@@ -1,5 +1,7 @@
 # Use a genepop file to run differentiation analyses
 # Note: assumes populations are unique with only a single name, with no spaces
+### Adjust pop names will only work with stock code and year if in the format for PBT, as per: stockcode_year_indivID_sex
+
 
 # Clear space
 # rm(list=ls())
@@ -9,10 +11,14 @@
 # install.packages("hierfstat")
 # install.packages("phangorn")
 # install.packages("rstudioapi")
+# install.packages("stringr")
+# install.packages("tidyr")
 
 library(adegenet)
 library(hierfstat)
 library(phangorn)
+library(stringr)
+library(tidyr)
 
 # Set working directory
 current.path <- dirname(rstudioapi::getSourceEditorContext()$path)
@@ -20,7 +26,8 @@ current.path <- gsub(pattern = "\\/01_scripts", replacement = "", x = current.pa
 setwd(current.path)
 
 #### 1. Load in data ####
-## Set variables, datatype
+## Set variables 
+# Set datatype
 datatype <- "SNP"
 #datatype <- "microsat"
 if(datatype=="SNP"){
@@ -28,6 +35,10 @@ if(datatype=="SNP"){
 }else if(datatype=="microsat"){
   allele.code <- 3
 }
+
+# Set whether years should be treated differently
+sep_by <- "collection_and_year"
+#sep_by <- "collection"
 
 
 ## Manually choose the file
@@ -39,38 +50,71 @@ if(.Platform$OS.type == "unix") {
                           , caption = "Select a genepop file")
 }
 
+
 ## Read in data
 obj <- read.genepop(file = my_genepop.path
                     , ncode = allele.code)
 obj
+
+### Adjust pop names
+if(sep_by=="collection_and_year"){
+  
+  # Bring out vector of indiv names in the genepop
+  indiv_names.df <- as.data.frame(rownames(obj$tab))
+  colnames(indiv_names.df) <- "indiv.name"
+  
+  # Separate the vector into individual components
+  indiv_names.df <- separate(data = indiv_names.df
+                             , sep = "_"
+                             , col = "indiv.name"
+                             , into = c("stock.code", "year", "fish.id", "sex")
+                             )
+  
+  # Recollect stock.code and year
+  pop_short <- paste0(str_pad(string = indiv_names.df$stock.code, width = 2, side = "left", pad = "0"), "_", indiv_names.df$year)
+  
+  # Change popnames to the new indiv names
+  pop(obj) <- pop_short
+  
+  # Report
+  unique(pop(obj))
+  
+}else {
+  print("Not changing popnames")
+}
+
+#TODO Rename pops?
+
 
 #### 2. View data ####
 dim(obj$tab) # How many ind ? (rows) & how many marker-alleles ?
 nPop(obj) # How many populations?
 unique(pop(obj)) # What populations?
 table(pop(obj)) # Sample size per population
-
-
+table(pop(obj))[sort(names(table(pop(obj))))]
 # TODO: read in the stock code file so that the pops can be renamed as per strings
-## Rename these to only the river name
-pop(obj) <- gsub(pattern =  "\\_.*", replacement = "", x = pop(obj))
-# unique(pop(obj))
 
 
 ### 2a. Samples per population ###
 # Plot sample size in baseline per population
-pdf(file = "03_results/baseline_sample_size_per_pop.pdf", width = 7, height = 5)
+pdf(file = "03_results/baseline_sample_size_per_pop_by_yr.pdf", width = 10, height = 5)
 par(mar=c(5,5,3,3))
-barplot(table(pop(obj)), col=funky(17)
+barplot(table(pop(obj))[sort(names(table(pop(obj))))]
+        , col=funky(17)
         #, las=3, las = 1
         , las=2
-        , xlab="Stock_code"
+        #, xlab="Stock_code"
         , ylab="Sample size"
         #, ylim = c(0,40)
         , main = basename(my_genepop.path)
         )
 abline(h = c(30), lty=2)
 dev.off()
+
+
+### Could drop some pops here if they are too small
+
+
 
 ### 2b. Alleles per marker ###
 table(nAll(obj))
@@ -102,14 +146,23 @@ rownames(all.data.hf) <- indNames(obj) # use indiv names as rownames
 # pairwise.wc.fst <- pairwise.WCfst(all.data.hf[c(1:100, 8100:8200), ])
 pairwise.wc.fst <- pairwise.WCfst(all.data.hf)
 pairwise.wc.fst
-write.csv(pairwise.wc.fst, file = "03_results/all_data_wcfst.csv")
+
+# Save results
+if(sep_by=="collection_and_year"){
+  FN <- "03_results/all_data_by_year_wcfst.csv"
+} else {
+  FN <- "03_results/all_data_wcfst.csv"
+}
+FN
+
+write.csv(pairwise.wc.fst, file = FN)
 
 
 #### 4. Plotting trees (and produce tree output) ####
 # Use UPGMA algorithm to estimate tree and plot
 upgma.tree <- upgma(pairwise.wc.fst)
 
-pdf(file = "03_results/pairwise_wc_fst_tree_upgma.pdf", width = 7, height = 5)
+pdf(file = "03_results/pairwise_wc_fst_tree_upgma_by_yr.pdf", width = 7, height = 10)
 plot(upgma.tree
      #, main = ""
      )
