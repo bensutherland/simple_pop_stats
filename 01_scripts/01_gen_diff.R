@@ -8,11 +8,38 @@
 # rm(list=ls())
 
 # Install packages
+BiocManager::install("qvalue") # req for dartR
+
+if (!require("units")) install.packages("units") #req for adegenet
+if (!require("cluster")) install.packages("cluster") #req for adegenet
 if (!require("adegenet")) install.packages("adegenet")
+if (!require("dartR")) install.packages("dartR")
 if (!require("hierfstat")) install.packages("hierfstat")
 if (!require("phangorn")) install.packages("phangorn")
+if (!require("poppr")) install.packages("poppr")
+# if (!require("SNPRelate")) {
+#   if(!require("BiocManager")) install.packages("BiocManager")
+#   BiocManager::install("SNPRelate")
+# }
 if (!require("stringr")) install.packages("stringr")
 if (!require("tidyr")) install.packages("tidyr")
+
+require("units")
+require("cluster")
+require("adegenet")
+require("hierfstat")
+require("phangorn")
+require("poppr")
+require("SNPRelate")
+require("stringr")
+require("tidyr")
+# require("dartR") # fails on windows
+
+
+
+
+
+
 
 ## Set working directory
 current.path <- dirname(rstudioapi::getSourceEditorContext()$path)
@@ -174,28 +201,9 @@ write.csv(pairwise.wc.fst, file = fn)
 
 #### 04. Phylogenetic trees ####
 #### 04.1. Based on wcfst ####
-# Use UPGMA algorithm to estimate tree and plot
-upgma.tree <- upgma(pairwise.wc.fst)
-
-fn <- paste0("03_results/gen_diff_tree_upgma_", sep_by, "_by_", name_by, ".pdf")
-pdf(file = fn, width = 7, height = 10)
-plot(upgma.tree
-     #, main = ""
-     )
-dev.off()
-
-# Use NJ algorithm to estimate tree and plot
+# NJ algorithm (but unrooted)
 nj.tree <- NJ(pairwise.wc.fst)
-
-fn <- paste0("03_results/gen_diff_tree_nj_", sep_by, "_by_", name_by, ".pdf")
-pdf(file = fn, width = 7, height = 10)
-plot(nj.tree
-     # , main = ""
-     )
-dev.off()
-
-# Use NJ algorithm (but unrooted) and plot
-fn <- paste0("03_results/gen_diff_tree_nj_unroot_", sep_by, "_by_", name_by, ".pdf")
+fn <- paste0("03_results/gen_diff_tree_nj_unrooted_", sep_by, "_by_", name_by, ".pdf")
 pdf(file = fn)
 plot(nj.tree, "unrooted"
      #, main=""
@@ -205,78 +213,63 @@ dev.off()
 # note, not as good as in FigTree
 
 # Export the tree to produce more custom images in FigTree
-fn <- paste0("03_results/gen_diff_tree_", sep_by, "_by_", name_by, ".tre")
+fn <- paste0("03_results/gen_diff_tree_nj_wcfst_", sep_by, "_by_", name_by, ".tre")
 write.tree(nj.tree, file=fn)
 
-#### 04.1. Bootstrapping ####
+#### 04.1. Bootstrapped tree ####
+dist.method <- "edwards.dist" # set distance method
+
 par(mar=c(3,3,3,3))
-pdf(file = "test.pdf")
-bootstrapped_tree <- aboot(x = obj, dist = nei.dist, sample = 1000, strata = pop(obj))
+fn <- paste0("03_results/gen_diff_tree_nj_", dist.method, "_", sep_by, "_by_", name_by, ".pdf")
+pdf(file = fn)
+bootstrapped_tree <- aboot(x = obj_no_monomorphic, dist = dist.method, sample = 10000, strata = pop(obj_no_monomorphic))
 dev.off()
 
-bootstrapped_tree_UPGMA_cse <- aboot(x = obj, dist = edwards.dist, sample = 1000, strata = pop(obj))
-write.tree(phy = bootstrapped_tree_nj_cse, file = "bootstrapped_tree_UPGMA_cse.tre")
+fn <- paste0("03_results/gen_diff_tree_nj_", dist.method, "_", sep_by, "_by_", name_by, ".tre")
+write.tree(phy = bootstrapped_tree, file = fn)
 
 
-bootstrapped_tree_nj_cse <- aboot(x = obj, tree = "nj", dist = edwards.dist, sample = 1000, strata = pop(obj))
-write.tree(phy = bootstrapped_tree_nj_cse, file = "bootstrapped_tree_nj_cse.tre")
+# #### WORKING ON FINDING A NEW OPTION FOR BOOTSTRAPPING FST BELOW ####
+# install.packages("diveRsity")
+# library("diveRsity")
+# 
+# diff_stats <- diffCalc(infile = my_genepop.path, outfile = "my_results", fst = TRUE, pairwise = TRUE
+#                        , bs_pairwise = TRUE, boots = 1000, ci_type = "individuals")
 
-## Change to neighbour joining
-## Use Corvelli - etc. if possible, if not WC FST
-## screen out 0.5 axis label
-
-
-#### WORKING ON FINDING A NEW OPTION FOR BOOTSTRAPPING BELOW ####
-install.packages("diveRsity")
-library("diveRsity")
-
-diff_stats <- diffCalc(infile = my_genepop.path, outfile = "my_results", fst = TRUE, pairwise = TRUE
-                       , bs_pairwise = TRUE, boots = 1000, ci_type = "individuals")
-
-
-
-#### 6. bootstrapping Fst  ####
-# requires latest hierfstat (v0.04-29) otherwise get error
-nboots <- 1000
-boot.fst.all <- boot.ppfst(dat = all.data.hf[,-1], nboot = nboots, quant = c(0.025,0.975))
-
-# debug
-for(i in 3:ncol(all.data.hf)){
-  print(i)
-  j <- i + 1
-  boot.ppfst(dat = all.data.hf[,i:j], nboot = 4, quant = c(0.025,0.975))
-}
-
-boot.fst.all <- boot.ppfst(dat = all.data.hf[,], nboot = nboots, quant = c(0.025,0.975))
-
-
-boot.fst.all
-# note that nboot = 1000 is about the same as nboot = 10,000 (very marginally different)
-
-
-
-# Collect output
-lower.limit <- t(boot.fst.all$ll)
-upper.limit <- boot.fst.all$ul
-upper.limit[is.na(upper.limit)] <- 0
-lower.limit[is.na(lower.limit)] <- 0
-boot.fst.all.output <- upper.limit + lower.limit
-boot.fst.all.output
-
-filename <- paste0("03_results/all_data_fst_nboot_", nboots, ".csv")
-write.csv(x = boot.fst.all.output, file = filename)
-
-
-# genet.dist requires a df containing pop of orgn as 1st col, multi-locus genos in following
-head(all.data.hf)
-
-
-
-
-
-
-# run figtree from linux:
-# https://github.com/mooreryan/iroki_cli/wiki/Installing-FigTree
+# #### 6. bootstrapping Fst  ####
+# # requires latest hierfstat (v0.04-29) otherwise get error
+# nboots <- 1000
+# boot.fst.all <- boot.ppfst(dat = all.data.hf[,-1], nboot = nboots, quant = c(0.025,0.975))
+# 
+# # debug
+# for(i in 3:ncol(all.data.hf)){
+#   print(i)
+#   j <- i + 1
+#   boot.ppfst(dat = all.data.hf[,i:j], nboot = 4, quant = c(0.025,0.975))
+# }
+# 
+# boot.fst.all <- boot.ppfst(dat = all.data.hf[,], nboot = nboots, quant = c(0.025,0.975))
+# 
+# 
+# boot.fst.all
+# # note that nboot = 1000 is about the same as nboot = 10,000 (very marginally different)
+# 
+# 
+#  
+# # Collect output
+# lower.limit <- t(boot.fst.all$ll)
+# upper.limit <- boot.fst.all$ul
+# upper.limit[is.na(upper.limit)] <- 0
+# lower.limit[is.na(lower.limit)] <- 0
+# boot.fst.all.output <- upper.limit + lower.limit
+# boot.fst.all.output
+# 
+# filename <- paste0("03_results/all_data_fst_nboot_", nboots, ".csv")
+# write.csv(x = boot.fst.all.output, file = filename)
+# 
+# 
+# # genet.dist requires a df containing pop of orgn as 1st col, multi-locus genos in following
+# head(all.data.hf)
 
 
 ## Things to record in logfile
@@ -284,3 +277,57 @@ head(all.data.hf)
 my_genepop.path
 # github version ID
 datatype
+
+
+#### 07. Principal components analysis (PCA) ####
+# Convert from genind to genlight
+obj.gl <- gi2gl(obj_no_monomorphic, parallel = TRUE)
+my.data <- obj.gl
+
+# Perform PCA
+pca1 <- glPca(my.data, nf = 3)
+
+# Plot PCA (axes 1,2,3)
+pdf(file = paste0(output.dir, "pca_all_samples.pdf"), width = 11.5, height = 7.5)
+par(mfrow=c(2,1))
+scatter(x = pca1, posi = "topleft", xax = 1, yax = 2)
+title("PC1 (x) vs PC2 (y)", adj = 1)
+
+scatter(x = pca1, posi = "topleft", xax = 3, yax = 2) # show PC3 and PC4
+title("PC3 (x) vs PC2 (y)", adj = 1)
+dev.off()
+
+# Plot allele loadings
+num.retained.pcs <- length(dimnames(pca1$loadings)[[2]]) # how many axes were retained? 
+
+# Plot loading values of the markers in the PCs
+pdf(file = paste0(output.dir, "pc_loadings.pdf"), width = 8, height = 8)
+par(mfrow=c(num.retained.pcs,1))
+# Plot the loading values of the different markers into the PCA
+for(i in 1:num.retained.pcs){
+  loadingplot(x = pca1, axis = i
+              , main = paste("PC",i,"_loadings_(alleles)", sep = "")
+              #, threshold = quantile(x = pca1$loadings[,i], 0.8) # not working
+              , threshold = 0.001
+  )
+}
+dev.off()
+
+# Plot PCA with samples coloured by PC
+pdf(file = paste0(output.dir , "pca_colorplot.pdf"), width = 8, height = 8)
+par(mfrow=c(1,1), mar = c(4,4,4,4))
+myCol <- colorplot(pca1$scores, pca1$scores, transp=T, cex=4)
+abline(h=0,v=0, col = "grey")
+text(x = 2, y = 5, paste(labels=nLoc(my.data), "loci", sep = " "))
+text(x = 2, y = 4, labels=paste("PC1=Red", "\n", "PC2=Green", "\n", "PC3=Blue"))
+dev.off()
+
+# Bring colorplot colors into the samples of the Neighbour-joining tree
+pdf(file = paste0(output.dir, "njt_colorplot.pdf"), width = 11, height = 9)
+plot(nj(D), type="fan", show.tip=T, cex =  0.75)
+tiplabels(pch=20, col=myCol, cex=4)
+dev.off()
+
+
+
+
