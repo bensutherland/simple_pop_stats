@@ -8,21 +8,19 @@
 # rm(list=ls())
 
 # Install packages
-BiocManager::install("qvalue") # req for dartR
+#install.packages("BiocManager")
+#BiocManager::install("qvalue") # req for dartR
+#BiocManager::install("SNPRelate")
 
-if (!require("units")) install.packages("units") #req for adegenet
-if (!require("cluster")) install.packages("cluster") #req for adegenet
-if (!require("adegenet")) install.packages("adegenet")
-if (!require("dartR")) install.packages("dartR")
-if (!require("hierfstat")) install.packages("hierfstat")
-if (!require("phangorn")) install.packages("phangorn")
-if (!require("poppr")) install.packages("poppr")
-# if (!require("SNPRelate")) {
-#   if(!require("BiocManager")) install.packages("BiocManager")
-#   BiocManager::install("SNPRelate")
-# }
-if (!require("stringr")) install.packages("stringr")
-if (!require("tidyr")) install.packages("tidyr")
+# install.packages("units")
+# install.packages("cluster")
+# install.packages("adegenet")
+# install.packages("hierfstat")
+# install.packages("phangorn")
+# install.packages("poppr")
+# install.packages("stringr")
+# install.packages("tidyr")
+
 
 require("units")
 require("cluster")
@@ -34,11 +32,7 @@ require("SNPRelate")
 require("stringr")
 require("tidyr")
 # require("dartR") # fails on windows
-
-
-
-
-
+require(tcltk)
 
 
 ## Set working directory
@@ -50,8 +44,9 @@ setwd(current.path)
 datatype <- "SNP" # SNP or microsat ?
 sep_by <- "collection" # sep_by collection or collection_and_year or none ?
 name_by <- "stockname" # name_by stockcode or stockname # NOTE: stockname only compatible w/ sep_by "collection"
-sc.fn <- "H:\\Stock_Codes\\eulachon\\euStockCodesCu.txt" # stock code filename
-
+#sc.fn <- "H:\\Stock_Codes\\eulachon\\euStockCodesCu.txt" # stock code filename
+sc.fn <- "/hdd/07_eulachon/euStockCodesCU.txt" # stock code filename
+output.dir <- "03_results/"
 
 #### 01. Load in data ####
 ## Manually choose the file
@@ -288,7 +283,7 @@ my.data <- obj.gl
 pca1 <- glPca(my.data, nf = 3)
 
 # Plot PCA (axes 1,2,3)
-pdf(file = paste0(output.dir, "pca_all_samples.pdf"), width = 11.5, height = 7.5)
+pdf(file = paste0("03_results/", "pca_all_samples.pdf"), width = 11.5, height = 7.5)
 par(mfrow=c(2,1))
 scatter(x = pca1, posi = "topleft", xax = 1, yax = 2)
 title("PC1 (x) vs PC2 (y)", adj = 1)
@@ -329,5 +324,138 @@ tiplabels(pch=20, col=myCol, cex=4)
 dev.off()
 
 
+### 5. Discriminant Analysis of Principal Components ####
+# First separate populations
+# Convert genlight to matrix
+my.data.mat <- as.matrix(my.data)
+my.data.mat[1:5,1:5]
+
+# Translate the number of minor allele to genind format
+my.data.mat[my.data.mat == 0] <- "1/1" #homozygote reference
+my.data.mat[my.data.mat == 1] <- "1/2" #heterozygote
+my.data.mat[my.data.mat == 2] <- "2/2" #homozygote alternate
+my.data.mat[1:5,1:5]
+
+# Convert matrix to genind
+my.data.gid <- df2genind(my.data.mat, sep = "/", ploidy = 2) # convert df to genind
+
+# Transfer pop attributes
+pop(my.data.gid) <- pop(my.data) 
+
+unique(pop(my.data.gid))
+
+# Separate
+sep.obj <- seppop(x = my.data.gid)
+names(sep.obj)
+
+# Repool
+datatype.list <- list()
+datatype.list[["all.gid"]] <- my.data.gid
+datatype.list[["south.gid"]] <- repool(sep.obj$Sandy_R, sep.obj$Elwha_R
+                                       , sep.obj$Cowlitz_R, sep.obj$Columbia_R
+                                       , sep.obj$Fraser_R, sep.obj$Klamath_R
+                                       )
+
+datatype.list[["north.gid"]] <- repool(sep.obj$Bear_R, sep.obj$`Bella Coola_R`, sep.obj$Carroll_Cr, sep.obj$Ecstall_R
+                                       , sep.obj$Falls_Cr, sep.obj$Kemano_R, sep.obj$Khyex_R, sep.obj$Kingcome_R
+                                       , sep.obj$Kitimat_R, sep.obj$Klinaklini_R, sep.obj$Nass_R, sep.obj$Skeena_R, sep.obj$Unuk_R
+                                       , sep.obj$Wannock_R
+)
+
+datatype <- "all.gid"
+# datatype <- "south.gid"
+# datatype <- "north.gid"
+
+data.gid <- datatype.list[[datatype]]
+
+# Change from genind file to hfstat
+data.hf <- genind2hierfstat(data.gid)
+rownames(data.hf) <- indNames(data.gid)
+
+# PCA on a matrix of individual genotype frequencies (hierfstat)
+y <- indpca(data.hf, ind.labels = rownames(data.hf))
+#y <- indpca(data.hf, ind.labels = pop(data.gid)) # this allows to view the size class type, if wanted
+
+filename <- paste(output.dir, datatype, "_sample_PCA.pdf", sep = "")
+pdf(file = filename, width = 11, height = 6)
+plot(y, cex = 0.7)
+dev.off()
+
+# DAPC
+dapc <- dapc(data.gid, n.pca = 10, n.da = 1)
+
+filename <- paste(output.dir, datatype, "_sample_DAPC.pdf", sep = "")
+pdf(file = filename, width = 11, height = 6)
+scatter(dapc, scree.da = F, bg = "white", legend = T
+        , txt.leg=rownames(dapc$means)
+        , posi.leg = "topleft"
+        #, col = cols
+)
+dev.off()
+
+
+# Loading plot # Plot marker variance contribution to DAPC
+filename <- paste(output.dir, datatype, "_DAPC_loadings.pdf", sep = "")
+pdf(file = filename, width = 11, height = 4)
+par(mfrow=c(1,1), mar=c(3,4,3,3))
+loadingplot(dapc$var.contr, thres=1e-3, las = 1, xlab = "Loci", ylab = "Locus contribution", las = 1, main = "")
+dev.off()
+
+
+
+
+####
+
+
+
+
+
+
+
+output.dir <- "03_results/"
+# Transforms data (centers), performs PCA, performs Linear Discriminant Analysis (LDA) with PCs, calc allele contributions
+dapc1 <- dapc(my.data, n.pca = 10, n.da = 1) # n.pca = number axes to be retained; n.da = number of axes retained in Discriminant Analysis step
+dapc1 # Provides information such as proportion conserved variance and object details
+
+# Plot density plot of samples along discriminant function 1
+pdf(file = paste0("03_results/", "dapc_all_pops.pdf"), width = 10.5, height = 7)
+par(mfrow=c(1,1))
+
+
+stock_codes.df
+
+scatter(dapc1, scree.da = F, bg = "white", legend = T
+        , txt.leg=rownames(dapc1$means)
+        , posi.leg = "topright"
+        #, col = my.cols
+)
+dev.off()
+
+# Loading plot # Plot marker variance contribution to DAPC
+par(mfrow=c(1,1), mar=c(5,5,3,3))
+
+# Plot the loading values of the different markers into the DAPC
+pdf(file = paste0(output.dir, "dapc_loadings.pdf"), width = 10.5, height = 7)
+loadingplot(dapc1$var.contr, thres=1e-3, xlab = "Loci", ylab = "Locus contribution", las = 1
+            , main = "")
+# This plots names for any variable with contribution > 1e-3 (0.001)
+dev.off()
+
+# To get all data, change the threshold, (not for plotting)
+# Note: this needs to be proven that these are indeed in the same order (index and names)
+dapc_loadings_all <- loadingplot(dapc1$var.contr, threshold = 0)
+dapc_loadings_vals <- dapc_loadings_all$var.values # obtain var.contr vals
+names(dapc_loadings_vals) <- names(dapc1$pca.cent) # bring in loci names instead of just index
+head(dapc_loadings_vals)
+dapc_loadings_vals <- as.data.frame(dapc_loadings_vals) # make a df
+head(dapc_loadings_vals)
+colnames(dapc_loadings_vals) <- "var.contr" # rename column
+head(dapc_loadings_vals)
+dapc_loadings_vals$mname <- rownames(x = dapc_loadings_vals) # make rownames a vector within df
+head(dapc_loadings_vals)
+
+# Write out, without rownames
+write.table(x = dapc_loadings_vals, file = paste0(output.dir, "dapc_loadings.csv")
+            , sep = ",", quote = F, col.names = T, row.names = F)
 
 
