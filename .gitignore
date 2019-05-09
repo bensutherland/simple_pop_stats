@@ -1,4 +1,7 @@
 *.csv
+*.gen
 *.pdf
+*.Rdata
+*.Rhistory
 *.tre
 *.txt
