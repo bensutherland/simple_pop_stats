@@ -76,5 +76,7 @@ update_pop_names <- function(sep_by = "collection", name_by = "stockname"){
   }
   
   assign(x = "obj", value = obj, envir = .GlobalEnv)
+  assign(x = "sep_by", value = sep_by, envir = .GlobalEnv)
+  assign(x = "name_by", value = name_by, envir = .GlobalEnv)
   
 }

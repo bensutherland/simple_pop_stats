@@ -33,5 +33,6 @@ load_genepop <- function(datatype = "SNP"){
   
   assign(x = "obj", value = obj, envir = .GlobalEnv)
   assign(x = "datatype", value = datatype, envir = .GlobalEnv)
+  assign(x = "my_genepop.path", value = my_genepop.path, envir = .GlobalEnv)
   
 }
