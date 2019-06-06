@@ -4,7 +4,7 @@ A short analysis of population statistics given specific inputs
 Requirements:     
 adegenet     
 tcltk (linux only)     
-
+hierfstat    
 
 
 ## Setup ##
@@ -31,12 +31,34 @@ If you are working with MGL_GSI_SNP data, where the sample IDs are all in the co
 
 Other options:     
 `sep_by`    
-* collection
-* collection_and_year
-* none
+* collection     
+* collection_and_year    
+* none      
 `name_by`     
-* stockname
-* none
+* stockname     
+* none     
+
+
+## Characterize Data ##
+To find the number of samples, markers, alleles, and sample size per population, use the following:    
+`characterize_genepop(df = obj)`
+
+
+## Drop loci ##
+To remove loci, use the following script that can allow you to remove monomorphic loci, or remove loci using a tab-delimited file with a single column with marker names that are to be removed from the object. This will end up as `obj_filt`.    
+`drop_loci(drop_monomorphic = TRUE, drop_file = <path/to/drop/file.txt>)
+
+
+## Genetic Differentiation ##
+For this step, you will need your data prepared for analysis in hierfstat, so use the following:    
+If you only have a genind saved as obj_filt in this example, and it has been separated by something above:    
+`calculate_FST(format="genind", dat = obj_filt, separated = TRUE)`     
+...note: if it has not been separated, run with separated = FALSE.    
+
+If you already have a hierfstat object:     
+`calculate_FST(format="hierfstat", dat = obj_filt, separated = FALSE)       
+...note: same as above, you can use separated=TRUE.     
+
 
 
 
