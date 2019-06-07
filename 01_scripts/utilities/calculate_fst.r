@@ -30,7 +30,7 @@ calculate_FST <- function(format="genind", dat = obj_filt, separated = FALSE){
     
   } else {
     print("Your datatype is not supported")
-    return(fail)
+    return(fail) # crash if not supported
   }
   
   # Calculate FST
@@ -40,7 +40,6 @@ calculate_FST <- function(format="genind", dat = obj_filt, separated = FALSE){
   assign(x = "pairwise_wc_fst", value = pairwise.wc.fst, envir = .GlobalEnv)
   
   # Save results
-  
   if(separated==TRUE){
     
     fn <- paste0("03_results/gen_diff_wcfst_", sep_by, "_by_", name_by, ".csv")

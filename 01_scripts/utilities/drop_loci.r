@@ -45,5 +45,6 @@ drop_loci <- function(drop_monomorphic = TRUE, drop_file = NULL){
   
   print("The output object will be saved as 'obj_filt'")
   assign(x = "obj_filt", value = obj, envir = .GlobalEnv)
+  assign(x = "drop_loci_file", value = drop_file, envir = .GlobalEnv)
   
 }
