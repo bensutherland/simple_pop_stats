@@ -5,7 +5,8 @@ Requirements:
 adegenet     
 tcltk (linux only)     
 hierfstat    
-
+phangorn       
+ape      
 
 ## Setup ##
 I suggest putting a genepop into `02_input_data`, but there is an interactive selection of files, so it can really be anywhere on your machine.     
@@ -58,7 +59,15 @@ If you only have a genind saved as obj_filt in this example, and it has been sep
 If you already have a hierfstat object:     
 `calculate_FST(format="hierfstat", dat = obj_filt, separated = FALSE)       
 ...note: same as above, you can use separated=TRUE.     
+...note: if you used the above to format from genind to hf your hf will be the obj_filt.hf     
+
+This will output your results as `pairwise_wc_fst`, and save to the `03_results` folder.      
 
 
+## Build a tree ##
+You can build a tree using the previous genetic differentiation object:      
+`make_tree(matrix = pairwise_wc_fst, tree_method = "NJ", separated = TRUE)`         
 
+...or you can build a new tree using bootstrap with the filtered genind file:        
+`make_tree(bootstrap = TRUE, boot_obj = obj_filt, nboots = 10000, dist_metric = "edwards.dist", separated = TRUE)`      
 
