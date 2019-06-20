@@ -20,6 +20,10 @@ Load a genepop with the following, using 'SNP' or 'microsat':
 `load_genepop(datatype = "SNP")`     
 Your data will be put into the 'obj', which is a genind object.    
 
+If you are loading from an R object, e.g. a renamed genepop from `MGL_GSI_SNP` with the object name my.genepop:     
+`load(<R object>)`      
+`obj <- my.genepop`      
+
 To see what populations you have:     
 `unique(pop(obj))`      
 
@@ -47,7 +51,7 @@ To find the number of samples, markers, alleles, and sample size per population,
 
 ## Drop loci ##
 To remove loci, use the following script that can allow you to remove monomorphic loci, or remove loci using a tab-delimited file with a single column with marker names that are to be removed from the object. This will end up as `obj_filt`.    
-`drop_loci(drop_monomorphic = TRUE, drop_file = <path/to/drop/file.txt>)
+`drop_loci(drop_monomorphic = TRUE, drop_file = <path/to/drop/file.txt>)`       
 
 
 ## Genetic Differentiation ##
@@ -57,7 +61,7 @@ If you only have a genind saved as obj_filt in this example, and it has been sep
 ...note: if it has not been separated, run with separated = FALSE.    
 
 If you already have a hierfstat object:     
-`calculate_FST(format="hierfstat", dat = obj_filt, separated = FALSE)       
+`calculate_FST(format="hierfstat", dat = obj_filt, separated = FALSE)`       
 ...note: same as above, you can use separated=TRUE.     
 ...note: if you used the above to format from genind to hf your hf will be the obj_filt.hf     
 
