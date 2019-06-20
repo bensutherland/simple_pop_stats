@@ -51,25 +51,3 @@ drop_pops <- function(df = obj, drop_by_pop_size = TRUE, min_indiv = 20, drop_fi
   assign(x = "drop_pops_file", value = drop_file, envir = .GlobalEnv)
   
 }
-
-
-## This was code that would allow dropping pops by a vector of names, not necessary:
-### Original, more complex method that doesn't use internal function on genind
-# # Separate pops out of genind into a named list
-# sep.obj <- seppop(x = df)
-# 
-# reduced_sep.obj <- list()
-# 
-# for(i in 1:length(pops_to_keep)){
-#   
-#   name_of_pop <- pops_to_keep[i]
-#   reduced_sep.obj[[name_of_pop]] <- sep.obj[[name_of_pop]]
-#   
-# }
-# 
-# # repool
-# print("Repooling the reduced obj")
-# reduced_obj <- repool(reduced_sep.obj)
-# 
-# reduced_obj
-
