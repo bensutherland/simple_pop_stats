@@ -61,10 +61,9 @@ make_tree <- function(matrix = NULL
     
     # Save tree
     write.tree(phy = bootstrapped_tree, file = fn.tree)
+    assign(x = "bootstrapped_tree", value = bootstrapped_tree, envir = .GlobalEnv)
     
   }
-  
-  assign(x = "bootstrapped_tree", value = bootstrapped_tree, envir = .GlobalEnv)
   
 }
 
