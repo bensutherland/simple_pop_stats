@@ -47,11 +47,15 @@ Other options:
 ## Characterize Data ##
 To find the number of samples, markers, alleles, and sample size per population, use the following:    
 `characterize_genepop(df = obj)`
-
+Will produce a barchart of sample size per pop (`sample_size*.pdf`).     
 
 ## Drop loci ##
 To remove loci, use the following script that can allow you to remove monomorphic loci, or remove loci using a tab-delimited file with a single column with marker names that are to be removed from the object. This will end up as `obj_filt`.    
 `drop_loci(drop_monomorphic = TRUE, drop_file = <path/to/drop/file.txt>)`       
+
+## Drop pops ##
+To remove pops from a user defined minimum number of individuals, or a tab-delimited text file (change from NULL), use the following to create `obj_pop_filt`:    
+`drop_pops(df = obj_filt, drop_by_pop_size = TRUE, min_indiv = 35, drop_file = NULL)`       
 
 
 ## Genetic Differentiation ##
