@@ -35,6 +35,8 @@ drop_pops <- function(df = obj, drop_by_pop_size = TRUE, min_indiv = 20, drop_fi
     
     # Remove these loci
     print(paste0("Dropping user defined pops, in total: ", length(user_defined_drop_pops), " pops"))
+    print("Dropping:   ")
+    print(user_defined_drop_pops)
     
     all_pops <- as.character(unique(pop(df)))
     
