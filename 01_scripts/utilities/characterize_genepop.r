@@ -25,7 +25,18 @@ characterize_genepop <- function(df = obj){
     fn <- paste0("03_results/sample_size_per_pop.pdf")
   }
   
-  pdf(file = fn, width = 10, height = 5)
+  
+  # Set up PDF based on the number of populations present (e.g. big data)
+  if(length(table(pop(df))) > 100) { 
+    pdf.width <- 20 
+    cex.lab <- 0.7
+  } else { 
+      pdf.width <- 10
+      cex.lab <- 0.9
+      } 
+  
+  
+  pdf(file = fn, width = pdf.width, height = 5)
   par(mar=c(8,5,3,3))
   barplot(table(pop(df))[sort(names(table(pop(df))))]
           , las=2
@@ -33,6 +44,7 @@ characterize_genepop <- function(df = obj){
           , ylab="Sample size"
           #, ylim = c(0,40)
           , main = basename(my_genepop.path)
+          , cex.names = cex.lab
   )
   abline(h = c(30), lty=2)
   dev.off()
