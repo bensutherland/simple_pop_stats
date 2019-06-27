@@ -19,7 +19,7 @@ characterize_genepop <- function(df = obj){
   
   # Plot sample size in baseline per population
   # Make filename
-  if(!is.null(sep_by)){
+  if(exists("sep_by")){
     fn <- paste0("03_results/sample_size_per_", sep_by, "_by_", name_by, ".pdf")
   }else{
     fn <- paste0("03_results/sample_size_per_pop.pdf")
