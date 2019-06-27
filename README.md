@@ -9,6 +9,10 @@ phangorn
 ape      
 
 ## 00. Setup ##
+The StockCodes file <sp>StockCodesCU.txt must be in:     
+`00_archive/` (Linux)       
+`H:/Stock_Codes/<species>/` (Windows/MGL)     
+
 I suggest putting a genepop into `02_input_data`, but there is an interactive selection of files, so it can really be anywhere on your machine.     
 
 Source the main script `01_gen_diff.R`. This will source all of the functions within this repo.    
