@@ -33,7 +33,7 @@ To see what populations you have:
 
 
 ## 02. Renaming Data ##
-If you are working with MGL_GSI_SNP data, where the sample IDs are all in the composition of:    
+If you are working with *MGL_GSI_SNP* data, where the sample IDs are all in the composition of:    
 `stockcode_year_indivID_sex`, e.g. `2_2000_9_U`      
 ...you can use the following script to rename your populations:    
 `update_pop_names(sep_by = "collection", name_by = "stockname")`    
@@ -47,6 +47,8 @@ Other options:
 * stockname     
 * none     
 
+If you are working with *MGL_GSI* microsat data, and want to clean your population names, use the following to drop all characters after the first space:      
+`fix_pop_names(df = obj)`      
 
 ## 03. Characterize Data ##
 To find the number of samples, markers, alleles, and sample size per population, use the following:    
