@@ -28,7 +28,7 @@ drop_pops <- function(df = obj, drop_by_pop_size = TRUE, min_indiv = 20, drop_fi
     # Reporting
     print("Reading in list of populations to drop, from the following file: ")
     print(drop_file)
-    print(paste0("Before dropping, the genind has ",  length(unique(pop(obj))), " pops"))
+    print(paste0("Before dropping, the genind has ",  length(unique(pop(df))), " pops"))
     
     user_defined_drop_file <- read.delim2(file = drop_file, header = F, stringsAsFactors = F)
     user_defined_drop_pops <- user_defined_drop_file$V1
