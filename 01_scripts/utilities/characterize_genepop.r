@@ -28,8 +28,8 @@ characterize_genepop <- function(df = obj){
   
   # Set up PDF based on the number of populations present (e.g. big data)
   if(length(table(pop(df))) > 100) { 
-    pdf.width <- 20 
-    cex.lab <- 0.7
+    pdf.width <- 25 
+    cex.lab <- 0.6
   } else { 
       pdf.width <- 10
       cex.lab <- 0.9
