@@ -4,5 +4,5 @@
 *.Rdata
 *.Rhistory
 *.tre
-*.txt
+*.txt*
 *.xls*
