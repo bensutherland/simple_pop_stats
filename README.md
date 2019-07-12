@@ -85,3 +85,8 @@ You can build a tree using the previous genetic differentiation object:
 ...or you can build a new tree using bootstrap with the filtered genind file:        
 `make_tree(bootstrap = TRUE, boot_obj = obj_filt, nboots = 10000, dist_metric = "edwards.dist", separated = TRUE)`      
 
+## 08. Run Principal Components Analysis
+Conduct PCA on your sample using the following:     
+`pca_from_genind(data = obj_pop_filt, PCs_ret = 3, plot_eigen=TRUE, plot_allele_loadings=TRUE)`       
+This will output results into `03_results`    
+In the future, there will be an option to upload a colour file for your populations.     
