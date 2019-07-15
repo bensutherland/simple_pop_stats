@@ -19,6 +19,9 @@
 # install.packages("stringr")
 # install.packages("tidyr")
 
+# install.packages("Demerelate")
+# install.packages("related", repos="http://R-Forge.R-project.org")
+
 
 require("units")
 require("cluster")
@@ -31,6 +34,9 @@ require("stringr")
 require("tidyr")
 # require("dartR") # fails on windows
 require(tcltk)
+
+require("Demerelate")
+require("related")
 
 
 ## Set working directory
