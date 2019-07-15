@@ -94,3 +94,14 @@ In the future, there will be an option to upload a colour file for your populati
 After the PCA, you can run a DAPC, which will use the cols matching those from your PCA. 
 `dapc_from_genind(data = obj_pop_filt, plot_allele_loadings = TRUE)`      
 
+## 09. Calculate relatedness
+First, convert data from genind to relatedness format and calculate relatedness values:      
+`relatedness_calc(data = obj_pop_filt)`        
+...this will output to `03_results/kinship_analysis_<date>.Rdata`      
+
+Second, plot your results:      
+`relatedness_plot(data = kinship_analysis_<date>.Rdata, same_pops = TRUE, plot_by = "names")`     
+...where you can use either "names" or "codes" if using only same-on-same.      
+...and if you set `same_pops` to FALSE, you will get all pops pairwise comparisons. (but can't use names)      
+
+
