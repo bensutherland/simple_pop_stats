@@ -2,11 +2,7 @@
 A short analysis of population statistics given specific inputs
 
 Requirements:     
-adegenet     
-tcltk (linux only)     
-hierfstat    
-phangorn       
-ape      
+<to do>
 
 ## 00. Setup ##
 The StockCodes file <sp>StockCodesCU.txt must be in:     
@@ -15,8 +11,8 @@ The StockCodes file <sp>StockCodesCU.txt must be in:
 
 I suggest putting a genepop into `02_input_data`, but there is an interactive selection of files, so it can really be anywhere on your machine.     
 
-Source the main script `01_gen_diff.R`. This will source all of the functions within this repo.    
-When this script is sourced, you will be prompted to select a species from the options. This will set up a lot of your file names.         
+Source the main script `01_scripts/simple_pop_stats_start.R` to activate all functions.    
+Select a species from the options to set up most variable names.        
 
 
 ## 01. Loading Data ##

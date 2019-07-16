@@ -5,7 +5,7 @@
 # 2. genetic distance file: 03_results/gen_diff_wcfst.csv
 ## ...from: calculate_FST()
 
-compare_phys_genet_dist(){
+compare_phys_genet_dist <- function(){
   
   # Set input filenames
   phys_dist.FN <- "03_results/physical_distance.txt"
