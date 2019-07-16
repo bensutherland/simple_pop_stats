@@ -22,6 +22,8 @@
 # install.packages("Demerelate")
 # install.packages("related", repos="http://R-Forge.R-project.org")
 
+# install.packages("geosphere")
+
 
 require("units")
 require("cluster")
@@ -35,9 +37,9 @@ require("tidyr")
 # require("dartR") # fails on windows
 require(tcltk)
 
-require("Demerelate")
-require("related")
-
+# require("Demerelate")
+# require("related")
+library(geosphere)
 
 ## Set working directory
 current.path <- dirname(rstudioapi::getSourceEditorContext()$path)

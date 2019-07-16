@@ -104,4 +104,11 @@ Second, plot your results:
 ...where you can use either "names" or "codes" if using only same-on-same.      
 ...and if you set `same_pops` to FALSE, you will get all pops pairwise comparisons. (but can't use names)      
 
+## 10. Compare geographic and genetic distance
+If you have GPS coordinates in the stock code file, you can automatically calculate the distance between all pairs of locations using the following script:     
+`calculate_physical_dist()`      
+...which will output `03_results/physical_distance.txt`     
 
+Using this file, along with an earlier calculated FST (output of `calculate_FST()` above), use the following:       
+`compare_phys_genet_dist()`       
+...which will put your results into `03_results/pairwise_fst_v_physical_dist.pdf`      
