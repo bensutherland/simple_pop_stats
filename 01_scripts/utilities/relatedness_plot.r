@@ -1,11 +1,13 @@
 # Calculate relatedness for each population
 
-relatedness_plot <- function(data = "kinship_analysis_2019-07-15.Rdata", same_pops = TRUE, plot_by = "names"){
+relatedness_plot <- function(file = "03_results/kinship_analysis_2019-07-16.Rdata", same_pops = TRUE, plot_by = "names"){
   
   # Read in data
-  input.FN <- paste0("03_results/", data)
-  print(paste0("Loading data from ", input.FN))
-  load(input.FN)
+  print(paste0("Loading data from ", file))
+  load(file)
+  
+  # Record date
+  date <- format(Sys.time(), "%Y-%m-%d")
   
   ## The results are in the following formats
   # relatedness: df w/ all pairwise est. of relatedness
@@ -90,6 +92,9 @@ relatedness_plot <- function(data = "kinship_analysis_2019-07-15.Rdata", same_po
   
   ## Set up a wrapper to plot all types
   datatypes <- c("wang", "ritland","quellergt")
+  
+  # Report
+  print("Plotting relatedness, output will be in 03_results")
   
   ## Loop to plot
   for(i in 1:length(datatypes)){
