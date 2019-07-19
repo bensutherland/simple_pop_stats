@@ -63,6 +63,14 @@ To remove loci, use the following script that can allow you to remove monomorphi
 To remove pops from a user defined minimum number of individuals, or a tab-delimited text file (change from NULL), use the following to create `obj_pop_filt`:    
 `drop_pops(df = obj_filt, drop_by_pop_size = TRUE, min_indiv = 35, drop_file = NULL)`       
 
+## 05.5 Rename microsat pops to SNP pop names
+In case you want to use downstream applications for microsat data, you need to replace microsat pop names with SNP pop names. So create a crosswalk file, with the following format:     
+datatype1, datatype2
+popname_microsat, popname_SNP
+
+...save it, and then load it using:    
+`connect_two_datatypes(df = obj_pop_filt, crosswalk.FN = "path/to/crosswalk/file")`    
+
 
 ## 06. Genetic Differentiation ##
 For this step, you will need your data prepared for analysis in hierfstat, so use the following:    
