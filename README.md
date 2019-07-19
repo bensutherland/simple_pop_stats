@@ -39,8 +39,9 @@ Other options:
 * collection     
 * collection_and_year    
 * none      
+
 `name_by`     
-* stockname     
+* stockname (only compatible with `sep_by = collection`)     
 * none     
 
 If you are working with *MGL_GSI* microsat data, and want to clean your population names, use the following to drop all characters after the first space:      
