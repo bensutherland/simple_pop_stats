@@ -38,11 +38,14 @@ Other options:
 `sep_by`    
 * collection     
 * collection_and_year    
-* none      
+* none (do nothing)      
 
 `name_by`     
-* stockname (only compatible with `sep_by = collection`)     
-* none     
+* stockname     
+* none (do nothing to keep as stock code)     
+
+Made a mistake? Don't worry, just recover your original genind:      
+`obj <- obj.bck`      
 
 If you are working with *MGL_GSI* microsat data, and want to clean your population names, use the following to drop all characters after the first space:      
 `fix_pop_names(df = obj)`      
