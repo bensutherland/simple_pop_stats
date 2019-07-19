@@ -5,6 +5,9 @@
 
 update_pop_names <- function(sep_by = "collection", name_by = "stockname"){
   
+  # Create backup
+  obj.bck <- obj
+  
   # Extract genepop indiv names and put into df
   indiv_names.df <- as.data.frame(rownames(obj$tab))
   colnames(indiv_names.df) <- "indiv.name"
@@ -45,12 +48,37 @@ update_pop_names <- function(sep_by = "collection", name_by = "stockname"){
   ## Collect the new names into a dataframe
   pop_short.df <- as.data.frame(pop(obj))
   colnames(pop_short.df) <- "pop_short"
-  pop_short.df$pop_short <- as.integer(as.character(pop_short.df$pop_short)) # for below, this must be integer
+  
+  # Make numeric for matching with stock code below
+  if(sep_by == "collection"){
+    
+    # TO REMOVE
+    #pop_short.df$pop_short <- as.integer(as.character(pop_short.df$pop_short)) # for below, this must be integer
+    # TO REMOVE
+    
+  }else if(sep_by == "collection_and_year"){
+    
+    # separate the column into the collection and the year again
+    pop_short.df <- separate(data = pop_short.df, sep = "_", col = "pop_short", into = c("stock.code", "year"))
+    
+    # rename stock.code into 'pop_short' for compatibility between methods
+    colnames(pop_short.df)[which(colnames(pop_short.df)=="stock.code")] <- "pop_short"
+    
+  }else{
+    
+    print("Pop names still in original format")
+    
+  }
+  
+  # To merge with stock code file below, the pop short variable must be an integer
+  if(sep_by != "none"){
+    pop_short.df$pop_short <- as.integer(as.character(pop_short.df$pop_short)) 
+  }
 
   
-  ## Move from numeric to names
+  ## Change from numeric to names
   #### 01.2 Pop names as numeric or character?
-  if(sep_by=="collection" && name_by=="stockname"){
+  if(sep_by!="none" && name_by=="stockname"){
     
     # Generate an order column for re-ordering the samples' stock code vector
     pop_short.df$id <- 1:nrow(pop_short.df)
@@ -66,16 +94,32 @@ update_pop_names <- function(sep_by = "collection", name_by = "stockname"){
     print("re-ordering back into original order")
     rosetta <- rosetta[order(rosetta$id), ]
     
-    # Use the collection instead of code
-    pop(obj) <- rosetta$collection
+    # Add the year if necessary, and create vector for using as pop ID
+    if(sep_by=="collection_and_year"){
+      
+      rosetta$name <- paste0(rosetta$collection, "-", rosetta$year)
+      
+    }else if(sep_by=="collection"){
+      
+      rosetta$name <- rosetta$collection
+      
+    }
+    
+    # Use the newly designated identifier per individual
+    pop(obj) <- rosetta$name
     
     # Reporting
     print(unique(pop(obj)))
+    print(table(pop(obj)))
+    
   } else {
+    
     print("Not renaming pop stock code to stock names")
+    
   }
   
   assign(x = "obj", value = obj, envir = .GlobalEnv)
+  assign(x = "obj.bck", value = obj.bck, envir = .GlobalEnv)
   assign(x = "sep_by", value = sep_by, envir = .GlobalEnv)
   assign(x = "name_by", value = name_by, envir = .GlobalEnv)
   
