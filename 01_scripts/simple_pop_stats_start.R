@@ -50,6 +50,7 @@ file_sources <- list.files(path = "01_scripts/utilities/", pattern = "\\.r$", fu
 
 # Source functions
 for(fun in file_sources){
+  print(fun)
   source(fun)
   }
 rm(fun, file_sources) # clean up
