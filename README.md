@@ -108,7 +108,7 @@ First, convert data from genind to relatedness format and calculate relatedness 
 ...this will output to `03_results/kinship_analysis_<date>.Rdata`      
 
 Second, plot your results:      
-`relatedness_plot(data = kinship_analysis_<date>.Rdata, same_pops = TRUE, plot_by = "names")`     
+`relatedness_plot(file = "03_results/kinship_analysis_<date>.Rdata", same_pops = TRUE, plot_by = "names")`     
 ...where you can use either "names" or "codes" if using only same-on-same.      
 ...and if you set `same_pops` to FALSE, you will get all pops pairwise comparisons. (but can't use names)      
 
