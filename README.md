@@ -107,6 +107,8 @@ First, convert data (SNP or microsat) from genind to relatedness format and calc
 `relatedness_calc(data = obj_pop_filt, datatype = "SNP")`        
 ...this will output to `03_results/kinship_analysis_<date>.Rdata`      
 
+Note: if you are using microsat data, this will depend that you have run 'Rename microsat pops to SNP pop names' above, so that the pop names can be converted to stock codes.        
+
 Second, plot your results:      
 `relatedness_plot(file = "03_results/kinship_analysis_<date>.Rdata", same_pops = TRUE, plot_by = "names")`     
 ...where you can use either "names" or "codes" if using only same-on-same.      
