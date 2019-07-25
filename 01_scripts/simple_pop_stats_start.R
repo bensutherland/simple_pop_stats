@@ -18,6 +18,7 @@
 # install.packages("poppr")
 # install.packages("stringr")
 # install.packages("tidyr")
+# install.packages("dplyr")
 
 # install.packages("Demerelate")
 # install.packages("related", repos="http://R-Forge.R-project.org")
@@ -36,6 +37,7 @@ require("stringr")
 require("tidyr")
 # require("dartR") # fails on windows
 require(tcltk)
+require(dplyr)
 
 # require("Demerelate")
 # require("related")
