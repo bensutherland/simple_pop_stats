@@ -103,8 +103,8 @@ After the PCA, you can run a DAPC, which will use the cols matching those from y
 `dapc_from_genind(data = obj_pop_filt, plot_allele_loadings = TRUE)`      
 
 ## 09. Calculate relatedness
-First, convert data from genind to relatedness format and calculate relatedness values:      
-`relatedness_calc(data = obj_pop_filt)`        
+First, convert data (SNP or microsat) from genind to relatedness format and calculate relatedness values:      
+`relatedness_calc(data = obj_pop_filt, datatype = "SNP")`        
 ...this will output to `03_results/kinship_analysis_<date>.Rdata`      
 
 Second, plot your results:      
