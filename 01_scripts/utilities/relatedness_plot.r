@@ -49,7 +49,9 @@ relatedness_plot <- function(file = "03_results/kinship_analysis_2019-07-16.Rdat
   # compare pop1 and pop2 to identify if same
   output.df$same <- output.df$pop1==output.df$pop2
   
-
+  head(output.df)
+  dim(output.df)
+  
   # Are all pop comparisons to be kept, or only same-on-same?
   if(same_pops==TRUE){
     
@@ -61,51 +63,93 @@ relatedness_plot <- function(file = "03_results/kinship_analysis_2019-07-16.Rdat
     print("Keeping all population comparisons")
   }
   
-  # Plot with code or stock name?
-  if(plot_by == "names" & same_pops==TRUE){
+  dim(output.df)
+  
+  # If datatype is SNP, there are different plotting opts. If datatype is microsat, plotting opts are limited
+  if(datatype == "SNP"){
     
-    # Reporting
-    print("Since both options of keeping only same pops and displaying as names were selected")
-    print("...the stock codes for the same-on-same will be converted to names for display purposes")
+    print("Datatype is SNP, continue")
+
+      # Plot with code or stock name?
+      if(plot_by == "names" & same_pops==TRUE){
     
-    # Read in stock codes
-    print("Reading in stock code file")
-    stock_codes.df <- read.delim2(file = sc.base)
+      # Reporting
+      print("Since both options of keeping only same pops and displaying as names were selected")
+      print("...the stock codes for the same-on-same will be converted to names for display purposes")
     
-    # Change name slightly to remove underscores
-    output.df$Code <- gsub(output.df$pop1, pattern = "_", replacement = "")
-    head(output.df)
+      # Read in stock codes
+      print("Reading in stock code file")
+      stock_codes.df <- read.delim2(file = sc.base)
     
-    # Merge
-    rosetta <- merge(x = stock_codes.df, y = output.df, by = "Code", sort = F, all.y = T)
-    rosetta$collection <- droplevels(rosetta$collection)
+      # Change name slightly to remove underscores
+      output.df$Code <- gsub(output.df$pop1, pattern = "_", replacement = "")
+      head(output.df)
     
-    output.df <- rosetta[, c("rel.wang", "rel.ritland", "rel.quellergt", "same", "Code", "collection")]
+      # Merge
+      rosetta <- merge(x = stock_codes.df, y = output.df, by = "Code", sort = F, all.y = T)
+      rosetta$collection <- droplevels(rosetta$collection)
     
-    colnames(output.df)[which(colnames(output.df)=="collection")] <- "group"
-    head(output.df)
+      output.df <- rosetta[, c("rel.wang", "rel.ritland", "rel.quellergt", "same", "Code", "collection")]
     
-  } else if(plot_by=="codes" | same_pops=="FALSE"){
-    print("Keeping stock codes")
+      colnames(output.df)[which(colnames(output.df)=="collection")] <- "group"
+      head(output.df)
+    
+      } else if(plot_by=="codes" | same_pops=="FALSE"){
+      
+        print("Keeping stock codes")
+      }
+    
+  } else if(datatype=="microsat"){
+    
+    print("Your data is in microsat format... ")
+    
+    # Plot with code or stock name?
+    if(plot_by == "names" & same_pops==TRUE){
+      
+      # Reporting
+      print("Since both options of keeping only same pops and displaying as names were selected")
+      print("...the stock codes for the same-on-same will be converted to names for display purposes")
+      
+      # Read in stock codes
+      print("Reading in stock code file")
+      stock_codes.df <- read.delim2(file = sc.base, stringsAsFactors = F)
+      
+      # Extract the two-digit code from the group vector
+      output.df$Code <- substr(x = output.df$group, start = 1, stop = 2)
+      output.df$Code<- as.numeric(output.df$Code)
+      head(output.df)
+      
+      # Merge
+      rosetta <- merge(x = stock_codes.df, y = output.df, by = "Code", sort = F, all.y = T)
+      output.df <- rosetta[, c("rel.wang", "rel.ritland", "rel.quellergt", "same", "Code", "collection")]
+      
+      colnames(output.df)[which(colnames(output.df)=="collection")] <- "group"
+      head(output.df)
+      
+    } else if(plot_by=="codes" | same_pops=="FALSE"){
+      
+      print("Keeping stock codes")
+    }
+    
   }
   
   
   ## Set up a wrapper to plot all types
-  datatypes <- c("wang", "ritland","quellergt")
+  relatedness_metrics <- c("wang", "ritland","quellergt")
   
   # Report
   print("Plotting relatedness, output will be in 03_results")
   
   ## Loop to plot
-  for(i in 1:length(datatypes)){
-    datatype <- datatypes[i]
+  for(i in 1:length(relatedness_metrics)){
+    metric <- relatedness_metrics[i]
     
-    pdf(file = paste0("03_results/", "relatedness_", datatype, "_", date, ".pdf"), width = 20, height = 8)
+    pdf(file = paste0("03_results/", "relatedness_", metric, "_", date, ".pdf"), width = 20, height = 8)
     par(mar=c(7,3,3,3))
-    boxplot(output.df[, paste0("rel.", datatype)] ~ output.df$group
+    boxplot(output.df[, paste0("rel.", metric)] ~ output.df$group
             #, col = comp_names.df$colour
             , las = 2
-            , ylab = paste0("relatedness (", datatype, ")")
+            , ylab = paste0("relatedness (", metric, ")")
     )
     abline(h = 0, lty = 2)
     dev.off()
