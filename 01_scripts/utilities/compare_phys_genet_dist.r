@@ -66,12 +66,19 @@ compare_phys_genet_dist <- function(){
   fst_data.df <- fst_data.df[,c("fst_all", "comparison")] # only keep necessary cols
   head(fst_data.df)
   
+  # Find the appropriate Y-axis for text in plot below
+  fst_max <- max(fst_data.df$fst_all)
+  
   
   ### Combine physical dist and Fst dist ###
   # Load physical distance data
   distance_full.df <- read.delim2(file = phys_dist.FN, header = T, sep = "\t", stringsAsFactors = F)
   distance_full.df$dist.m <- as.numeric(distance_full.df$dist.m)
   distance_full.df$dist.km <- distance_full.df$dist.m / 1000
+  
+  # Find the appropriate X-axis for text in plot below
+  dist_max <- max(distance_full.df$dist.km)
+    
   
   # Identify whether any contrasts are missing from either 
   print("The following contrasts are missing from either the phys.dist or genet.dist")
@@ -95,7 +102,8 @@ compare_phys_genet_dist <- function(){
   summary(mod)
   abline(mod)
   
-  text(x = 400, y = 0.05
+  text(    x = (dist_max - (dist_max * 0.66))
+         , y = (fst_max - (fst_max * 0.1))
        , labels = paste0("adj.rsquared = ", round(summary(mod)$adj.r.squared, digits = 4))
   )
   dev.off()
