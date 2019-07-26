@@ -1,48 +1,56 @@
 # Execute a DAPC from a genind file
 # Will save out a plot into 03_results
 
-dapc_from_genind <- function(data = obj_pop_filt, plot_allele_loadings = TRUE){
+dapc_from_genind <- function(data = obj_pop_filt, plot_allele_loadings = TRUE
+                             , colour_file = NULL){
   
-  print("Converting genind to genlight")
+  print("Executing DAPC")
   
-  # Convert genind to genlight using dartR
-  obj.gl <- gi2gl(data, parallel = TRUE)
-  my.data <- obj.gl
+  ## DAPC
+  dapc <- dapc(data, n.pca = 10, n.da = 1)
   
-  print(paste0("Executing DAPC, retaining ", PCs_ret, " PCs"))
+  # Bring in colour data
+  if(is.null(colour_file)){
+    
+    print("There is no colour file, so will use default")    
+    
+    # Set colours default
+    library(RColorBrewer)
+    cols1 <- brewer.pal(n = nPop(my.data), name = "Paired")
+    cols2 <- brewer.pal(n = (nPop(my.data)-length(cols1)), name = "Spectral")
+    cols <- c(cols1, cols2)
+    
+    ordered_colours <- cols
+    
+  } else if(!is.null(colour_file)){
+    
+    # Reporting
+    print(paste0("Using custom colours file from ", colour_file))
+    
+    # Input colour file
+    colours.df <- read.table(file = colour_file, header = T, sep = ",", stringsAsFactors = F)
+    
+    ## Create a colours vector
+    # Select only the pops that are in the data
+    colours <- filter(colours.df, collection %in% rownames(dapc$means))
+    
+    # Put into alphabetic order by collection (the plotting order, and legend order)
+    colours <- colours[order(colours$collection), ]
+    
+    # Take only the colour (note: must NOT be factor to correctly plot)
+    ordered_colours <- colours$colour
+    
+  }
   
-  # Convert genlight to matrix
-  my.data.mat <- as.matrix(my.data)
-  my.data.mat[1:5,1:5]
-  
-  # Translate the number of minor allele to genind format
-  my.data.mat[my.data.mat == 0] <- "1/1" #homozygote reference
-  my.data.mat[my.data.mat == 1] <- "1/2" #heterozygote
-  my.data.mat[my.data.mat == 2] <- "2/2" #homozygote alternate
-  my.data.mat[1:5,1:5]
-  
-  # Convert matrix to genind
-  my.data.gid <- df2genind(my.data.mat, sep = "/", ploidy = 2) # convert df to genind
-  
-  # Transfer pop attributes
-  pop(my.data.gid) <- pop(my.data) 
-  
-  data.gid <- my.data.gid
-  
-  # Change from genind file to hfstat
-  data.hf <- genind2hierfstat(data.gid)
-  rownames(data.hf) <- indNames(data.gid)
 
   
-  # DAPC
-  dapc <- dapc(data.gid, n.pca = 10, n.da = 1)
-  
+  ## Plot DAPC
   filename <- paste("03_results/", "sample_DAPC.pdf", sep = "")
   pdf(file = filename, width = 11, height = 6)
   scatter(dapc, scree.da = F, bg = "white", legend = T
           , txt.leg=rownames(dapc$means)
           , posi.leg = "topleft"
-          , col = cols
+          , col = ordered_colours
   )
   dev.off()
   
@@ -56,9 +64,9 @@ dapc_from_genind <- function(data = obj_pop_filt, plot_allele_loadings = TRUE){
   dev.off()
   
   
-  dapc_loadings_all <- loadingplot(dapc1$var.contr, threshold = 0)
+  dapc_loadings_all <- loadingplot(dapc$var.contr, threshold = 0)
   dapc_loadings_vals <- dapc_loadings_all$var.values # obtain var.contr vals
-  names(dapc_loadings_vals) <- names(dapc1$pca.cent) # bring in loci names instead of just index
+  names(dapc_loadings_vals) <- names(dapc$pca.cent) # bring in loci names instead of just index
   head(dapc_loadings_vals)
   dapc_loadings_vals <- as.data.frame(dapc_loadings_vals) # make a df
   head(dapc_loadings_vals)
