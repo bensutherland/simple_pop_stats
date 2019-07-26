@@ -85,6 +85,7 @@ If you already have a hierfstat object:
 
 This will output your results as `pairwise_wc_fst`, and save to the `03_results` folder.      
 
+Note: if you want to have a custom filename for your FST csv file, use the argument `cust_fn` for your basename, which will automatically save into `03_results`.      
 
 ## 07. Build a tree ##
 You can build a tree using the previous genetic differentiation object:      
