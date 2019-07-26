@@ -122,3 +122,22 @@ If you have GPS coordinates in the stock code file, you can automatically calcul
 Using this file, along with an earlier calculated FST (output of `calculate_FST()` above), use the following:       
 `compare_phys_genet_dist()`       
 ...which will put your results into `03_results/pairwise_fst_v_physical_dist.pdf`      
+
+## 11. Run AMOVA
+AMOVA will use repunits and collections to see where the variance exists in your data.    
+To create a repunit file _de novo_, run:      
+`calculate_AMOVA(data = obj_pop_filt, build_file = TRUE)`       
+This will output `00_archive/unique_pops.csv`, and fill this out with a new column entitled `repunit` to show the higher level groupings in your data.     
+
+Once you have a file describing the repunits, run the following:      
+`calculate_AMOVA(data = obj_pop_filt, build_file = FALSE, missing_treat = mean)`      
+The results will be output into `obj_amova` and `obj_amova.pegas`.     
+Other options:      
+* mean = impute missing
+* ignore = do nothing
+* zero = convert NA to 0
+* genotype = drop indiv w/ missing
+
+## 12. Convert pop to repunit
+Once you have built the file for the AMOVA with repunits, you can use this file to re-calculate FST using repunits instead of collections.      
+
