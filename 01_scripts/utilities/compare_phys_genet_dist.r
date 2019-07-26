@@ -2,14 +2,14 @@
 # Requires two files:
 # 1. physical distance file: 03_results/physical_distance.txt
 ## ...from: calculate_physical_dist()
-# 2. genetic distance file: 03_results/gen_diff_wcfst.csv
+# 2. genetic distance file: set in argument for function
 ## ...from: calculate_FST()
 
-compare_phys_genet_dist <- function(){
+compare_phys_genet_dist <- function(FST_file = NULL){
   
   # Set input filenames
   phys_dist.FN <- "03_results/physical_distance.txt"
-  genet_dist.FN <- "03_results/gen_diff_wcfst.csv"
+  genet_dist.FN <- FST_file
   
   # Set output filenames
   output_fig.FN <- "03_results/pairwise_fst_v_physical_dist.pdf"
@@ -102,8 +102,8 @@ compare_phys_genet_dist <- function(){
   summary(mod)
   abline(mod)
   
-  text(    x = (dist_max - (dist_max * 0.66))
-         , y = (fst_max - (fst_max * 0.1))
+  text(    x = (dist_max - (dist_max * 0.8))
+         , y = (fst_max - (fst_max * 0.05))
        , labels = paste0("adj.rsquared = ", round(summary(mod)$adj.r.squared, digits = 4))
   )
   dev.off()
