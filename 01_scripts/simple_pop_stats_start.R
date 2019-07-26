@@ -38,6 +38,7 @@ require("tidyr")
 # require("dartR") # fails on windows
 require(tcltk)
 require(dplyr)
+require(ggplot2)
 
 # require("Demerelate")
 # require("related")
