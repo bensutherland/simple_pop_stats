@@ -95,13 +95,14 @@ You can build a tree using the previous genetic differentiation object:
 `make_tree(bootstrap = TRUE, boot_obj = obj_filt, nboots = 10000, dist_metric = "edwards.dist", separated = TRUE)`      
 
 ## 08. Run multidimensional scaling techniques
-Conduct PCA on your sample using the following:     
-`pca_from_genind(data = obj_pop_filt, PCs_ret = 3, plot_eigen=TRUE, plot_allele_loadings=TRUE)`       
+Conduct PCA using:     
+`pca_from_genind(data = obj_pop_filt, PCs_ret = 3, plot_eigen=TRUE, plot_allele_loadings=TRUE, colour_file = NULL)`       
 This will output results into `03_results`    
-In the future, there will be an option to upload a colour file for your populations.     
 
-After the PCA, you can run a DAPC, which will use the cols matching those from your PCA. 
-`dapc_from_genind(data = obj_pop_filt, plot_allele_loadings = TRUE)`      
+Conduct DAPC using:      
+`dapc_from_genind(data = obj_pop_filt, plot_allele_loadings = TRUE, colour_file = NULL)`      
+
+To use custom colours, set the path to a csv file with header 'collection' and 'colour' containing the population name and colour name to set your custom colours.     
 
 ## 09. Calculate relatedness
 First, convert data (SNP or microsat) from genind to relatedness format and calculate relatedness values:      
@@ -141,4 +142,7 @@ Other options:
 
 ## 12. Convert pop to repunit
 Once you have built the file for the AMOVA with repunits, you can use this file to re-calculate FST using repunits instead of collections.      
+`pop_to_repunit(data = obj_pop_filt)`     
 
+Now you can go back to the FST calculation above and calculate with your repunit merged:    
+`calculate_FST(format="genind", dat = obj_repunit, separated = TRUE)`      
