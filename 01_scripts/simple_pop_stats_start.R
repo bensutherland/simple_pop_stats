@@ -16,6 +16,7 @@
 # install.packages("hierfstat")
 # install.packages("phangorn")
 # install.packages("poppr")
+# install.packages("SNPRelate")
 # install.packages("stringr")
 # install.packages("tidyr")
 
@@ -26,7 +27,7 @@ require("adegenet")
 require("hierfstat")
 require("phangorn")
 require("poppr")
-require("SNPRelate")
+require("SNPRelate") # Failed on windows Not available Version 3.5.3 
 require("stringr")
 require("tidyr")
 # require("dartR") # fails on windows
