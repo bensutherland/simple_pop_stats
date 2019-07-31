@@ -13,6 +13,9 @@ characterize_genepop <- function(df = obj){
   
   table(pop(df))[sort(names(table(pop(df))))] # if numeric, this will help
   
+  print(paste0("There is an average of ", round(mean(table(pop(df))), digits = 2), " samples per pop"))
+  print(paste0("There is an stdev of ", round(sd(table(pop(df))), digits = 2), " samples per pop"))
+  
   print("**How many alleles per marker?**")
   print("**Note: when 1 allele, means marker is monomorphic**")
   print(table(nAll(df)))

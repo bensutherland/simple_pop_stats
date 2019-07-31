@@ -1,7 +1,8 @@
 # Calculate pair-wise Fst
 # format should be genind or hierfstat
+# If you want a custom filename for your output csv, set cust_fn as the basename (note this will automatically go in 03_results)
 
-calculate_FST <- function(format="genind", dat = obj_filt, separated = FALSE){
+calculate_FST <- function(format="genind", dat = obj_filt, separated = FALSE, cust_fn = NULL){
   
   if(format=="genind"){
     
@@ -50,6 +51,15 @@ calculate_FST <- function(format="genind", dat = obj_filt, separated = FALSE){
     
   }
 
+  
+  # Is a custom filename being used?
+  if(!is.null(cust_fn)){
+    
+    fn <- paste0("03_results/", cust_fn)
+    
+  } else {
+    print("Not using a custom filename")
+  }
 
   # Save out
   print(paste0("Saving output as ", fn))

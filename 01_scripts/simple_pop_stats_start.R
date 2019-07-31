@@ -19,6 +19,12 @@
 # install.packages("SNPRelate")
 # install.packages("stringr")
 # install.packages("tidyr")
+# install.packages("dplyr")
+
+# install.packages("Demerelate")
+# install.packages("related", repos="http://R-Forge.R-project.org")
+
+# install.packages("geosphere")
 
 
 require("units")
@@ -32,7 +38,12 @@ require("stringr")
 require("tidyr")
 # require("dartR") # fails on windows
 require(tcltk)
+require(dplyr)
+require(ggplot2)
 
+# require("Demerelate")
+# require("related")
+library(geosphere)
 
 ## Set working directory
 current.path <- dirname(rstudioapi::getSourceEditorContext()$path)
@@ -43,6 +54,7 @@ file_sources <- list.files(path = "01_scripts/utilities/", pattern = "\\.r$", fu
 
 # Source functions
 for(fun in file_sources){
+  print(fun)
   source(fun)
   }
 rm(fun, file_sources) # clean up
