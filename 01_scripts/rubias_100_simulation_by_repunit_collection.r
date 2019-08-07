@@ -9,6 +9,10 @@ rubias_base<-read_tsv(base.FN)
 rubias_base<-filter(rubias_base,(collection!="Green_R") & (repunit!="LILL"))
 rubias_base<-filter(rubias_base,(repunit!="UNK"))
 
+rubias_base <- rubias_base %>%
+                group_by(collection) %>%
+                filter(n() >10) 
+
 repunit.CNT<-rubias_base %>%
              count(repunit,name="n_per_repunit")
 
@@ -20,8 +24,10 @@ repunit.collection_CNT<-rubias_base %>%
 collection.CNT<-rubias_base %>%
                 count(collection,name="n_per_collection")
   
-# Format cols to character or integer required for rubias
-rubias_base<-select(rubias_base,-allele.Count)
+# Remove column if exists (warning if doesn't)
+rubias_base<-select(rubias_base,-one_of("allele.Count"))
+
+# Format cols to character or integer required for rubias 
 rubias_base[, 1:4] <- lapply(X = rubias_base[,1:4], FUN = as.character)
 rubias_base[, 5:ncol(rubias_base)] <- lapply(X = rubias_base[, 5:ncol(rubias_base)], FUN = as.integer)
 
@@ -34,7 +40,7 @@ names(all_repunit_scenario) <- paste("All", repunits, sep = "-")
   
 all_repunit_results <- assess_reference_loo(reference = rubias_base, 
                                              gen_start_col = 5, 
-                                             reps = 10, 
+                                             reps = 100, 
                                              mixsize = 200,
                                              alpha_repunit = all_repunit_scenario)
 
