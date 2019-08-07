@@ -20,6 +20,9 @@
 # install.packages("stringr")
 # install.packages("tidyr")
 # install.packages("dplyr")
+# install.packages("R.methodsS3")
+# install.packages("dartR")
+
 
 # install.packages("Demerelate")
 # install.packages("related", repos="http://R-Forge.R-project.org")
@@ -36,14 +39,15 @@ require("poppr")
 require("SNPRelate") # Failed on windows Not available Version 3.5.3 
 require("stringr")
 require("tidyr")
-# require("dartR") # fails on windows
-require(tcltk)
-require(dplyr)
-require(ggplot2)
+require("R.methodsS3")
+require("dartR")
+require("tcltk")
+require("dplyr")
+require("ggplot2")
 
 # require("Demerelate")
 # require("related")
-library(geosphere)
+library("geosphere")
 
 ## Set working directory
 current.path <- dirname(rstudioapi::getSourceEditorContext()$path)
