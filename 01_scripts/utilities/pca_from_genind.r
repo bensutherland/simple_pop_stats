@@ -72,7 +72,7 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
   
   # Save
   pdf(file = paste0("03_results/", "pca_all_samples.pdf"), width = 11.5, height = 7.5)
-  p
+  print(p)
   dev.off()
   
   
