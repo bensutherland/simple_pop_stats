@@ -3,6 +3,8 @@ A short analysis of population statistics given specific inputs
 
 Requirements:     
 <to do>
+Installation of related requires some special instructions on Windows. Follow tutorial:     
+https://github.com/timothyfrasier/related
 
 ## 00. Setup ##
 The StockCodes file <sp>StockCodesCU.txt must be in:     
