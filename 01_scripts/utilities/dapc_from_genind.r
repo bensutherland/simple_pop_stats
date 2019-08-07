@@ -46,7 +46,7 @@ dapc_from_genind <- function(data = obj_pop_filt, plot_allele_loadings = TRUE
   
   ## Plot DAPC
   filename <- paste("03_results/", "sample_DAPC.pdf", sep = "")
-  pdf(file = filename, width = 11, height = 6)
+  pdf(file = filename, width = 10, height = 10)
   scatter(dapc, scree.da = F, bg = "white", legend = T
           , txt.leg=rownames(dapc$means)
           , posi.leg = "topleft"
