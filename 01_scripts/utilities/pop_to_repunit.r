@@ -3,8 +3,6 @@
 
 pop_to_repunit <- function(data = obj){
   
-  strat.FN <- "00_archive/unique_pops_w_repunit.txt"
-  
   # Reporting
   print("Your original data contains the following populations")
   print(table(pop(data)))
@@ -39,8 +37,3 @@ pop_to_repunit <- function(data = obj){
     
   }
 }
-
-
-
-
-
