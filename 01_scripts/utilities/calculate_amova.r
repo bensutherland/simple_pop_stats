@@ -28,7 +28,7 @@ calculate_AMOVA <- function(data = obj_pop_filt, missing_treat = "ignore", build
       data <- missingno(pop = data, type = missing_treat, cutoff = 0)
       
       # Read in the repunit file
-      strat.FN <- "00_archive/unique_pops_w_repunit.txt"
+      strat.FN <- "00_archive/unique_pops_w_repunit.csv"
       strat_obj <- read.table(file = strat.FN, header = T, sep = ",")
       
       ## Add a strat obj to the genind
@@ -56,6 +56,7 @@ calculate_AMOVA <- function(data = obj_pop_filt, missing_treat = "ignore", build
       
       assign(x = "obj_amova", value = obj_amova, pos = .GlobalEnv)
       assign(x = "obj_amova.pegas", value = obj_amova.pegas, pos = .GlobalEnv)
+      assign(x = "strat.FN", value = strat.FN, pos = .GlobalEnv)
       
       print("Your outputs are obj_amova and obj_amova.pegas")
     }
