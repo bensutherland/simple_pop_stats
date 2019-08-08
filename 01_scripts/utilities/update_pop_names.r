@@ -3,7 +3,7 @@
 #  can rename populations using sep_by and "collection", "collection_and_year", or "none"
 #  If using collection, can also translate from number to name by using name_by = "stockname"
 
-update_pop_names <- function(sep_by = "collection", name_by = "stockname"){
+update_pop_names <- function(sep_by = "collection", name_by = "stockname", add_CU = FALSE){
   
   # Create backup
   obj.bck <- obj
@@ -105,6 +105,15 @@ update_pop_names <- function(sep_by = "collection", name_by = "stockname"){
       
     }
     
+    # Add the CU if requested
+    if(add_CU==TRUE){
+      
+      print("Adding CU to the collection name for the pop variable")
+      
+      rosetta$name <- paste(rosetta$name, rosetta$repunit, sep =  "_")
+      
+    }
+    
     # Use the newly designated identifier per individual
     pop(obj) <- rosetta$name
     
@@ -122,5 +131,6 @@ update_pop_names <- function(sep_by = "collection", name_by = "stockname"){
   assign(x = "obj.bck", value = obj.bck, envir = .GlobalEnv)
   assign(x = "sep_by", value = sep_by, envir = .GlobalEnv)
   assign(x = "name_by", value = name_by, envir = .GlobalEnv)
+  assign(x = "add_CU", value = add_CU, envir = .GlobalEnv)
   
 }

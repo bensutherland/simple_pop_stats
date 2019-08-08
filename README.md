@@ -46,6 +46,9 @@ Other options:
 * stockname     
 * none (do nothing to keep as stock code)     
 
+New: the option `add_CU` can be used to append the CU from the stock code file to the population if you use the following command (only compatible with the following):      
+`update_pop_names(sep_by = "collection", name_by = "stockname", add_CU = TRUE)`
+
 Made a mistake? Don't worry, just recover your original genind:      
 `obj <- obj.bck`      
 
