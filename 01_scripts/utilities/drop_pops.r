@@ -10,10 +10,10 @@ drop_pops <- function(df = obj, drop_by_pop_size = TRUE, min_indiv = 20, drop_fi
   
   # Remove pops
   if(drop_by_pop_size==TRUE){
-    pops_to_keep <- names(which(table(pop(df))[sort(names(table(pop(df))))] > min_indiv )) # which pops to keep
+    pops_to_keep <- names(which(table(pop(df))[sort(names(table(pop(df))))] >= min_indiv )) # which pops to keep
     
     # Reporting
-    print(paste0("Keeping pops with more than ", min_indiv , " individuals"))
+    print(paste0("Keeping pops with at least ", min_indiv , " individuals"))
     print(paste0("Dropping: ", setdiff(unique(pop(df)), pops_to_keep)))
     
     df <- df[pop=pops_to_keep]
