@@ -1,6 +1,6 @@
 # Characterize genepop details
 
-characterize_genepop <- function(df = obj){
+characterize_genepop <- function(df = obj, pdf_width = 8, pdf_height = 5, cex_names = 0.5 ){
   
   # View features
   print("**Number of individuals and Number of marker-alleles**")
@@ -28,18 +28,8 @@ characterize_genepop <- function(df = obj){
     fn <- paste0("03_results/sample_size_per_pop.pdf")
   }
   
-  
-  # Set up PDF based on the number of populations present (e.g. big data)
-  if(length(table(pop(df))) > 100) { 
-    pdf.width <- 25 
-    cex.lab <- 0.6
-  } else { 
-      pdf.width <- 10
-      cex.lab <- 0.9
-      } 
-  
-  
-  pdf(file = fn, width = pdf.width, height = 5)
+  # Plot and save
+  pdf(file = fn, width = pdf_width, height = pdf_height)
   par(mar=c(8,5,3,3))
   barplot(table(pop(df))[sort(names(table(pop(df))))]
           , las=2
@@ -47,7 +37,7 @@ characterize_genepop <- function(df = obj){
           , ylab="Sample size"
           #, ylim = c(0,40)
           , main = basename(my_genepop.path)
-          , cex.names = cex.lab
+          , cex.names = cex_names
   )
   abline(h = c(30), lty=2)
   dev.off()

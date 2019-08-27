@@ -57,8 +57,9 @@ If you are working with *MGL_GSI* microsat data, and want to clean your populati
 
 ## 03. Characterize Data ##
 To find the number of samples, markers, alleles, and sample size per population, use the following:    
-`characterize_genepop(df = obj)`
+`characterize_genepop(df = obj, pdf_width = 30, pdf_height = 6, cex_names = 0.3)`     
 Will produce a barchart of sample size per pop (`sample_size*.pdf`).     
+Set the parameters based on your plotting requirements, the above is an example for a very large number of pops.     
 
 ## 04. Drop loci ##
 To remove loci, use the following script that can allow you to remove monomorphic loci, or remove loci using a tab-delimited file with a single column with marker names that are to be removed from the object. This will end up as `obj_filt`.    
@@ -79,14 +80,14 @@ popname_microsat, popname_SNP
 
 ## 06. Genetic Differentiation ##
 For this step, you will need your data prepared for analysis in hierfstat, so use the following:    
-If you only have a genind saved as obj_filt in this example, and it has been separated by something above:    
-`calculate_FST(format="genind", dat = obj_filt, separated = TRUE)`     
+If you only have a genind saved as obj_pop_filt in this example, and it has been separated by something above:    
+`calculate_FST(format="genind", dat = obj_pop_filt, separated = TRUE)`     
 ...note: if it has not been separated, run with separated = FALSE.    
 
 If you already have a hierfstat object:     
-`calculate_FST(format="hierfstat", dat = obj_filt, separated = FALSE)`       
+`calculate_FST(format="hierfstat", dat = obj_pop_filt, separated = FALSE)`       
 ...note: same as above, you can use separated=TRUE.     
-...note: if you used the above to format from genind to hf your hf will be the obj_filt.hf     
+...note: if you used the above to format from genind to hf your hf will be the obj_pop_filt.hf     
 
 This will output your results as `pairwise_wc_fst`, and save to the `03_results` folder.      
 
@@ -97,7 +98,7 @@ You can build a tree using the previous genetic differentiation object:
 `make_tree(matrix = pairwise_wc_fst, tree_method = "NJ", separated = TRUE)`         
 
 ...or you can build a new tree using bootstrap with the filtered genind file:        
-`make_tree(bootstrap = TRUE, boot_obj = obj_filt, nboots = 10000, dist_metric = "edwards.dist", separated = TRUE)`      
+`make_tree(bootstrap = TRUE, boot_obj = obj_pop_filt, nboots = 10000, dist_metric = "edwards.dist", separated = TRUE)`      
 
 ## 08. Run multidimensional scaling techniques
 Conduct PCA using:     
