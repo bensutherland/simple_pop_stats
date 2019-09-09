@@ -12,7 +12,7 @@ BiocManager::install("qvalue")
 #PBTdata.genid<-read.genepop(file="S:/01_chinook/PBT/2019/PID20190012_Yukon_Juv/stats/PID20190012_V2_2019-07-12.gen")
 #source("C:/00_Github/simple_pop_stats/01_scripts/simple_pop_stats_start.R")
 
-file.sources = list.files("C:/00_Github/simple_pop_stats/01_scripts//utilities/", pattern="\\.r$",
+file.sources = list.files("C:/00_Github/simple_pop_stats/01_scripts/utilities/", pattern="\\.r$",
                           full.names=TRUE, ignore.case=TRUE) 
 # Source functions
 for (pn in file.sources) {

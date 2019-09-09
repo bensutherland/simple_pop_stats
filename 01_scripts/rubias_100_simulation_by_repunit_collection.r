@@ -66,16 +66,17 @@ write_tsv(repunit.100,paste0("repunit_100_",format(Sys.time(), "%Y-%m-%d"),".txt
 
 }  # End of Skipped lines
 
-collections<-unique(rubias_base$collection)
-
-all_collection_scenario <- lapply(collections,
+#collections<-unique(rubias_base$collection)
+collections<-c("Green_R_Lill","Green_R","Nooksack_H","Nooksack_SF","Clearwater_R","Salish_Cr")
+for (i in 1:length(collections)){
+all_collection_scenario <- lapply(collections[i],
                                function(x) tibble(collection = x, ppn = 1.0))
-names(all_collection_scenario) <- collections
+names(all_collection_scenario) <- collections[i]
 
 # Then, we use it, producing only 5 replicates for each scenario:
 all_collection_results <- assess_reference_loo(reference = rubias_base
                                             ,gen_start_col = 5
-                                            ,reps = 10
+                                            ,reps = 100
                                             ,mixsize = 200
                                             ,alpha_collection = all_collection_scenario
                                             )
@@ -105,9 +106,9 @@ collection.100<-inner_join(collection.CNT,collection.100) %>%
                            inner_join(.,collection.rep_100) %>%
                            inner_join(.,repunit.collection_CNT )
 
-# Keep these outputs for later
-write_tsv(all_collection_results,paste0("all_collection_results",format(Sys.time(), "%Y-%m-%d"),".gz"))
-write_tsv(collection.100,paste0("collection_100_",format(Sys.time(), "%Y-%m-%d"),".txt"))          
-
+# Keep these outputs for later Use static names as could take more than a day to run issue if you use dates in
+write_tsv(all_collection_results,paste0("all_collection_results_5pop.gz"),append = T)
+write_tsv(collection.100,paste0("collection_100_5_pop.txt"),append=T,header=T)          
+}
 
 
