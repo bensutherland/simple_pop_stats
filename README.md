@@ -71,7 +71,8 @@ To remove pops from a user defined minimum number of individuals, or a tab-delim
 
 ## 05.5 Rename microsat pops to SNP pop names
 In case you want to use downstream applications for microsat data, you need to replace microsat pop names with SNP pop names. So create a crosswalk file, with the following format:     
-datatype1, datatype2
+(Note: first line is header names, keep as shown, following lines are custom):     
+datatype1, datatype2        
 popname_microsat, popname_SNP
 
 ...save it, and then load it using:    
