@@ -151,4 +151,5 @@ Once you have built the file for the AMOVA with repunits, you can use this file 
 `pop_to_repunit(data = obj_pop_filt)`     
 
 Now you can go back to the FST calculation above and calculate with your repunit merged:    
-`calculate_FST(format="genind", dat = obj_repunit, separated = TRUE)`      
+`calculate_FST(format="genind", dat = obj_repunit, separated = TRUE, cust_fn = "gen_diff_wcfst_repunit_by_stockname.csv")`       
+...make sure to use a custom filename, otherwise this will re-write over existing FST calculations.   
