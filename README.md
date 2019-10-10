@@ -129,7 +129,7 @@ If you have GPS coordinates in the stock code file, you can automatically calcul
 ...which will output `03_results/physical_distance.txt`     
 
 Using this file, along with an earlier calculated FST (output of `calculate_FST()` above), use the following:       
-`compare_phys_genet_dist()`       
+`compare_phys_genet_dist(FST_file = "03_results/<your_FST_file>.csv")`       
 ...which will put your results into `03_results/pairwise_fst_v_physical_dist.pdf`      
 
 ## 11. Run AMOVA
