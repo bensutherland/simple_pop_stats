@@ -138,7 +138,7 @@ To create a repunit file _de novo_, run:
 This will output `00_archive/unique_pops.csv`, and fill this out with a new column entitled `repunit` to show the higher level groupings in your data.     
 
 Once you have a file describing the repunits, run the following:      
-`calculate_AMOVA(data = obj_pop_filt, build_file = FALSE, missing_treat = mean)`      
+`calculate_AMOVA(data = obj_pop_filt, build_file = FALSE, missing_treat = "mean")`      
 The results will be output into `obj_amova` and `obj_amova.pegas`.     
 Other options:      
 * mean = impute missing
