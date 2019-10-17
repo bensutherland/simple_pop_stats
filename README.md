@@ -22,10 +22,6 @@ Load a genepop with the following, using 'SNP' or 'microsat':
 `load_genepop(datatype = "SNP")`     
 Your data will be put into the 'obj', which is a genind object.    
 
-If you are loading from an R object, e.g. a renamed genepop from `MGL_GSI_SNP` with the object name my.genepop:     
-`load(<R object>)`      
-`obj <- my.genepop`      
-
 To see what populations you have:     
 `unique(pop(obj))`      
 
