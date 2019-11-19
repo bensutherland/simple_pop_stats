@@ -22,10 +22,6 @@ Load a genepop with the following, using 'SNP' or 'microsat':
 `load_genepop(datatype = "SNP")`     
 Your data will be put into the 'obj', which is a genind object.    
 
-If you are loading from an R object, e.g. a renamed genepop from `MGL_GSI_SNP` with the object name my.genepop:     
-`load(<R object>)`      
-`obj <- my.genepop`      
-
 To see what populations you have:     
 `unique(pop(obj))`      
 
@@ -71,7 +67,8 @@ To remove pops from a user defined minimum number of individuals, or a tab-delim
 
 ## 05.5 Rename microsat pops to SNP pop names
 In case you want to use downstream applications for microsat data, you need to replace microsat pop names with SNP pop names. So create a crosswalk file, with the following format:     
-datatype1, datatype2
+(Note: first line is header names, keep as shown, following lines are custom):     
+datatype1, datatype2        
 popname_microsat, popname_SNP
 
 ...save it, and then load it using:    
@@ -128,7 +125,7 @@ If you have GPS coordinates in the stock code file, you can automatically calcul
 ...which will output `03_results/physical_distance.txt`     
 
 Using this file, along with an earlier calculated FST (output of `calculate_FST()` above), use the following:       
-`compare_phys_genet_dist()`       
+`compare_phys_genet_dist(FST_file = "03_results/<your_FST_file>.csv")`       
 ...which will put your results into `03_results/pairwise_fst_v_physical_dist.pdf`      
 
 ## 11. Run AMOVA
@@ -138,7 +135,7 @@ To create a repunit file _de novo_, run:
 This will output `00_archive/unique_pops.csv`, and fill this out with a new column entitled `repunit` to show the higher level groupings in your data.     
 
 Once you have a file describing the repunits, run the following:      
-`calculate_AMOVA(data = obj_pop_filt, build_file = FALSE, missing_treat = mean)`      
+`calculate_AMOVA(data = obj_pop_filt, build_file = FALSE, missing_treat = "mean")`      
 The results will be output into `obj_amova` and `obj_amova.pegas`.     
 Other options:      
 * mean = impute missing
@@ -151,4 +148,5 @@ Once you have built the file for the AMOVA with repunits, you can use this file 
 `pop_to_repunit(data = obj_pop_filt)`     
 
 Now you can go back to the FST calculation above and calculate with your repunit merged:    
-`calculate_FST(format="genind", dat = obj_repunit, separated = TRUE)`      
+`calculate_FST(format="genind", dat = obj_repunit, separated = TRUE, cust_fn = "gen_diff_wcfst_repunit_by_stockname.csv")`       
+...make sure to use a custom filename, otherwise this will re-write over existing FST calculations.   
