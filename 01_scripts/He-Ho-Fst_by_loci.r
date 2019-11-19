@@ -3,11 +3,11 @@ library(HWxtest)
 library(dartR)
 library(StAMPP)
 # To install SNPRelate
-if (!requireNamespace("BiocManager", quietly = TRUE))
-  install.packages("BiocManager")
+#if (!requireNamespace("BiocManager", quietly = TRUE))
+#  install.packages("BiocManager")
 
-BiocManager::install("SNPRelate")
-BiocManager::install("qvalue")
+#BiocManager::install("SNPRelate")
+#BiocManager::install("qvalue")
 
 #PBTdata.genid<-read.genepop(file="S:/01_chinook/PBT/2019/PID20190012_Yukon_Juv/stats/PID20190012_V2_2019-07-12.gen")
 #source("C:/00_Github/simple_pop_stats/01_scripts/simple_pop_stats_start.R")
@@ -51,11 +51,10 @@ PBTdata.FST<- PBTdata.FST.all %>%
 
 
 
-
 #To test whether these numbers fit the Hardy-Weinberg proportions, call the function
 PBTdata.hwx <- hwx.test(PBTdata.genid)
 
-PBTdata.Hobs<-summary(PBTdata.genid)
+
 
 PBTdata.genpop<-genind2genpop(PBTdata.genid)
 PBTdata.freq<-makefreq(PBTdata.genpop,missing=0)
