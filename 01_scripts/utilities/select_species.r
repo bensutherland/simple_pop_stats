@@ -10,15 +10,16 @@ select_species <- function() {
                , "2 - coho"
                , "3 - chum"
                , "4 - eulachon"
+               , "5 - sockeye"
                , "q - quit")
              , sep="\n")
   ans <- readline("Select species by number above or q: " )
   
   # If answer is not one of the species choices, terminate menu
-  if (!(ans %in% c("1","2","3","4"))) {stop("Terminated by request")}
+  if (!(ans %in% c("1","2","3","4","5"))) {stop("Terminated by request")}
   
   # Select species
-  species <<- c("chinook","coho","chum","eulachon")[as.integer(ans)]
+  species <<- c("chinook","coho","chum","eulachon","sockeye")[as.integer(ans)]
   print(paste("You have chosen: ",species))
   
   # Set variables sex_gene, species_gene, two.letter.code
@@ -34,12 +35,15 @@ select_species <- function() {
     sex_gene <<- ""
     species_gene <<- ""
     two.letter.code <<- "cm"
-  }else {
+  }else if(species=="eulachon") {
     sex_gene <<- ""
     species_gene <<- ""
     two.letter.code <<- "eu"
-  }    
-  
+  }else if(species=="sockeye") {
+    sex_gene <<- ""
+    species_gene <<- ""
+    two.letter.code <<- "sk"    
+  }
   
   # Set the directory and filename for the database (input and output)
   # Will depend on whether on the network (windows) or off the network (unix)
