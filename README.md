@@ -143,7 +143,15 @@ Other options:
 * zero = convert NA to 0
 * genotype = drop indiv w/ missing
 
-## 12. Convert pop to repunit
+## 12. Generate allele frequency table
+Calculate allele frequencies per population using the following:    
+`calculate_allele_freq()`    
+This will output 'freq.df', but to add the actual genotype alleles to the file, use the following:    
+`build_allele_freq_table(freq_file = freq.df)`    
+Note: this assumes that the hotspot file that is currently active is the same as the one that has been used to score all of the samples in your dataset.      
+
+
+## Extra. Convert pop to repunit
 *update*: this is no longer suggested, as it skews allele frequencies towards the population with the largest sample size that is being grouped into the repunit.     
 Once you have built the file for the AMOVA with repunits, you can use this file to re-calculate FST using repunits instead of collections.      
 `pop_to_repunit(data = obj_pop_filt)`     
