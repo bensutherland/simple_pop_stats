@@ -144,6 +144,7 @@ Other options:
 * genotype = drop indiv w/ missing
 
 ## 12. Convert pop to repunit
+*update*: this is no longer suggested, as it skews allele frequencies towards the population with the largest sample size that is being grouped into the repunit.     
 Once you have built the file for the AMOVA with repunits, you can use this file to re-calculate FST using repunits instead of collections.      
 `pop_to_repunit(data = obj_pop_filt)`     
 
