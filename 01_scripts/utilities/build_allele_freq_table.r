@@ -54,4 +54,7 @@ build_allele_freq_table <- function(freq_file = freq.df, include_alleles = TRUE)
   print("Your data is in the obj freq_and_alleles.df")
   assign(x = "freq_and_alleles.df", value = all_data.df, envir = .GlobalEnv)
   
+  # Write out
+  write.table(x = freq_and_alleles.df, file = "03_results/freq_and_alleles.txt", sep = "\t", quote = F, row.names = F, col.names = T)
+  
   }
