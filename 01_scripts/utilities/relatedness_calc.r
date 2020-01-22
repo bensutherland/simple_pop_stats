@@ -110,6 +110,7 @@ relatedness_calc <- function(data = obj_pop_filt, datatype = "SNP"){
   
   # Save out results
   date <- format(Sys.time(), "%Y-%m-%d")
+  assign(x = "output", value = output, envir = .GlobalEnv)
   save.image(file = paste0("03_results/", "kinship_analysis_", date, ".Rdata"))
   
 }
