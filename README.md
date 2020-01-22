@@ -65,7 +65,11 @@ To remove loci, use the following script that can allow you to remove monomorphi
 To remove pops from a user defined minimum number of individuals, or a tab-delimited text file (change from NULL), use the following to create `obj_pop_filt`:    
 `drop_pops(df = obj_filt, drop_by_pop_size = TRUE, min_indiv = 35, drop_file = NULL)`       
 
-## 05.5 Rename microsat pops to SNP pop names
+## 05.1 Reduce populations by sample size
+`downsample_pops(data = obj_filt, subset_method = "chosen", set_sample_size = 40)`      
+Other opts: "chosen", "average", "min"
+
+## 05.2 Rename microsat pops to SNP pop names
 In case you want to use downstream applications for microsat data, you need to replace microsat pop names with SNP pop names. So create a crosswalk file, with the following format:     
 (Note: first line is header names, keep as shown, following lines are custom):     
 datatype1, datatype2        
