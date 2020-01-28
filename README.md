@@ -7,14 +7,18 @@ Installation of related requires some special instructions on Windows. Follow tu
 https://github.com/timothyfrasier/related
 
 ## 00. Setup ##
-The StockCodes file <sp>StockCodesCU.txt must be in:     
-`00_archive/` (Linux)       
-`H:/Stock_Codes/<species>/` (Windows/MGL)     
+#### Files:    ####
+Necessary auxillary files must be either accessed through the network, or placed into `00_archive`, including:     
+- <sp>StockCodesCU.txt or <sp>mixCodes.txt (base/mix stock codes)        
+- <species>_PBT_ES.txt or <species>_mix_PBT_ES.txt (base/mix ES)     
+- <species>_hotspot_detail.txt (hotspot file)     
 
-I suggest putting a genepop into `02_input_data`, but there is an interactive selection of files, so it can really be anywhere on your machine.     
+Input file (genepop or rubias) can be accessible anywhere, but it is suggested to put into `02_input_data` for ease of access.     
 
+#### Start ####
 Source the main script `01_scripts/simple_pop_stats_start.R` to activate all functions.    
-Select a species from the options to set up most variable names.        
+Select whether you are on the network or not (i.e., running off network on local machine)     
+Select a species from the options to set up most variable names, this will set path variables.        
 
 
 ## 01. Loading Data ##
