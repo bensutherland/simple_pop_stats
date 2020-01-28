@@ -163,7 +163,7 @@ Want to use a rubias format file but don't want to go back to MGL_GSI_SNP? Or ma
 `genepop_to_rubias(data = obj, sample_type = "reference")`      
 This will use the datatype variable to determine SNP / microsat and run a conversion to produce a rubias output.      
 
-If you are generating a microsat genepop to rubias, then you need a conversion table specified. This will be in the format:     
+If you are generating a microsat genepop to rubias, then you need a conversion table specified, saved with the name `00_archive/<sp>StockCodes_microsat.txt`. This will be in the format:     
 ```
 collection\t repunit
 Bella_Coola\t CC
