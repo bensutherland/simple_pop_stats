@@ -45,9 +45,16 @@ select_species <- function() {
     two.letter.code <<- "sk"    
   }
   
+  
+  # Platform-specific variables
+  if(.Platform$OS.type == "unix") {
+    
+    
+  }
+  
   # Set the directory and filename for the database (input and output)
   # Will depend on whether on the network (windows) or off the network (unix)
-  if(.Platform$OS.type == "unix") {
+  if(on_network == FALSE) {
     
     # general path
     general.path <<- ""
@@ -55,63 +62,65 @@ select_species <- function() {
     # Working path (for random stuff)
     working.path <<- ""
     
-    #TVC Stock Seperated file locations
-    base.path <<- paste0(general.path,"base/")
-    mix.path <<- paste0(general.path,"mix/")
+    # Input proton stock-seperated files (base/mix)
+    base.path <<- paste0(general.path, "base/")
+    mix.path  <<- paste0(general.path, "mix/")
     
-    # Result path
+    # Result output
     result.path <<- "04_QC/"
     genepop.path <<- "03_genepop/"
     db.path <<- "05_databases/"
+    
+    # rubias files (base/mix)
     rubias_base.path <<- "07_rubias_base/"
     rubias_mix.path <<- "08_rubias_mix/"
     
+    # Required auxillary files
     # Extraction sheets
     ES.base <<- paste0("00_archive/", species, "_PBT_ES.txt") # base
-    ES.mix <<- paste0("00_archive/", species, "_mix_PBT_ES.txt",sep="") # mix
+    ES.mix  <<- paste0("00_archive/", species, "_mix_PBT_ES.txt") # mix
     
-    # Stock codes
-    sc.base.source <<- NULL
+    # Stock codes (base/mix)
     sc.base <<- paste0("00_archive/", two.letter.code, "StockCodesCU.txt")
-    sc.base.gps <<- paste0("00_archive/", two.letter.code, "StockCodes_w_GPS.txt")
-    sc.mix <<- paste0("00_archive/", two.letter.code, "mixCodes.txt")
+    sc.mix  <<- paste0("00_archive/", two.letter.code, "mixCodes.txt")
     
     # Hotspot file
     hotspot.file <<- paste0("00_archive/", species, "_hotspot_detail.txt")
     
     
-  } else if(.Platform$OS.type == "windows") {
+  } else if(on_network == TRUE) {
     
-    # general path
+    # General path
     general.path <<- paste0("H:/BEACHAMT/", species, "/PBT/")
     
     # Working path (for random stuff)
     working.path <- "S:/00_work/"
     
-    #Process path - default path for data output
+    # Process path - default path for data output
     process.path <- paste0("W:/1_GSI/PBT/", species, "/")
     
-    #TVC Stock Seperated file locations
+    # Input stock-seperated Proton file locations
     base.path <<- paste0(general.path,"base/")
     mix.path <<- paste0(general.path,"mix/")
     
-    # Result path
-    result.path <<- "04_QC/"
+    # Results path
+    result.path  <<- "04_QC/"
     genepop.path <<- "03_genepop/"
     db.path <<- "05_databases/"
-    #  rubias_base.path <<- "07_rubias_base/"
-    rubias_base.path <<- paste0(process.path,"rubias/")
-    #  rubias_mix.path <<- "08_rubias_mix/"
-    rubias_mix.path <<- paste0(process.path,"mrubias/")
+    rubias_base.path <<- paste0(process.path, "rubias/")
+    rubias_mix.path  <<- paste0(process.path, "mrubias/")
     
     # Extraction sheets
     ES.base <<- paste0("W:/9_PBT/01_", species, "/", species, "_PBT_ES.txt",sep="") # base
     ES.mix <<- paste0("W:/9_PBT/01_", species, "/", species, "_mix_PBT_ES.txt",sep="") # mix
     
     # Stock codes
+    
+    # Is the following necessary? #
     sc.base.source <<- paste0("W:/9_PBT/01_", species, "/", two.letter.code,  "StockCodesCU.xlsx")
+    # End/ Is the following necessary? #
+    
     sc.base <<- paste0("H:/Stock_Codes/", species, "/", two.letter.code,  "StockCodesCU.txt")
-    sc.base.gps <<- paste0("H:/Stock_Codes/", species, "/", two.letter.code, "StockCodes_w_GPS.txt")
     sc.mix <<- paste0("H:/Stock_Codes/", species, "/", two.letter.code,  "mixCodes.txt")
     
     # Hotspot file

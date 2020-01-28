@@ -23,6 +23,9 @@
 # install.packages("R.methodsS3")
 # install.packages("dartR")
 
+# For ask functionality
+# install.packages("gtools")
+
 
 # install.packages("Demerelate")
 # install.packages("related", repos="http://R-Forge.R-project.org")
@@ -44,6 +47,7 @@ require("dartR")
 require("tcltk")
 require("dplyr")
 require("ggplot2")
+library("gtools")
 
 # require("Demerelate")
 # require("related")
@@ -63,5 +67,8 @@ for(fun in file_sources){
   }
 rm(fun, file_sources) # clean up
 
+# User entry to determine if on local network or offline
+setup_network()
 
+# User entry to set species for filling in variables
 select_species()
