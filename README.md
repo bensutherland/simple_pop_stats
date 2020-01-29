@@ -13,6 +13,8 @@ Necessary auxillary files must be either accessed through the network, or placed
 - <species>_PBT_ES.txt or <species>_mix_PBT_ES.txt (base/mix ES)     
 - <species>_hotspot_detail.txt (hotspot file)     
 
+- microsat: <sp>StockCodes_microsat.txt
+
 Input file (genepop or rubias) can be accessible anywhere, but it is suggested to put into `02_input_data` for ease of access.     
 
 #### Start ####
@@ -167,8 +169,18 @@ If you are generating a microsat genepop to rubias, then you need a conversion t
 ```
 collection\t repunit
 Bella_Coola\t CC
-...
 ```
+
+## 14. Run simulated individual assignment test
+Use a rubias baseline output by MGL_GSI_SNP or by the genepop_to_rubias() converter as a 100% simulation input to test your reporting units using the rubias function assess_reference_loo().       
+`full_sim(rubias_base.FN = "03_results/rubias_output.txt", num_sim_indiv = 200, sim_reps = 100)`          
+...will save output into 03_results, including:
+- collection_100_stats_YYYY-MM-DD.txt (summary info of sum of all iteration assignments)
+- collection_100_stats_all_reps_YYYY-MM-DD.txt (not just the top repunit assignment)
+- collection_100_stats_all_pops_YYYY-MM-DD.txt (not just the top collection assignment)
+- all_collection_results_YYYY-MM-DD.txt.gz (raw output of all sims)
+
+For now, save these to a separate folder to make sure they don't get written over.    
 
 ## Extra. Convert pop to repunit
 *update*: this is no longer suggested, as it skews allele frequencies towards the population with the largest sample size that is being grouped into the repunit.     
