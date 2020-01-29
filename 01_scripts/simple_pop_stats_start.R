@@ -22,9 +22,13 @@
 # install.packages("dplyr")
 # install.packages("R.methodsS3")
 # install.packages("dartR")
+# install.packages("rubias)
 
 # For ask functionality
 # install.packages("gtools")
+
+# For reading data
+# install.packages("readr")
 
 
 # install.packages("Demerelate")
@@ -48,6 +52,8 @@ require("tcltk")
 require("dplyr")
 require("ggplot2")
 library("gtools")
+library("readr")
+library("rubias")
 
 # require("Demerelate")
 # require("related")
