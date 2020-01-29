@@ -1,35 +1,34 @@
 ## Convert genepop data (microsat) to rubias format
-genepop_to_rubias_microsat <- function(data){
+genepop_to_rubias_microsat <- function(data = data, sample_type = sample_type){
   
   print("Converting microsat genepop to rubias format")
   
-  # data is in a genind obj
-  obj
+  # # data is in a genind data
+  # data
+   
+  # # Details regarding the data
+  # nLoc(data)
+  # data$loc.fac # the marker names and number of alleles
+  # length(unique(data$loc.fac)) # How many different markers are there?
+  # data$tab[1:5,1:20] # What does the main data look like?
   
-  nLoc(obj)
-  obj$loc.fac # the marker names and number of alleles
-  # How many different markers are there?
-  length(unique(obj$loc.fac))
-  
-  # What does the main data look like?
-  obj$tab[1:5,1:20]
-  
+  # There are NAs in the data occassionally; these need to be converted to 0s for the below to work
+  #  , and will eventually end up as NAs again
+  data$tab[is.na(data$tab)] <- 0
+   
   # Create an object that contains allele 1 and allele 2 for each individual, using the alleles scored in tab
-  
   
   # Set nulls
   moi <- NULL ; loc_name.oi <- NULL ; allele_name.oi <- NULL; all_data <- list()
   
-  # Keep for later: nrow(obj$tab)
-  
   # Per individual
-  for(i in 1:10){
+  for(i in 1:nrow(data$tab)){
     
-    # indiv.list <- list() # list method
+    indiv.list <- list() # list method
     indiv.df <- NULL # vector df method
     
     # What are the unique markers?
-    unique_markers <- unique(gsub(pattern = "\\..*", replacement = "", x = colnames(obj$tab)))
+    unique_markers <- unique(gsub(pattern = "\\..*", replacement = "", x = colnames(data$tab)))
     unique_markers_allele_2 <- paste0(unique_markers, "_1")
     all_markers <- c(rbind(unique_markers, unique_markers_allele_2)) # interleave allele and allele_2
     head(all_markers)
@@ -44,17 +43,18 @@ genepop_to_rubias_microsat <- function(data){
     str(indiv.df)
     
     # What is the indiv name for this round?
-    indiv_name <- gsub(pattern = " ", replacement = "_", x = rownames(obj$tab)[i])
+    indiv_name <- gsub(pattern = " ", replacement = "_", x = rownames(data$tab)[i]) # replace spaces with underscores
+    indiv_name <- gsub(pattern = "\\_*\\_", replacement = "_", x = indiv_name) # replace multiple "_" w/ single
     colnames(indiv.df)[which(colnames(indiv.df)=="NA.vec")] <- indiv_name
     head(indiv.df)
     
     # Transfer the allelic info per marker by scanning over all columns
     
     # Per column (marker_allele)
-    for(c in 1:ncol(obj$tab)){
+    for(c in 1:ncol(data$tab)){
       
       # What marker_allele are we dealing with
-      moi <- colnames(obj$tab)[c]
+      moi <- colnames(data$tab)[c]
       
       # Identify marker
       loc_name.oi <- gsub(pattern = "\\..*", replacement = "", x = moi)
@@ -76,15 +76,21 @@ genepop_to_rubias_microsat <- function(data){
         
       }
       
+      
       # Check scores
+      
+      # # DEBUGGING
+      # print(i)
+      # print(c)
+       
       # If the indiv x marker_allele is a 0, not present here
-      if(obj$tab[i,c]=="0"){
+      if(data$tab[i,c]=="0"){
         
-        print("Not this allele")
+        # print("Not this allele")
         
         
         # If the indiv x marker_allele is a 1, one allele is present here
-      }else if(obj$tab[i,c]=="1"){
+      }else if(data$tab[i,c]=="1"){
         
         
         # If it is the first allele identified
@@ -93,7 +99,7 @@ genepop_to_rubias_microsat <- function(data){
           rubias_locus_name <- paste0(loc_name.oi)
           
           
-          # If it is the second allele identified 
+        # If it is the second allele identified 
         }else if( marker=="second" ){
           
           rubias_locus_name <- paste0(loc_name.oi, "_1")
@@ -104,7 +110,7 @@ genepop_to_rubias_microsat <- function(data){
         indiv.df[indiv.df$all_markers==rubias_locus_name, indiv_name] <- allele_name.oi
         
         # If the indiv x marker_allele is a 2, both alleles are this
-      }else if(obj$tab[i,c]=="2"){
+      }else if(data$tab[i,c]=="2"){
         
         rubias_locus_name <- paste0(loc_name.oi)
         indiv.df[indiv.df$all_markers==rubias_locus_name, indiv_name] <- allele_name.oi
@@ -120,9 +126,7 @@ genepop_to_rubias_microsat <- function(data){
       
     }
     
-    print(paste0("Finished indiv", rownames(obj$tab)[i]))
-    
-    # Replace NAs with 0s (#TODO)
+    print(paste0("Finished indiv", rownames(data$tab)[i]))
     
     all_data[[indiv_name]] <- indiv.df
     
@@ -161,10 +165,11 @@ genepop_to_rubias_microsat <- function(data){
   
   rubias.df <- rubias.df[-1,]
   rubias.df[1:5,1:5]
+  two_allele_data <- rubias.df
   
-  # Add sample type, collection, repunit, indiv columns, and then it is finished. (Plus fix the NA issue above)
   
-  
+  #### Adding non-genetic columns #####
+  annotate_rubias(two_allele_data = two_allele_data, sample_type = sample_type)
   
   
 }

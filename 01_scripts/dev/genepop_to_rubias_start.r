@@ -5,11 +5,11 @@ genepop_to_rubias <- function(data = obj, sample_type = "reference"){
   
   if(datatype=="SNP"){
     
-    genepop_to_rubias_SNP(data = data)
+    genepop_to_rubias_SNP(data = data, sample_type = sample_type)
     
   }else if(datatype=="microsat"){
     
-    genepop_to_rubias_microsat(data = data)
+    genepop_to_rubias_microsat(data = data, sample_type = sample_type)
     
   }
   

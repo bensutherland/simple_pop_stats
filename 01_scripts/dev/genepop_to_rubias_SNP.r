@@ -1,5 +1,5 @@
 # Convert genepop data (SNP) to rubias input (where data = a genind file)
-genepop_to_rubias_SNP <- function(data){
+genepop_to_rubias_SNP <- function(data = data, sample_type=sample_type){
   
   print("Converting SNP genepop to rubias format")
   
@@ -74,31 +74,11 @@ genepop_to_rubias_SNP <- function(data){
   
   # make df
   two_allele_data <- as.data.frame(x = two_allele_data, stringsAsFactors = FALSE)
-  
-  #### HERE TODAY - CAN'T GET IT TO ADD NEW COLUMNS...
-  
-  # Format the rubias non-genetic columns
-  two_allele_data$sample_type <- rep(x = sample_type, times = nrow(two_allele_data))
-  #two_allele_data
-  
-  # Look up pop name
-  two_allele_data$indiv  <- rownames(two_allele_data)
-  head(two_allele_data$indiv)
-  pop_code <- as.data.frame(as.character(gsub(pattern = "\\_.*", replacement = "", x = two_allele_data$indiv), stringsAsFactors = F))
-  colnames(pop_code) <- "pop_code"
-  sc.df <- read.delim2(file = sc.base, header = TRUE, stringsAsFactors = F)
-  pop_code <- merge(x = pop_code, y = sc.df, by.x = "pop_code", by.y = "Code", sort = F, all.x = TRUE)
-  
-  # Add in data
-  two_allele_data$collection  <- pop_code$collection
-  two_allele_data$repunit <- pop_code$repunit
-  head(two_allele_data)
+  dim(two_allele_data)
   
   
-  
-  
-  
-  dplyr::select(sample_type, dplyr::everything())
+  #### Adding non-genetic columns #####
+  annotate_rubias(two_allele_data = two_allele_data, sample_type = sample_type)
   
 }
 
