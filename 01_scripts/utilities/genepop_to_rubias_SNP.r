@@ -16,6 +16,7 @@ genepop_to_rubias_SNP <- function(data = data, sample_type=sample_type){
   #one_allele_data[1:5,1:5]
   
   # Convert the genepop code back to homo/het info
+  print("Converting from genepop codes to proton codes")
   for(i in 1:ncol(one_allele_data)){
     
     # Replace based on the number the datatype in torrent format
@@ -34,6 +35,7 @@ genepop_to_rubias_SNP <- function(data = data, sample_type=sample_type){
   #one_allele_data[1:15,1:10]
   
   # Convert to rubias format from proton format
+  print("Converting from proton format to rubias format")
   for(i in 1:ncol(one_allele_data)){
     one_allele_data[,i] <- ifelse(test = one_allele_data[,i]=="homo.ref", yes = "1 1"
                                   , no = ifelse(test = one_allele_data[,i]=="het", yes = "1 2"
@@ -78,6 +80,7 @@ genepop_to_rubias_SNP <- function(data = data, sample_type=sample_type){
   
   
   #### Adding non-genetic columns #####
+  print("Adding non-genetic columns")
   annotate_rubias(two_allele_data = two_allele_data, sample_type = sample_type)
   
 }

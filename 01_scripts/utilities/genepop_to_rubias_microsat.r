@@ -126,7 +126,8 @@ genepop_to_rubias_microsat <- function(data = data, sample_type = sample_type){
       
     }
     
-    print(paste0("Finished indiv", rownames(data$tab)[i]))
+    ## Debugging
+    # print(paste0("Finished indiv", rownames(data$tab)[i]))
     
     all_data[[indiv_name]] <- indiv.df
     

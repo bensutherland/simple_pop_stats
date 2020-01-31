@@ -8,10 +8,11 @@ annotate_rubias <- function(two_allele_data = two_allele_data, sample_type = sam
   indiv.vec <- rownames(x = two_allele_data)
   
   # Use stock code info to get collection name and repunit; depends if microsat or SNP
+  print("Using stock code file to collect names and repunits")
   if(datatype == "SNP"){
     
     # Remove everything after the first underscore to get the stock code (if in MGL_GSI_SNP format)
-    pop_code <- gsub(pattern = "\\_.*", replacement = "", x = indiv)
+    pop_code <- gsub(pattern = "\\_.*", replacement = "", x = indiv.vec)
     pop_code <- as.data.frame(pop_code, stringsAsFactors = FALSE)
     sc.df <- read.delim2(file = sc.base, header = TRUE, stringsAsFactors = F) # TODO: if mix, do X
     pop_code <- merge(x = pop_code, y = sc.df, by.x = "pop_code", by.y = "Code", sort = F, all.x = TRUE)
