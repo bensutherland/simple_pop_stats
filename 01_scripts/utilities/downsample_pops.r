@@ -73,6 +73,7 @@ downsample_pops <- function(data = obj, subset_method = "chosen", set_sample_siz
   subset_data <- repool(data.list)
   
   assign(x = "obj_subset", value = subset_data, envir = .GlobalEnv)
+  print("Your subset data is avail in obj_subset")
   
 }
   

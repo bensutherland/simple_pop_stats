@@ -166,7 +166,7 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
   write_tsv(x = all_collection_results, path = paste0("03_results/all_collection_results_", format(Sys.time(), "%Y-%m-%d"),".txt.gz"))
   
   # Write out the summary report of the collection and repunit assignment results
-  write_tsv(x = coll_all, path = paste0("03_results/collection_100_stats_",format(Sys.time(), "%Y-%m-%d"),".txt"))
+  write_tsv(x = coll_all, path = paste0("03_results/collection_100_stats_", format(Sys.time(), "%Y-%m-%d"),".txt"))
   
   # Write out all info
   write_tsv(x = coll_to_coll_filt_all, path = paste0("03_results/collection_100_stats_all_pops_",format(Sys.time(), "%Y-%m-%d"),".txt"))
