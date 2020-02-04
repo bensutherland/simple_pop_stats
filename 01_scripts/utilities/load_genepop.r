@@ -4,6 +4,7 @@
 load_genepop <- function(datatype = "SNP"){
   
   # Manually choose files (function depends windows or linux)
+  print("Select your genepop from file...")
   if(.Platform$OS.type == "unix") {
     
     my_genepop.path <- tk_choose.files(caption = "Select a genepop file" )
