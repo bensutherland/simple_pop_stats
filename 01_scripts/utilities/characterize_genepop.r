@@ -1,6 +1,6 @@
 # Characterize genepop details
 
-characterize_genepop <- function(df = obj, pdf_width = 8, pdf_height = 5, cex_names = 0.5 ){
+characterize_genepop <- function(df = obj, pdf_width = 8, pdf_height = 5, cex_names = 0.5, main_name = FALSE ){
   
   # View features
   print("**Number of individuals and Number of marker-alleles**")
@@ -28,6 +28,17 @@ characterize_genepop <- function(df = obj, pdf_width = 8, pdf_height = 5, cex_na
     fn <- paste0("03_results/sample_size_per_pop.pdf")
   }
   
+  # Add main title? 
+  if(main_name == TRUE){
+    
+    main_name <- basename(my_genepop.path)
+    
+  }else if(main_name == FALSE){
+    
+    main_name <- NULL
+    
+  }
+  
   # Plot and save
   pdf(file = fn, width = pdf_width, height = pdf_height)
   par(mar=c(8,5,3,3))
@@ -36,7 +47,7 @@ characterize_genepop <- function(df = obj, pdf_width = 8, pdf_height = 5, cex_na
           #, xlab="Stock_code"
           , ylab="Sample size"
           #, ylim = c(0,40)
-          , main = basename(my_genepop.path)
+          , main = main_name
           , cex.names = cex_names
   )
   abline(h = c(30), lty=2)
