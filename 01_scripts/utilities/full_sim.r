@@ -1,17 +1,22 @@
 ## Running 100 percent simulations
+# proportions.FN should be a tab-delim file with header collections \t ppn
 full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
                      , num_sim_indiv = 200 # number of indiv to sim from the baseline
                      , sim_reps = 100 
-                     , filter_by_pop_size = FALSE, min_pop_size = 10
+                     , filter_by_pop_size = FALSE
+                     , min_pop_size = 10
+                     , proportions.FN = NULL
                      #, repunit_sim = FALSE   # simulate by repunit
                      #, keep_false = FALSE     # Select whether all populations are retained (TRUE) or populations marked as FALSE in the keep column are dropped (FALSE)
                      #, all_collections = TRUE # Run all collections in 100 percent simulation; # Are all populations to be run, or only those that are specified by 'collections_to_use'
                      ){
   
+  #### 01. Load in baseline ####
   ## Load baseline data
   rubias_base <- read_tsv(rubias_base.FN)
   
   
+  #### TODO: This is better somewhere else ####
   ## Optional # filtering
   if(filter_by_pop_size==TRUE){
     
@@ -32,11 +37,11 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
     filtered_base.FN <- paste0(filtered_base.FN, "_coll_10_", format(Sys.time(), "%Y-%m-%d"),".txt")
     write_tsv(x = rubias_base, path = filtered_base.FN)
   }
+  #### END\TODO: This is better somewhere else ####
   
   
-  
-  ## Generate statistics per collection and per repunit
-  print("Generating stats per collection and per repunit")
+  #### 02. Generate counts per collection and per repunit ####
+  print("Generating counts per collection and per repunit")
   
   # Number of fish per collection
   collection.CNT <- rubias_base %>%
@@ -68,19 +73,50 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
   # Identify collections
   collections <- unique(rubias_base$collection)
   
-  # Make a repunit list, essentially a list of tibbles (one per repunit), contains 'ppn'
-  all_collection_scenario <- lapply(collections,
-                                    function(x) tibble(collection = x, ppn = 1.0))
-  # Name the list
-  #names(all_collection_scenario) <- collections # old method
-  for(i in 1:length(all_collection_scenario)){
-    names(all_collection_scenario)[[i]] <- all_collection_scenario[[i]]$collection
+  
+  #### 03. Define proportions per stock ####
+  ### Determine 100% simulation or fishery sample
+  # If a proportion filename is given, use it
+  if(!is.null(proportions.FN)){
+  
+    # Reporting
+    print("Performing a set-proportion mixture")
+    
+    # Read in the proportion filename:
+    ppn.df <- read_tsv(file = proportions.FN)
+    
+    # Sub in this proportion for the all_collection_scenario variable
+    ppn.df
+    
+    # Put into the list of scenarios
+    all_collection_scenario <- list()
+    scenario.name <- gsub(pattern = "\\..*", replacement = "", x = proportions.FN)
+    all_collection_scenario[[scenario.name]] <- ppn.df
+    
+  
+  }else {
+  
+    # Reporting
+    print("Performing 100% simulation")
+    
+    # Make a repunit list, essentially a list of tibbles (one per repunit), contains 'ppn'
+    all_collection_scenario <- lapply(collections,
+                                      function(x) tibble(collection = x, ppn = 1.0))
+    # Name the list
+    #names(all_collection_scenario) <- collections # old method
+    for(i in 1:length(all_collection_scenario)){
+      names(all_collection_scenario)[[i]] <- all_collection_scenario[[i]]$collection
     }
+    
+    all_collection_scenario
+    
   
-  # all_collection_scenario
+  }
+
   
-  #### Run Simulation ####
+  #### 04. Run Simulation ####
   print("Running simulation and assessing the simulation assignments")
+  print(paste0("This will include a total of ***", length(all_collection_scenario.list), "*** scenarios"))
   # Run simulation and put results into the repunit list
   # creates genotype-logL matrix based on simulation-by-indiv w/ randomly drawn popn proportions
   # then uses two estimates of mixture (maxL, MCMC)
@@ -92,15 +128,18 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
   )
   
   
-  #### Collect and summarize output ####
+
+  
+  #### 05. Collect and summarize output ####
   print("Collecting and summarizing outputs")
+  
   # Filter for same-on-same (targets); take the average of all reps for post_mean_pi, mle_pi, and true_pi
   coll_to_coll_filt_res <- all_collection_results %>%
                               group_by(collection_scenario, repunit, collection) %>%
                               summarise_at(.vars=c("post_mean_pi","mle_pi","true_pi")
                               , .funs=c(mean="mean")) %>%
                                   group_by(collection_scenario) %>%
-                                  filter(true_pi_mean == 1)
+                                  filter(true_pi_mean > 0)
   
   
   # Match repunit with estimated repunit and summarize
@@ -114,7 +153,7 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
                               filter(true_pi_mean_sum > 0)
   
   # Assign names
-  names(coll_to_rep_filt_res) <- c("collection"
+  names(coll_to_rep_filt_res) <- c("collection_scenario"
                                    , "repunit"
                                    , "repunit_post_mean_pi"
                                    , "repunit_mle_pi"
