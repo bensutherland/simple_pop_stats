@@ -62,18 +62,8 @@ select_species <- function() {
     # Working path (for random stuff)
     working.path <<- ""
     
-    # Input proton stock-seperated files (base/mix)
-    base.path <<- paste0(general.path, "base/")
-    mix.path  <<- paste0(general.path, "mix/")
-    
     # Result output
-    result.path <<- "04_QC/"
-    genepop.path <<- "03_genepop/"
-    db.path <<- "05_databases/"
-    
-    # rubias files (base/mix)
-    rubias_base.path <<- "07_rubias_base/"
-    rubias_mix.path <<- "08_rubias_mix/"
+    result.path <<- "03_results/"
     
     # Required auxillary files
     # Extraction sheets
@@ -99,16 +89,8 @@ select_species <- function() {
     # Process path - default path for data output
     process.path <- paste0("W:/1_GSI/PBT/", species, "/")
     
-    # Input stock-seperated Proton file locations
-    base.path <<- paste0(general.path,"base/")
-    mix.path <<- paste0(general.path,"mix/")
-    
     # Results path
-    result.path  <<- "04_QC/"
-    genepop.path <<- "03_genepop/"
-    db.path <<- "05_databases/"
-    rubias_base.path <<- paste0(process.path, "rubias/")
-    rubias_mix.path  <<- paste0(process.path, "mrubias/")
+    result.path  <<- "03_results/"
     
     # Extraction sheets
     ES.base <<- paste0("W:/9_PBT/01_", species, "/", species, "_PBT_ES.txt",sep="") # base

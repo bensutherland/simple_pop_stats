@@ -16,13 +16,13 @@ make_tree <- function(matrix = NULL
     # Save out, create filename
     if(separated==TRUE){
       
-      fn.plot <- paste0("03_results/gen_diff_tree_nj_unrooted_", sep_by, "_by_", name_by, ".pdf")
-      fn.tree <- paste0("03_results/gen_diff_tree_nj_unrooted_", sep_by, "_by_", name_by, ".tre")
+      fn.plot <- paste0(result.path, "gen_diff_tree_nj_unrooted_", sep_by, "_by_", name_by, ".pdf")
+      fn.tree <- paste0(result.path, "gen_diff_tree_nj_unrooted_", sep_by, "_by_", name_by, ".tre")
       
     }else{
       
-      fn.plot <- paste0("03_results/gen_diff_tree_nj_unrooted.pdf")
-      fn.tree <- paste0("03_results/gen_diff_tree_nj_unrooted.tre")
+      fn.plot <- paste0(result.path, "gen_diff_tree_nj_unrooted.pdf")
+      fn.tree <- paste0(result.path, "gen_diff_tree_nj_unrooted.tre")
       
     }
     
@@ -43,13 +43,13 @@ make_tree <- function(matrix = NULL
     
     if(separated==TRUE){
       
-      fn.plot <- paste0("03_results/gen_diff_tree_nj_unrooted_", sep_by, "_by_", name_by, "_", dist_metric, "_", nboots, "_boots.pdf")
-      fn.tree <- paste0("03_results/gen_diff_tree_nj_unrooted_", sep_by, "_by_", name_by, "_", dist_metric, "_", nboots, "_boots.tre")
+      fn.plot <- paste0(result.path, "gen_diff_tree_nj_unrooted_", sep_by, "_by_", name_by, "_", dist_metric, "_", nboots, "_boots.pdf")
+      fn.tree <- paste0(result.path, "gen_diff_tree_nj_unrooted_", sep_by, "_by_", name_by, "_", dist_metric, "_", nboots, "_boots.tre")
       
     }else{
       
-      fn.plot <- paste0("03_results/gen_diff_tree_nj_unrooted_", dist_metric, "_", nboots, "_boots.pdf")
-      fn.tree <- paste0("03_results/gen_diff_tree_nj_unrooted_", dist_metric, "_", nboots, "_boots.tre")
+      fn.plot <- paste0(result.path, "gen_diff_tree_nj_unrooted_", dist_metric, "_", nboots, "_boots.pdf")
+      fn.tree <- paste0(result.path, "gen_diff_tree_nj_unrooted_", dist_metric, "_", nboots, "_boots.tre")
       
     }
     

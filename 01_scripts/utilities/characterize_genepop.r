@@ -23,9 +23,9 @@ characterize_genepop <- function(df = obj, pdf_width = 8, pdf_height = 5, cex_na
   # Plot sample size in baseline per population
   # Make filename
   if(exists("sep_by")){
-    fn <- paste0("03_results/sample_size_per_", sep_by, "_by_", name_by, ".pdf")
+    fn <- paste0(result.path, "/sample_size_per_", sep_by, "_by_", name_by, ".pdf")
   }else{
-    fn <- paste0("03_results/sample_size_per_pop.pdf")
+    fn <- paste0(result.path, "/sample_size_per_pop.pdf")
   }
   
   # Add main title? 
