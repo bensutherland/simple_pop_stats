@@ -22,6 +22,11 @@ Source the main script `01_scripts/simple_pop_stats_start.R` to activate all fun
 Select whether you are on the network or not (i.e., running off network on local machine)     
 Select a species from the options to set up most variable names, this will set path variables.        
 
+Note: if you want your *output to go to a custom folder*, create the folder, then use the following to interactively identify it:     
+`set_output_folder()`      
+...or with a folder name:   
+`set_output_folder(result_path= "<your/full/path>")`       
+
 
 ## 01. Loading Data ##
 Load a genepop with the following, using 'SNP' or 'microsat':    
@@ -54,8 +59,18 @@ New: the option `add_CU` can be used to append the CU from the stock code file t
 Made a mistake? Don't worry, just recover your original genind:      
 `obj <- obj.bck`      
 
+#### Rename microsat data ####
 If you are working with *MGL_GSI* microsat data, and want to clean your population names, use the following to drop all characters after the first space:      
 `fix_pop_names(df = obj)`      
+
+...and if you would like to append regions to the end of the population name:      
+```
+# Set the path to your names.txt file (names.dat but tab-delimited)
+stock_code.FN <- "<full/path/to/names.txt>"
+# Fix microsat pop names
+fix_pop_names(df = obj, stock_code.FN = stock_code.FN)
+
+```
 
 ## 03. Characterize Data ##
 To find the number of samples, markers, alleles, and sample size per population, use the following:    
