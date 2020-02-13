@@ -7,15 +7,21 @@ Installation of related requires some special instructions on Windows. Follow tu
 https://github.com/timothyfrasier/related
 
 ## 00. Setup ##
-#### Files:    ####
-Necessary auxillary files must be either accessed through the network, or placed into `00_archive`, including:     
-- <sp>StockCodesCU.txt or <sp>mixCodes.txt (base/mix stock codes)        
-- <species>_PBT_ES.txt or <species>_mix_PBT_ES.txt (base/mix ES)     
-- <species>_hotspot_detail.txt (hotspot file)     
+#### Required Files:    ####
+Required files are automatically identified on network, or if off network:       
+```
+# Put essential files in 00_archive, including     
+# Extraction sheets: 
+<species>_PBT_ES.txt or <species>_mix_PBT_ES.txt (base/mix ES)     
+# Hotspot file:    
+<species>_hotspot_detail.txt (hotspot file)     
+# Stock code file:  
+SNP only: <sp>StockCodesCU.txt or <sp>mixCodes.txt (base/mix stock codes)        
+microsat only: <sp>StockCodes_microsat.txt
 
-- microsat: <sp>StockCodes_microsat.txt
+# The input file can be anywhere on your computer, but you can also put it in 02_input_data
+```
 
-Input file (genepop or rubias) can be accessible anywhere, but it is suggested to put into `02_input_data` for ease of access.     
 
 #### Start ####
 Source the main script `01_scripts/simple_pop_stats_start.R` to activate all functions.    
