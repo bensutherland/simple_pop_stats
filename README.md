@@ -194,8 +194,8 @@ Note: uses the datatype variable (SNP/microsat)
 *For microsatellite data*
 To convert the microsat data to rubias, the repunits per stock code must be specified:      
 ```
-# Prepare the following file:     
-00_archive/<sp>StockCodes_microsat.txt`.      
+# Prepare the following file: 00_archive/<sp>StockCodes_microsat.txt     
+# With the following format: 
 collection  repunit
 Bella_Coola CC
 Wannock     CC
