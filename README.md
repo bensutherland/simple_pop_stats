@@ -7,7 +7,7 @@ Installation of related requires some special instructions on Windows. Follow tu
 https://github.com/timothyfrasier/related
 
 ## 00. Setup ##
-#### Required Files:    ####
+#### Prepare required files:    ####
 Required files are automatically identified on network, or if off network:       
 ```
 # Put essential files in 00_archive, including     
@@ -22,17 +22,24 @@ microsat only: <sp>StockCodes_microsat.txt
 # The input file can be anywhere on your computer, but you can also put it in 02_input_data
 ```
 
-
-#### Start ####
-Source the main script `01_scripts/simple_pop_stats_start.R` to activate all functions.    
-Select whether you are on the network or not (i.e., running off network on local machine)     
-Select a species from the options to set up most variable names, this will set path variables.        
+#### Source functions and set variables ####
+Source `01_scripts/simple_pop_stats_start.R` to activate all functions.    
+Select if you are on the DFO network or running local.          
+Select the species being analyzed from the available list.        
 
 Note: if you want your *output to go to a custom folder*, create the folder, then use the following to interactively identify it:     
-`set_output_folder()`      
+      
 ...or with a folder name:   
-`set_output_folder(result_path= "<your/full/path>")`       
+``       
 
+
+#### Set output directory ####
+By default, the results will go into directories within this repo, unless a custom output director is chosen:           
+```
+set_output_folder()   # works interactively
+set_output_folder(result_path= "<your/full/path>")
+# note: the directory must already exist
+```
 
 ## 01. Loading Data ##
 Load a genepop with the following, using 'SNP' or 'microsat':    
