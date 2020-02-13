@@ -186,15 +186,20 @@ This will output 'freq.df', but to add the actual genotype alleles to the file, 
 `build_allele_freq_table(freq_file = freq.df)`    
 Note: this assumes that the hotspot file that is currently active is the same as the one that has been used to score all of the samples in your dataset.      
 
-## 13. Convert genepop to rubias format
-Want to use a rubias format file but don't want to go back to MGL_GSI_SNP? Or maybe you want to be able to use functions such as downsampling within simple_pop_stats and pipe to rubias? Use the following:    
+## 13. Convert format (genepop to rubias) 
+Convert genepop to rubias: 
 `genepop_to_rubias(data = obj, sample_type = "reference")`      
-This will use the datatype variable to determine SNP / microsat and run a conversion to produce a rubias output.      
+Note: uses the datatype variable (SNP/microsat)            
 
-If you are generating a microsat genepop to rubias, then you need a conversion table specified, saved with the name `00_archive/<sp>StockCodes_microsat.txt`. This will be in the format:     
+*For microsatellite data*
+To convert the microsat data to rubias, the repunits per stock code must be specified:      
 ```
-collection\t repunit
-Bella_Coola\t CC
+# Prepare the following file:     
+00_archive/<sp>StockCodes_microsat.txt`.      
+collection  repunit
+Bella_Coola CC
+Wannock     CC
+Fraser      FR
 ```
 
 ## 14. Run simulated individual assignment test
