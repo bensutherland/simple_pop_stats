@@ -7,7 +7,7 @@ Installation of related requires some special instructions on Windows. Follow tu
 https://github.com/timothyfrasier/related
 
 ## 00. Setup ##
-#### Prepare required files:    ####
+#### A. Prepare required files:    ####
 Required files are automatically identified on network, or if off network:       
 ```
 # Put essential files in 00_archive, including     
@@ -22,18 +22,12 @@ microsat only: <sp>StockCodes_microsat.txt
 # The input file can be anywhere on your computer, but you can also put it in 02_input_data
 ```
 
-#### Source functions and set variables ####
+#### B. Source functions and set variables ####
 Source `01_scripts/simple_pop_stats_start.R` to activate all functions.    
 Select if you are on the DFO network or running local.          
 Select the species being analyzed from the available list.        
-
-Note: if you want your *output to go to a custom folder*, create the folder, then use the following to interactively identify it:     
       
-...or with a folder name:   
-``       
-
-
-#### Set output directory ####
+#### C. Set custom output directory ####
 By default, the results will go into directories within this repo, unless a custom output director is chosen:           
 ```
 set_output_folder()   # works interactively
