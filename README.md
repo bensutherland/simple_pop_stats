@@ -67,16 +67,13 @@ Made a mistake? Don't worry, just recover your original genind:
 `obj <- obj.bck`      
 
 #### Rename microsat data ####
-If working with _MGL_GSI_ microsat data, clean population names:      
-```
-# Remove everything after the first space in pop names:      
-fix_pop_names(df = obj)
-# As above, plus add the repunit name to the end of the pop name:    
-# First set the path to your names.txt file (tab-delimited names.dat)
-stock_code.FN <- "<full/path/to/names.txt>"
-fix_pop_names(df = obj, stock_code.FN = stock_code.FN)
-```
-note: caution, if everything before the space is not unique between populations could cause populations to be merged
+If working with _MGL_GSI_ microsat data, first make a stock code file similar to the SNP stock code file, by inputting a names file that has been formatted as tab-delimited:      
+`prepare_stockcode_file(fix_names = TRUE, names_file.FN = "/path/to/your/tab/delim/names/file.txt")`       
+
+Then clean up your population names using the following:        
+`fix_pop_names(data = obj, append_region = TRUE, stockcode.FN = "/path/to/your/new/stockcode/file.txt")`      
+
+note: caution, if everything before the space is not unique between populations could cause populations to be merged. There are some checks in place to prevent this, but good to be aware of it.     
 
 ## 03. Characterize Data ##
 To find the number of samples, markers, alleles, and sample size per population, use the following:    
