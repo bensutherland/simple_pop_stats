@@ -44,7 +44,7 @@ To see what populations you have:
 `unique(pop(obj))`      
 
 
-## 02. Renaming Data ##
+## 02. Rename Data ##
 If you are working with *MGL_GSI_SNP* data, where the sample IDs are all in the composition of:    
 `stockcode_year_indivID_sex`, e.g. `2_2000_9_U`      
 ...you can use the following script to rename your populations:    
@@ -67,17 +67,16 @@ Made a mistake? Don't worry, just recover your original genind:
 `obj <- obj.bck`      
 
 #### Rename microsat data ####
-If you are working with *MGL_GSI* microsat data, and want to clean your population names, use the following to drop all characters after the first space:      
-`fix_pop_names(df = obj)`      
-
-...and if you would like to append regions to the end of the population name:      
+If working with _MGL_GSI_ microsat data, clean population names:      
 ```
-# Set the path to your names.txt file (names.dat but tab-delimited)
+# Remove everything after the first space in pop names:      
+fix_pop_names(df = obj)
+# As above, plus add the repunit name to the end of the pop name:    
+# First set the path to your names.txt file (tab-delimited names.dat)
 stock_code.FN <- "<full/path/to/names.txt>"
-# Fix microsat pop names
 fix_pop_names(df = obj, stock_code.FN = stock_code.FN)
-
 ```
+note: caution, if everything before the space is not unique between populations could cause populations to be merged
 
 ## 03. Characterize Data ##
 To find the number of samples, markers, alleles, and sample size per population, use the following:    
