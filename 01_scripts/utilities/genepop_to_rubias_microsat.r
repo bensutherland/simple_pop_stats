@@ -14,6 +14,7 @@ genepop_to_rubias_microsat <- function(data = data, sample_type = sample_type){
   
   # There are NAs in the data occassionally; these need to be converted to 0s for the below to work
   #  , and will eventually end up as NAs again
+  print("Convert NA values to 0")
   data$tab[is.na(data$tab)] <- 0
    
   # Create an object that contains allele 1 and allele 2 for each individual, using the alleles scored in tab
@@ -40,7 +41,7 @@ genepop_to_rubias_microsat <- function(data = data, sample_type = sample_type){
     NA.vec <- rep(x = "NA", times = length(indiv.df$all_markers))
     indiv.df <- cbind(indiv.df, NA.vec)
     indiv.df$NA.vec <- as.character(indiv.df$NA.vec)
-    str(indiv.df)
+    # str(indiv.df)
     
     # What is the indiv name for this round?
     indiv_name <- gsub(pattern = " ", replacement = "_", x = rownames(data$tab)[i]) # replace spaces with underscores
