@@ -1,8 +1,9 @@
 # Calculate pair-wise Fst
 # format should be genind or hierfstat
 # If you want a custom filename for your output csv, set cust_fn as the basename (note this will automatically go in 03_results)
+# Note: bootstrapping is currently not working well, keep it as FALSE or else often get an error
 
-calculate_FST <- function(format="genind", dat = obj_filt, separated = FALSE, cust_fn = NULL){
+calculate_FST <- function(format="genind", dat = obj_filt, separated = FALSE, cust_fn = NULL, bootstrap = FALSE){
   
   if(format=="genind"){
     
@@ -36,9 +37,21 @@ calculate_FST <- function(format="genind", dat = obj_filt, separated = FALSE, cu
   
   # Calculate FST
   print("Calculating WCfst")
-  pairwise.wc.fst <- pairwise.WCfst(dat)
-  print(pairwise.wc.fst)
-  assign(x = "pairwise_wc_fst", value = pairwise.wc.fst, envir = .GlobalEnv)
+  if(bootstrap==TRUE){
+    
+    pairwise.wc.fst <- boot.ppfst(dat = dat, nboot = 1000, quant = c(0.025, 0.975))
+    print(pairwise.wc.fst)
+    assign(x = "pairwise_wc_fst", value = pairwise.wc.fst, envir = .GlobalEnv)
+    booted <- "booted"
+    
+  }else if(bootstrap==FALSE){
+  
+    pairwise.wc.fst <- pairwise.WCfst(dat)
+    print(pairwise.wc.fst)
+    assign(x = "pairwise_wc_fst", value = pairwise.wc.fst, envir = .GlobalEnv)  
+    booted <- "not_booted"
+    
+  }
   
   # Save results
   if(separated==TRUE){
@@ -47,7 +60,7 @@ calculate_FST <- function(format="genind", dat = obj_filt, separated = FALSE, cu
     
   }else{
     
-    fn <- paste0("03_results/gen_diff_wcfst.csv")
+    fn <- paste0("03_results/gen_diff_wcfst_", booted, ".csv")
     
   }
 
