@@ -115,12 +115,14 @@ This will output your results as `pairwise_wc_fst`, and save to the `03_results`
 
 Note: if you want to have a custom filename for your FST csv file, use the argument `cust_fn` for your basename, which will automatically save into `03_results`.      
 
+
 ## 07. Build a tree ##
 You can build a tree using the previous genetic differentiation object:      
 `make_tree(matrix = pairwise_wc_fst, tree_method = "NJ", separated = TRUE)`         
 
 ...or you can build a new tree using bootstrap with the filtered genind file:        
 `make_tree(bootstrap = TRUE, boot_obj = obj_pop_filt, nboots = 10000, dist_metric = "edwards.dist", separated = TRUE)`      
+
 
 ## 08. Run multidimensional scaling techniques
 Conduct PCA using:     
@@ -131,6 +133,7 @@ Conduct DAPC using:
 `dapc_from_genind(data = obj_pop_filt, plot_allele_loadings = TRUE, colour_file = NULL)`      
 
 To use custom colours, set the path to a csv file with header 'collection' and 'colour' containing the population name and colour name to set your custom colours.     
+
 
 ## 09. Calculate relatedness
 First, convert data (SNP or microsat) from genind to relatedness format and calculate relatedness values:      
@@ -153,6 +156,7 @@ Using this file, along with an earlier calculated FST (output of `calculate_FST(
 `compare_phys_genet_dist(FST_file = "03_results/<your_FST_file>.csv")`       
 ...which will put your results into `03_results/pairwise_fst_v_physical_dist.pdf`      
 
+
 ## 11. Run AMOVA
 AMOVA will use repunits and collections to see where the variance exists in your data.    
 To create a repunit file _de novo_, run:      
@@ -167,6 +171,7 @@ Other options:
 * ignore = do nothing
 * zero = convert NA to 0
 * genotype = drop indiv w/ missing
+
 
 ## 12. Generate allele frequency table
 Calculate allele frequencies per population using the following:    

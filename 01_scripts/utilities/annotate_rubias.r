@@ -1,4 +1,8 @@
 # NOTE: microsat assumes you have "00_archive/euStockCodes_microsat.txt"
+# in the tab-delim format of: 
+#collection	repunit
+#12Mile_Creek	GoA
+
 annotate_rubias <- function(two_allele_data = two_allele_data, sample_type = sample_type){
   
   #### Adding non-genetic columns #####
