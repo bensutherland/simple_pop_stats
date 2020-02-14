@@ -18,7 +18,6 @@ genepop_to_rubias_microsat <- function(data = data, sample_type = sample_type){
   data$tab[is.na(data$tab)] <- 0
    
   # Create an object that contains allele 1 and allele 2 for each individual, using the alleles scored in tab
-  
   # Set nulls
   moi <- NULL ; loc_name.oi <- NULL ; allele_name.oi <- NULL; all_data <- list()
   
@@ -169,6 +168,8 @@ genepop_to_rubias_microsat <- function(data = data, sample_type = sample_type){
   rubias.df[1:5,1:5]
   two_allele_data <- rubias.df
   
+  # Just in case
+  write_delim(x = rubias.df, path = paste0(result.path, "rubias_mid.txt"), delim = "\t")
   
   #### Adding non-genetic columns #####
   annotate_rubias(two_allele_data = two_allele_data, sample_type = sample_type)
