@@ -56,11 +56,11 @@ calculate_FST <- function(format="genind", dat = obj_filt, separated = FALSE, cu
   # Save results
   if(separated==TRUE){
     
-    fn <- paste0("03_results/gen_diff_wcfst_", sep_by, "_by_", name_by, ".csv")
+    fn <- paste0(result.path, "gen_diff_wcfst_", sep_by, "_by_", name_by, ".csv")
     
   }else{
     
-    fn <- paste0("03_results/gen_diff_wcfst_", booted, ".csv")
+    fn <- paste0(result.path, "gen_diff_wcfst_", booted, ".csv")
     
   }
 
@@ -68,7 +68,7 @@ calculate_FST <- function(format="genind", dat = obj_filt, separated = FALSE, cu
   # Is a custom filename being used?
   if(!is.null(cust_fn)){
     
-    fn <- paste0("03_results/", cust_fn)
+    fn <- paste0(result.path, cust_fn)
     
   } else {
     print("Not using a custom filename")

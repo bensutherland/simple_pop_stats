@@ -27,9 +27,11 @@ annotate_rubias <- function(two_allele_data = two_allele_data, sample_type = sam
   }else if(datatype == "microsat"){
     
     # Take everything up to the first set of four numbers (year)
-    collection.vec <- gsub(pattern = "\\_[0-9]+\\_.*", replacement = "", x = indiv.vec)
+    #collection.vec <- gsub(pattern = "\\_[0-9]+\\_.*", replacement = "", x = indiv.vec)
+    collection.vec <- gsub(pattern = "\\_[0-9][0-9][0-9][0-9]\\_.*", replacement = "", x = indiv.vec)
     collection.vec <- as.data.frame(collection.vec)
-    microsat.sc.FN <- paste0("00_archive/", two.letter.code, "StockCodes_microsat.txt")
+    #microsat.sc.FN <- paste0("00_archive/", two.letter.code, "StockCodes_microsat.txt")
+    microsat.sc.FN <- paste0(current.path, "/00_archive/", two.letter.code, "StockCodes_microsat.txt")
     sc.df <- read.delim2(file = microsat.sc.FN, header = T, sep = "\t")
     sc.df <- merge(x = collection.vec, y = sc.df, by.x = "collection.vec", by.y = "collection", sort = F)
     repunit.vec <- sc.df$repunit
@@ -48,7 +50,7 @@ annotate_rubias <- function(two_allele_data = two_allele_data, sample_type = sam
   assign(x = "all_data.df", value = all_data.df, envir = .GlobalEnv)
   
   # Create filename
-  FN <- paste0("03_results/rubias_output_", datatype, ".txt")
+  FN <- paste0(result.path, "rubias_output_", datatype, ".txt")
   
   write.table(x = all_data.df, file = FN, sep = "\t", row.names = FALSE)
   
