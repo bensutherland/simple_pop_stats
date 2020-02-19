@@ -24,9 +24,9 @@ fix_pop_names <- function(data = obj, append_region = FALSE, stockcode.FN = NULL
   if(append_region==TRUE & !is.null(stockcode.FN)){
     
     # Read in stock code file
-    stockcode.df <- read.delim(stockcode.FN)
+    stockcode.df <- read.delim(stockcode.FN, stringsAsFactors = FALSE)
     # Make all_pops into a dataframe for merging
-    all_pops.df  <- as.data.frame(all_pops)
+    all_pops.df  <- as.data.frame(all_pops, stringsAsFactors = FALSE)
     
     # confirm that all data is present and equal
     if(length(intersect(x = all_pops.df$all_pops, y = stockcode.df$collection))==length(unique(all_pops.df$all_pops))){
@@ -34,6 +34,15 @@ fix_pop_names <- function(data = obj, append_region = FALSE, stockcode.FN = NULL
     }else{
       print("Not all pops in your data are in the stock code file, crashing...")
       stop()
+    }
+    
+    #### TODO ####
+    #HACK to solve issue of multiple collection IDs the same:
+    if(species=="sockeye"){
+      
+      # Remove the section of the stock code that has the remove from baseline statement:
+      stockcode.df <- stockcode.df[stockcode.df$repunit!="Remove from Baseline",]
+      
     }
     
     # Append the region code to the back of pop names

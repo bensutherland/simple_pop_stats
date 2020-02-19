@@ -20,6 +20,7 @@ update_pop_names <- function(sep_by = "collection", name_by = "stockname", add_C
                              , into = c("stock.code", "year", "fish.id", "sex")
                             )
   head(indiv_names.df)
+  dim(indiv_names.df)
 
   
   ## Generate new names for populations
@@ -86,10 +87,19 @@ update_pop_names <- function(sep_by = "collection", name_by = "stockname", add_C
     # Reporting
     print("Reading in stock codes")
     
-    stock_codes.df <- read.delim2(file = sc.base)
+    stock_codes.df <- read.delim2(file = sc.base, stringsAsFactors = F)
+    
+    # Safety check - are there duplicate values?
+    print("The following stock codes are seen more than once:   ")
+    stock_codes.df[duplicated(x = stock_codes.df$Code), "Code"]
+    print("If there are duplicated values, this will cause the program to crash")
     
     # Merge to get the stock code name
     rosetta <- merge(x = stock_codes.df, y = pop_short.df, by.x = "Code", by.y = "pop_short", sort = F, all.y = T)
+    rosetta$collection <- as.character(rosetta$collection)
+    rosetta$repunit <- as.character(rosetta$repunit)
+    rosetta$ProvState <- as.character(rosetta$ProvState)
+    str(rosetta)
     
     print("re-ordering back into original order")
     rosetta <- rosetta[order(rosetta$id), ]

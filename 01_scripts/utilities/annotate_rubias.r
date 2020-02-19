@@ -33,6 +33,16 @@ annotate_rubias <- function(two_allele_data = two_allele_data, sample_type = sam
     #microsat.sc.FN <- paste0("00_archive/", two.letter.code, "StockCodes_microsat.txt")
     microsat.sc.FN <- paste0(current.path, "/00_archive/", two.letter.code, "StockCodes_microsat.txt")
     sc.df <- read.delim2(file = microsat.sc.FN, header = T, sep = "\t")
+    
+    #### TODO ####
+    #HACK to solve issue of multiple collection IDs the same:
+    if(species=="sockeye"){
+      
+      # Remove the section of the stock code that has the remove from baseline statement:
+      sc.df <- sc.df[sc.df$repunit!="Remove from Baseline",]
+      
+    }
+    
     sc.df <- merge(x = collection.vec, y = sc.df, by.x = "collection.vec", by.y = "collection", sort = F)
     repunit.vec <- sc.df$repunit
     
