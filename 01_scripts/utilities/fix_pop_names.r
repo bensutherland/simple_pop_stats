@@ -19,8 +19,9 @@ fix_pop_names <- function(data = obj, append_region = FALSE, stockcode.FN = NULL
     stop()
   }
   
+  pop(data) <- all_pops
   
-  # Appending region
+  # If appending region, use the following:
   if(append_region==TRUE & !is.null(stockcode.FN)){
     
     # Read in stock code file
@@ -61,6 +62,7 @@ fix_pop_names <- function(data = obj, append_region = FALSE, stockcode.FN = NULL
   }
 
   print("Your data will be output as obj_renamed")
+  
   assign(x = "obj_renamed", value = data, envir = .GlobalEnv)
 
 }
