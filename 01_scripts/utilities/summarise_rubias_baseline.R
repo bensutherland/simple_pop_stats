@@ -8,7 +8,8 @@
 
 summarise_rubias_baseline <- function(baseline = rubias_base, 
                                out_prefix = "rubias_base_summary",
-                               repunit_desc = repunit_desc){
+                               repunit_desc = repunit_desc,
+                               by_year=FALSE){
   
     # Load necessary libraries
     library(dplyr)
@@ -50,8 +51,18 @@ summarise_rubias_baseline <- function(baseline = rubias_base,
           # Remove any columns that are == 0
           work <- work %>% select_if(~any(. > 0))
           
-          # Create a string of remaining column headers
-          base_summary$Years[i] <- paste(colnames(work),collapse=", ")      
+          if(by_year==TRUE){
+                for (j in 1:length(work)){
+                      work[j] <- paste0(colnames(work)[j],"(",work[j],")")
+                }
+                
+                base_summary$Years[i] <- paste(work,collapse=", ")
+          } else {
+            
+            # Create a string of remaining column headers
+            base_summary$Years[i] <- paste(colnames(work),collapse=", ")           
+            
+          }
             
     }
 
@@ -63,16 +74,21 @@ summarise_rubias_baseline <- function(baseline = rubias_base,
 
     # Keep the columns of interest
     base_summary <- subset(base_summary, select = c("CU_NAME","CU","collection","Years","total_N"))
-
-    # Rename the columns of interest
-    colnames(base_summary) <- c("Region/Conservation Unit","CU Number","Population","Years","N")
-
+    
+    if(by_year==TRUE){
+        # Rename the columns of interest
+        colnames(base_summary) <- c("Region/Conservation Unit","CU Number","Population","Years(N)","N")
+    } else {
+        # Rename the columns of interest
+        colnames(base_summary) <- c("Region/Conservation Unit","CU Number","Population","Years","N")
+    }
+    
     # Blank out repeated repunit and CU numbers
     base_summary$`Region/Conservation Unit`[duplicated(base_summary$`Region/Conservation Unit`)] <- ""
     base_summary$`CU Number`[duplicated(base_summary$`CU Number`)] <- ""
 
     # Output the dataframe
-    write.table(base_summary,file=paste0(out_prefix,".baseline_summary.txt")
+    write.table(base_summary,file=paste0("03_results/",out_prefix,".baseline_summary.txt")
                 ,quote=FALSE,sep="\t",row.names=FALSE)
 
 }
