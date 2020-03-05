@@ -210,6 +210,45 @@ Use a rubias baseline output by MGL_GSI_SNP or by the genepop_to_rubias() conver
 
 For now, save these to a separate folder to make sure they don't get written over.    
 
+## 15. Summarize a rubias base for collections, years and total N
+Will summarize a filtered rubias base, and export a table that reports the Repunit, CU number, Collection, years per collection and Total N. This is a commonly produced table for publication, so provided here for reproducability.
+
+```
+summarise_rubias_baseline(baseline = rubias_base,
+                          out_prefix = "rubias_base_summary",
+                          repunit_desc = repunit_desc,
+                          by_year=FALSE)
+```
+
+Takes a filtered baseline, an output prefix and a repunit file. Will export to 03_results. Please do not provide a path in the output prefix, only a prefix for the output file. Tacked on to the prefix will be `.baseline_summary.txt` and output will be tab delimited. Example:
+
+|                                    |           |                         |                        |     | 
+|------------------------------------|-----------|-------------------------|------------------------|-----| 
+| Region/Conservation Unit           | CU Number | Population              | Years                  | N   | 
+| Kalum_early timing                 | 49        | CEDAR_RIVER             | 1996                   | 20  | 
+| Kalum_late timing                  | 50        | KITSUMKALUM_RIVER-LOWER | 2013, 2014, 2015, 2016 | 559 | 
+| Zymoetz                            | 80        | THOMAS_CREEK            | 2004, 2009, 2010       | 96  | 
+| Sicintine                          | 81        | SICINTINE_RIVER         | 2010                   | 115 | 
+| Middle Skeena-mainstem tributaries | 54        | BULKLEY_RIVER-LOWER     | 1999                   | 96  | 
+|                                    |           | KISPIOX_RIVER           | 2004, 2006, 2008, 2010 | 98  | 
+|                                    |           | KITSEGUECLA_RIVER       | 2009                   | 95  | 
+|                                    |           | KITWANGA_RIVER          | 2003                   | 93  | 
+|                                    |           | KULDO_CREEK             | 2008, 2009             | 95  | 
+
+With `by_year=TRUE` it will add counts per year. Example:
+
+|                                    |           |                     |                                      |    | 
+|------------------------------------|-----------|---------------------|--------------------------------------|----| 
+| Region/Conservation Unit           | CU Number | Population          | Years(N)                             | N  | 
+| Middle Skeena-mainstem tributaries | 54        | BULKLEY_RIVER-LOWER | 1999(96)                             | 96 | 
+|                                    |           | KISPIOX_RIVER       | 2004(59), 2006(28), 2008(3), 2010(8) | 98 | 
+|                                    |           | KITSEGUECLA_RIVER   | 2009(95)                             | 95 | 
+|                                    |           | KITWANGA_RIVER      | 2003(93)                             | 93 | 
+
+
+The rubias file requires the headers `collection`, `repunit` and `indiv` <- should be there by default.
+The repunits file requires the headers `Display_Order`, `CU`, `CU_Name`,`repunit`. 
+
 ## Extra. Convert pop to repunit
 *update*: this is no longer suggested, as it skews allele frequencies towards the population with the largest sample size that is being grouped into the repunit.     
 Once you have built the file for the AMOVA with repunits, you can use this file to re-calculate FST using repunits instead of collections.      
