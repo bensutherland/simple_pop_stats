@@ -31,7 +31,7 @@ drop_loci <- function(drop_monomorphic = TRUE, drop_file = NULL){
     drop_loc <- drop_loc$V1
     
     # Remove these loci
-    print(paste0("Dropping user defined markers, in total: ", length(drop_names), " markers"))
+    print(paste0("Dropping user defined markers, in total: ", length(drop_loc), " markers"))
     
     all_loci <- locNames(obj)
     
