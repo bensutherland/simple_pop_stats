@@ -26,26 +26,40 @@ annotate_rubias <- function(two_allele_data = two_allele_data, sample_type = sam
     
   }else if(datatype == "microsat"){
     
+    # Identify stock name per sample
     # Take everything up to the first set of four numbers (year)
     #collection.vec <- gsub(pattern = "\\_[0-9]+\\_.*", replacement = "", x = indiv.vec)
     collection.vec <- gsub(pattern = "\\_[0-9][0-9][0-9][0-9]\\_.*", replacement = "", x = indiv.vec)
     collection.vec <- as.data.frame(collection.vec)
-    #microsat.sc.FN <- paste0("00_archive/", two.letter.code, "StockCodes_microsat.txt")
+    
+    # Read in stock name to repunit conversion
     microsat.sc.FN <- paste0(current.path, "/00_archive/", two.letter.code, "StockCodes_microsat.txt")
-    sc.df <- read.delim2(file = microsat.sc.FN, header = T, sep = "\t")
+    sc.df <- read.delim2(file = microsat.sc.FN, header = T, sep = "\t", stringsAsFactors = F)
     
     #### TODO ####
     #HACK to solve issue of multiple collection IDs the same:
     if(species=="sockeye"){
       
       # Remove the section of the stock code that has the remove from baseline statement:
-      sc.df <- sc.df[sc.df$repunit!="Remove from Baseline",]
+      #sc.df <- sc.df[sc.df$repunit!="Remove from Baseline",]
+      
+      # Alternate method
+      sc.df[grep(pattern = "Remove", x = sc.df$repunit, ignore.case = T, invert = T), ]
       
     }
     
+    # dim(collection.vec)
+    # temp.sc <- merge(x = collection.vec, y = sc.df, by.x = "collection.vec", by.y = "collection", sort = F)
+    # dim(temp.sc)
+    # combined_stock_and_repunit <- paste0(temp.sc$collection.vec, "--", temp.sc$repunit)
+    # combinations <- unique(combined_stock_and_repunit)
+    # write.csv(x = combinations, file = "03_results/combinations.csv")
+    # repunit.vec <- temp.sc$repunit
+    # 
+    # Backup
     sc.df <- merge(x = collection.vec, y = sc.df, by.x = "collection.vec", by.y = "collection", sort = F)
     repunit.vec <- sc.df$repunit
-    
+
   }
   
   

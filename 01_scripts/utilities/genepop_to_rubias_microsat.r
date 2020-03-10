@@ -169,11 +169,21 @@ genepop_to_rubias_microsat <- function(data = data, sample_type = sample_type){
   two_allele_data <- rubias.df
   
   # Just in case
-  write_delim(x = rubias.df, path = paste0(result.path, "rubias_mid.txt"), delim = "\t")
+  assign(x = "two_allele_data", value = two_allele_data, pos = .GlobalEnv)
+  write.csv(x = rubias.df, file = paste0(result.path, "rubias_mid.txt"))
+  # Note: this will change any allele name that starts with a number to an "X1b", for example
+  # two_allele_data <- read.csv(file = paste0(result.path, "rubias_mid.txt")) # not exactly the same, but close
+  # may want to try with rownames = T
   
+  ## In case of fail, restart here
+  # rubias.df <- read_delim(file = paste0(result.path, "rubias_mid.txt"), delim = "\t")
+  # dim(rubias.df)
+  # head(rubias.df)
+  # two_allele_data <- rubias.df
+  # sample_type <- "reference"
+   
   #### Adding non-genetic columns #####
   annotate_rubias(two_allele_data = two_allele_data, sample_type = sample_type)
-  
-  
+
 }
 
