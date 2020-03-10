@@ -58,6 +58,29 @@ make_tree <- function(matrix = NULL
     bootstrapped_tree <- aboot(x = boot_obj, dist = dist_metric, sample = nboots, strata = pop(boot_obj)
                                , tree = tree_method)
     dev.off()
+  }else if(tree_method=="njs" && bootstrap==TRUE){
+    
+    if(separated==TRUE){
+      
+      fn.plot <- paste0(result.path, "gen_diff_tree_nj_unrooted_", sep_by, "_by_", name_by, "_", dist_metric, "_", nboots, "_boots.pdf")
+      fn.tree <- paste0(result.path, "gen_diff_tree_nj_unrooted_", sep_by, "_by_", name_by, "_", dist_metric, "_", nboots, "_boots.tre")
+      
+    }else{
+      
+      fn.plot <- paste0(result.path, "gen_diff_tree_nj_unrooted_", dist_metric, "_", nboots, "_boots.pdf")
+      fn.tree <- paste0(result.path, "gen_diff_tree_nj_unrooted_", dist_metric, "_", nboots, "_boots.tre")
+      
+    }
+    
+  }
+    
+  
+  
+    # Generate tree
+    bootstrapped_tree <- aboot(x = boot_obj, dist = dist_metric
+                               , sample = nboots, strata = pop(boot_obj)
+                             , tree = tree_method
+                             )
     
     # Save tree
     write.tree(phy = bootstrapped_tree, file = fn.tree)
@@ -65,7 +88,6 @@ make_tree <- function(matrix = NULL
     
   }
   
-}
 
 
 
