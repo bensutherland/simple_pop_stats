@@ -22,6 +22,11 @@ microsat only: <sp>StockCodes_microsat.txt
 # The input file can be anywhere on your computer, but you can also put it in 02_input_data
 ```
 
+Note: new experimental (caution! will overwrite existing files!) function to update files from a source location to a target location (specifically your 00_archive):        
+`update_essential_files()`       
+...where your new essential files (those above) are in "C:/00_GitHub/essential_files/00_GSI_essentials/<species>"     
+
+
 #### B. Source functions and set variables ####
 Source `01_scripts/simple_pop_stats_start.R` to activate all functions.    
 Select if you are on the DFO network or running local.          
