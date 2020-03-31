@@ -8,7 +8,7 @@
 
 summarise_rubias_baseline <- function(baseline = rubias_base, 
                                out_prefix = "rubias_base_summary",
-                               repunit_desc = repunit_desc,
+                               repunits = repunit_desc,
                                by_year=FALSE){
   
     # Load necessary libraries
@@ -67,7 +67,7 @@ summarise_rubias_baseline <- function(baseline = rubias_base,
     }
 
     # Merge the results with the repunits file
-    base_summary <- merge(base_summary,repunit_desc,by="repunit")
+    base_summary <- merge(base_summary,repunits,by="repunit")
 
     # Order based on the Display_Order column
     base_summary <- base_summary[order(base_summary$Display_Order,base_summary$collection),]
