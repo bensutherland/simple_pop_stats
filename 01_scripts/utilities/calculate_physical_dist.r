@@ -1,9 +1,17 @@
 # Calculate the distance among points
 
-calculate_physical_dist <- function(){
+calculate_physical_dist <- function(add_CU = FALSE){
   
   # Load stock code file
   stock_codes.df <- read.delim2(file = sc.base, stringsAsFactors = F)
+  
+  # Deal with add_CU issue
+  if(add_CU == TRUE){
+    
+    # Add the CU onto the collection here
+    stock_codes.df$collection <- paste0(stock_codes.df$collection, "_", stock_codes.df$repunit)
+    
+  }
   
   # Convert long and lat to numeric values
   stock_codes.df$XLONG <- as.numeric(stock_codes.df$XLONG)
@@ -73,7 +81,7 @@ calculate_physical_dist <- function(){
   distance_full.df <- unique(distance_full.df)
   
   # Save out physical distance file
-  write.table(x = distance_full.df, file = "03_results/physical_distance.txt"
+  write.table(x = distance_full.df, file = paste0(result.path, "physical_distance.txt")
               , quote = F, sep = "\t", row.names = F, col.names = T)
   
 }
