@@ -55,8 +55,8 @@ library("gtools")
 library("readr")
 library("rubias")
 
-# require("Demerelate")
-# require("related")
+require("Demerelate")
+require("related")
 library("geosphere")
 
 ## Set working directory
