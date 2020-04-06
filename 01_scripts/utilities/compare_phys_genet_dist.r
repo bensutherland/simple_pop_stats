@@ -5,18 +5,19 @@
 # 2. genetic distance file: set in argument for function
 ## ...from: calculate_FST()
 
-compare_phys_genet_dist <- function(FST_file = NULL){
+compare_phys_genet_dist <- function(FST_file = NULL, phys_dist_file = NULL){
   
   # Set input filenames
-  phys_dist.FN <- "03_results/physical_distance.txt"
+  phys_dist.FN  <- phys_dist_file
   genet_dist.FN <- FST_file
   
   # Set output filenames
-  output_fig.FN <- "03_results/pairwise_fst_v_physical_dist.pdf"
+  output_fig.FN <- paste0(result.path, "pairwise_fst_v_physical_dist.pdf")
   
   # Read in FST data
   print("Reading in FST result file")
   fst <- read.delim2(file = genet_dist.FN, header = T, sep = ",", row.names = 1, stringsAsFactors = F)
+  head(fst) # note: issue w/ '-' transferred to '.'
   
   # Format FST data (make numeric)
   print("Formatting FST result file")
@@ -57,6 +58,12 @@ compare_phys_genet_dist <- function(FST_file = NULL){
   # Combine results and format
   fst_data.df <- cbind(ref_loc_all, comp_loc_all, fst_all)
   fst_data.df <- as.data.frame(fst_data.df, stringsAsFactors = F)
+  
+  # Data cleanup; correct all spaces with underscores
+  fst_data.df$ref_loc_all <- gsub(pattern = " |\\.", replacement = "_", x = fst_data.df$ref_loc_all, perl = T)
+  fst_data.df$comp_loc_all <- gsub(pattern = " |\\.", replacement = "_", x = fst_data.df$comp_loc_all, perl = T)
+  
+  # Convert to numeric
   fst_data.df$fst_all <- as.numeric(fst_data.df$fst_all)
   str(fst_data.df)
   fst_data.df$comparison <- paste0(fst_data.df$ref_loc_all, "_v_", fst_data.df$comp_loc_all)
@@ -68,17 +75,23 @@ compare_phys_genet_dist <- function(FST_file = NULL){
   
   # Find the appropriate Y-axis for text in plot below
   fst_max <- max(fst_data.df$fst_all)
+  print(paste0("The maximum FST val for plotting is FST = ", round(fst_max, digits = 3)))
   
   
   ### Combine physical dist and Fst dist ###
   # Load physical distance data
   distance_full.df <- read.delim2(file = phys_dist.FN, header = T, sep = "\t", stringsAsFactors = F)
+  
+  # Data cleanup: correct all spaces or dots with underscores
+  distance_full.df$comparison <- gsub(pattern = " |\\.", replacement = "_", x = distance_full.df$comparison, perl = T)
+  
+  # Convert to numeric
   distance_full.df$dist.m <- as.numeric(distance_full.df$dist.m)
   distance_full.df$dist.km <- distance_full.df$dist.m / 1000
   
   # Find the appropriate X-axis for text in plot below
   dist_max <- max(distance_full.df$dist.km)
-    
+  print(paste0("The maximum distance val for plotting is ", round(dist_max, digits = 0), " km"))
   
   # Identify whether any contrasts are missing from either 
   print("The following contrasts are missing from either the phys.dist or genet.dist")
@@ -104,7 +117,7 @@ compare_phys_genet_dist <- function(FST_file = NULL){
   
   text(    x = (dist_max - (dist_max * 0.8))
          , y = (fst_max - (fst_max * 0.05))
-       , labels = paste0("adj.rsquared = ", round(summary(mod)$adj.r.squared, digits = 4))
+       , labels = paste0("adj.rsquared = ", round(summary(mod)$adj.r.squared, digits = 3))
   )
   dev.off()
   
