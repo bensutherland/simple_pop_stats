@@ -1,6 +1,6 @@
 # Calculate relatedness for each population
 
-relatedness_plot <- function(file = "03_results/kinship_analysis_2019-07-16.Rdata", same_pops = TRUE, plot_by = "names"
+relatedness_plot <- function(file = "full_path", same_pops = TRUE, plot_by = "names"
                              , pdf_width = 7, pdf_height = 5){
   
   # Read in data
@@ -139,13 +139,13 @@ relatedness_plot <- function(file = "03_results/kinship_analysis_2019-07-16.Rdat
   relatedness_metrics <- c("wang", "ritland","quellergt")
   
   # Report
-  print("Plotting relatedness, output will be in 03_results")
+  print(paste0("Plotting relatedness, output will be in ", result.path))
   
   ## Loop to plot
   for(i in 1:length(relatedness_metrics)){
     metric <- relatedness_metrics[i]
     
-    pdf(file = paste0("03_results/", "relatedness_", metric, "_", date, ".pdf")
+    pdf(file = paste0(result.path, "relatedness_", metric, "_", date, ".pdf")
         , width = pdf_width, height = pdf_height)
     par(mar=c(7,6,3,3))
     boxplot(output.df[, paste0("rel.", metric)] ~ output.df$group

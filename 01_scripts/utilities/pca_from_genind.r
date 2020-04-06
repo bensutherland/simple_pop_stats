@@ -1,5 +1,5 @@
 # Execute a PCA from a genind file
-# Will save out a plot into 03_results
+# Will save out a plot into the result path
 
 pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
                             , plot_eigen = TRUE, plot_allele_loadings = TRUE
@@ -71,7 +71,7 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
   p
   
   # Save
-  pdf(file = paste0("03_results/", "pca_all_samples.pdf"), width = 11.5, height = 7.5)
+  pdf(file = paste0(result.path, "pca_all_samples.pdf"), width = 11.5, height = 7.5)
   print(p)
   dev.off()
   
@@ -94,7 +94,7 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
     
     print("Plotting eigenvalues")
     # Plot eigenvalues
-    pdf(file = paste0("03_results/", "pca_eigenvalues.pdf"), width = 4, height = 4)
+    pdf(file = paste0(result.path, "pca_eigenvalues.pdf"), width = 4, height = 4)
     barplot(pca1$eig, col = heat.colors(50), main = "PCA Eigenvalues")
     dev.off()
     }
@@ -105,7 +105,7 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
     num.retained.pcs <- length(dimnames(pca1$loadings)[[2]])
     
     # Plot loading values of the markers in the PCs
-    pdf(file = paste0("03_results/", "pc_loadings.pdf"), width = 8, height = 8)
+    pdf(file = paste0(result.path, "pc_loadings.pdf"), width = 8, height = 8)
     par(mfrow=c(num.retained.pcs,1))
     # Plot the loading values of the different markers into the PCA
     for(i in 1:num.retained.pcs){

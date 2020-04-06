@@ -33,12 +33,12 @@ relatedness_calc <- function(data = obj_pop_filt, datatype = "SNP"){
   
   # Save out as text file to be able to read in via readgenotypedata
   print("Exporting for ease of import")
-  write.table(x = obj_demerelate.df, file = "03_results/obj_demerelate.txt"
+  write.table(x = obj_demerelate.df, file = paste0(result.path, "obj_demerelate.txt")
               , quote = F, sep = "\t", row.names = F, col.names = F)
   
   # Read in via readgenotypedata as 'related' format
   print("Reading in as 'related' format")
-  my_data.related <- readgenotypedata(genotype.data = "03_results/obj_demerelate.txt")
+  my_data.related <- readgenotypedata(genotype.data = paste0(result.path, "obj_demerelate.txt"))
   names(my_data.related)
   
   
@@ -85,11 +85,11 @@ relatedness_calc <- function(data = obj_pop_filt, datatype = "SNP"){
     data.hf <- select(data.hf, Code, everything())
     
     # Write out
-    write.table(x = data.hf, file = "03_results/Demerelate_input.txt", quote = F, sep = "\t", col.names = F, row.names = F)
+    write.table(x = data.hf, file = paste0(result.path, "Demerelate_input.txt"), quote = F, sep = "\t", col.names = F, row.names = F)
     
     # Read in via readgenotypedata as 'related' format
     print("Reading in as 'related' format")
-    my_data.related <- readgenotypedata(genotype.data = "03_results/Demerelate_input.txt")
+    my_data.related <- readgenotypedata(genotype.data = paste0(result.path, "Demerelate_input.txt"))
     names(my_data.related)
     
     str(my_data.related$gdata)
@@ -111,6 +111,6 @@ relatedness_calc <- function(data = obj_pop_filt, datatype = "SNP"){
   # Save out results
   date <- format(Sys.time(), "%Y-%m-%d")
   assign(x = "output", value = output, envir = .GlobalEnv)
-  save.image(file = paste0("03_results/", "kinship_analysis_", date, ".Rdata"))
+  save.image(file = paste0(result.path, "kinship_analysis_", date, ".Rdata"))
   
 }

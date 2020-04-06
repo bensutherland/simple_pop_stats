@@ -7,8 +7,8 @@ calculate_AMOVA <- function(data = obj_pop_filt, missing_treat = "ignore", build
     if(build_file==TRUE){
       
       print("Building template to create repunits")
-      print("The template will be saved as '00_archive/unique_pops.csv'")
-      print("Fill in the template by adding column 'repunit' and re-save as comma separated '00_archive/unique_pops_w_repunit.csv'")
+      print(paste0("Writing out a template file to" , result.path, "unique_pops.csv"))
+      print("Fill in this template by adding column 'repunit' and re-save into the same folder as 'unique_pops_w_repunit.csv'")
       
       # Create file
       unique_pops <- as.data.frame(unique(pop(data)), stringsAsFactors = F)
@@ -16,19 +16,19 @@ calculate_AMOVA <- function(data = obj_pop_filt, missing_treat = "ignore", build
       print(unique_pops)
       
       # Write out to annotate
-      write.table(x = unique_pops, file = "00_archive/unique_pops.csv", row.names = F, col.names = T, quote = F)
+      write.table(x = unique_pops, file = paste0(result.path, "unique_pops.csv"), row.names = F, col.names = T, quote = F)
       # Manually edit the tab-delim file to include repunits, save as "00_archive/unique_pops_w_repunits.txt
       
     } else if(build_file==FALSE){
       
-      print("Assuming the repunit file has already been completed, and is named '00_archive/unique_pops_w_repunit.csv'")
+      print(paste0("Assuming the repunit file has already been completed in ", result.path, "unique_pops_w_repunit.csv"))
       
       # Apply missing filter
       print(paste0("Applying missing data filter, using ", missing_treat, " method."))
       data <- missingno(pop = data, type = missing_treat, cutoff = 0)
       
       # Read in the repunit file
-      strat.FN <- "00_archive/unique_pops_w_repunit.csv"
+      strat.FN <- paste0(result.path, "unique_pops_w_repunit.csv")
       strat_obj <- read.table(file = strat.FN, header = T, sep = ",")
       
       ## Add a strat obj to the genind
