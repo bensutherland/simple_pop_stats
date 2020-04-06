@@ -23,6 +23,17 @@ connect_two_datatypes <- function(df = obj_pop_filt, crosswalk.FN = NULL){
     
     print("There was no crosswalk file selected")
     
+    print("Use the following file to create a crosswalk file")
+    crosswalk_blank.FN <- paste0(result.path, "crosswalk_blank.csv")
+    print(crosswalk_blank.df)
+    
+    crosswalk_blank.df <- as.data.frame(unique(pop(obj_renamed)))
+    colnames(crosswalk_blank.df) <- c("msat_pops")
+    crosswalk_blank.df$snp_pops <- rep("unkn", times = nrow(crosswalk_blank.df))
+    crosswalk_blank.df
+    
+    write.csv(x = crosswalk_blank.df, file = crosswalk_blank.FN, row.names = F, quote = F)
+    
   }
   
   
@@ -34,7 +45,7 @@ connect_two_datatypes <- function(df = obj_pop_filt, crosswalk.FN = NULL){
   all_pops.df$id <- 1:nrow(all_pops.df)
   
   # Match up the microsat data to the crosswalk file
-  rosetta <- merge(x = crosswalk, y = all_pops.df, by.x = "datatype1", by.y = "all_pops"
+  rosetta <- merge(x = crosswalk, y = all_pops.df, by.x = "msat_pops", by.y = "all_pops"
                    , sort = F, all.y = T)
   
   # Re-order back to original
@@ -43,12 +54,13 @@ connect_two_datatypes <- function(df = obj_pop_filt, crosswalk.FN = NULL){
   
   # Replace original pop names with datatype 2 pop names
   print("Replacing original pop names with datatype2 pop names")
-  pop(df) <- rosetta$datatype2
+  pop(df) <- rosetta$snp_pops
   
   # Reporting
   print("Your data now has the following pop names")
   print(unique(pop(df)))
+  print("Your file is now called obj_connected")
   
-  assign(x = "obj_pop_filt_renamed", value = df, envir = .GlobalEnv)
+  assign(x = "obj_connected", value = df, envir = .GlobalEnv)
 
 }
