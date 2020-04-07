@@ -10,7 +10,7 @@ set_output_folder <- function(result_path = NULL){
   }else if(is.null(result_path)){
     
     # Manually create output directory (function depends windows or linux)
-    print("Select your genepop from file...")
+    print("Select your output directory...")
     if(.Platform$OS.type == "unix") {
       
       print("This hasn't been set up for unix yet...")
@@ -22,7 +22,7 @@ set_output_folder <- function(result_path = NULL){
       output.DIR <- choose.dir(caption = "Select a folder to output data")
       
       # Overwrite default result path with the selected one
-      result.path <- output.DIR
+      result.path <- paste0(output.DIR, "\\")
       
     }
 
