@@ -6,12 +6,33 @@
 #repunit_desc <- read.delim(file="H:/Stock_Codes/chinook/repunits_full.txt", stringsAsFactors = FALSE)
 
 
-summarise_rubias_baseline <- function(baseline = rubias_base, 
-                               out_prefix = "rubias_base_summary",
-                               repunits = repunit_desc,
+summarise_rubias_baseline <- function(out_prefix = "rubias_base_summary",
                                by_year=FALSE){
+  library(readr)
+    
+
+    
+    # If not, select the file
+    base.fn <- choose.files(caption = "Select a rubias formatted base file")
+    
+    # Load the rubias base file
+    baseline <- read_tsv(file=base.fn)
   
-    # Load necessary libraries
+  
+  
+  
+
+    
+    # Reduce repunits
+    repunit_desc.FN <- choose.files(getwd(),caption = "Path to repunits for analysis")
+    
+    # Load repunits file specified in config
+    print("Loading Reporting Units Detail")
+    repunits <- read_tsv(repunit_desc.FN)
+    
+  
+  
+  # Load necessary libraries
     library(dplyr)
     library(reshape2)
    
