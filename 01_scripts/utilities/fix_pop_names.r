@@ -26,6 +26,21 @@ fix_pop_names <- function(data = obj, append_region = FALSE, stockcode.FN = NULL
     
     # Read in stock code file
     stockcode.df <- read.delim(stockcode.FN, stringsAsFactors = FALSE)
+    
+    # Sort by stock code
+    stockcode.df <- stockcode.df[order(stockcode.df$Code), ]
+    
+    # There are occasionally errors in stock code files, where a collection is assigned two different stock codes and same region
+    # , this causes merges to fail, so get rid of any duplicates like that
+    duplicate.df <- stockcode.df[duplicated(paste0(stockcode.df$collection)),] # Identifies duplicates (second copy)
+    print("If there are duplicate stock collection names, the following will identify those that will be removed: ")
+    print(duplicate.df)
+    
+    # Remove duplicates
+    dim(stockcode.df)
+    stockcode.df <- stockcode.df[!duplicated(paste0(stockcode.df$collection)),] 
+    dim(stockcode.df)
+    
     # Make all_pops into a dataframe for merging
     all_pops.df  <- as.data.frame(all_pops, stringsAsFactors = FALSE)
     
@@ -39,6 +54,7 @@ fix_pop_names <- function(data = obj, append_region = FALSE, stockcode.FN = NULL
     
     #### TODO ####
     #HACK to solve issue of multiple collection IDs the same:
+    # May not be needed anymore?
     if(species=="sockeye"){
       
       # Remove the section of the stock code that has the remove from baseline statement:
