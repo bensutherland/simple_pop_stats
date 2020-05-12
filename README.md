@@ -215,7 +215,24 @@ Use a rubias baseline output by MGL_GSI_SNP or by the genepop_to_rubias() conver
 
 For now, save these to a separate folder to make sure they don't get written over.    
 
-## 15. Summarize a rubias base for collections, years and total N
+## 15. Plot mean assignment per repunit from 100 sim
+```plot_summarize_100_sim(axis_label="repunit",repunits_file = TRUE,
+                          plot_prefix = "summarize_100_sim")
+```
+If you have a repunits file, use `repunits_file = TRUE`, otherwise set this to false (eg. usats). Will be chosen by interactive popup if TRUE. You can also add in "regional roll-up" by adding a column to the repunits file with the heading `region` - matches the format that Chum and Eulachon already use. 
+
+Repunits allows you to choose the axis_label - if you didn't use a repunits file, don't change the default. Could be repunit, CU or CU_NAME, but not extensively tested. 
+
+plot_prefix allows you to change the output file name, so you don't overwrite previous work. Will write to the 03_results folder. 
+
+Requires 2 files produced in `full_sim`
+
+- collection_100_stats_all_reps_YYYY-MM-DD.txt (not just the top repunit assignment)
+- collection_100_stats_all_pops_YYYY-MM-DD.txt (not just the top collection assignment)
+
+These are selected interactively. Could use the - collection_100_stats_YYYY-MM-DD.txt file probably, but would break the regional roll-up.
+
+## 16. Summarize a rubias base for collections, years and total N
 Will summarize a filtered rubias base, and export a table that reports the Repunit, CU number, Collection, years per collection and Total N. This is a commonly produced table for publication, so provided here for reproducability.
 
 ```
