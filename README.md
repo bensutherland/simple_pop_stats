@@ -216,7 +216,8 @@ Use a rubias baseline output by MGL_GSI_SNP or by the genepop_to_rubias() conver
 For now, save these to a separate folder to make sure they don't get written over.    
 
 ## 15. Plot mean assignment per repunit from 100 sim
-```plot_summarize_100_sim(axis_label="repunit",repunits_file = TRUE,
+```
+plot_summarize_100_sim(axis_label="repunit",repunits_file = TRUE,
                           plot_prefix = "summarize_100_sim")
 ```
 If you have a repunits file, use `repunits_file = TRUE`, otherwise set this to false (eg. usats). Will be chosen by interactive popup if TRUE. You can also add in "regional roll-up" by adding a column to the repunits file with the heading `region` - matches the format that Chum and Eulachon already use. 
