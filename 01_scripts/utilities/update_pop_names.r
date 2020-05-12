@@ -3,13 +3,13 @@
 #  can rename populations using sep_by and "collection", "collection_and_year", or "none"
 #  If using collection, can also translate from number to name by using name_by = "stockname"
 
-update_pop_names <- function(sep_by = "collection", name_by = "stockname", add_CU = FALSE){
+update_pop_names <- function(df = "obj", sep_by = "collection", name_by = "stockname", add_CU = FALSE){
   
   # Create backup
-  obj.bck <- obj
+  obj.bck <- df
   
   # Extract genepop indiv names and put into df
-  indiv_names.df <- as.data.frame(rownames(obj$tab))
+  indiv_names.df <- as.data.frame(rownames(df$tab))
   colnames(indiv_names.df) <- "indiv.name"
   head(indiv_names.df)
   
@@ -38,16 +38,16 @@ update_pop_names <- function(sep_by = "collection", name_by = "stockname", add_C
   }else {
     
     print("Not renaming pops")
-    pop_short <- pop(obj)
+    pop_short <- pop(df)
     
   }
 
   ## Update pop names
-  pop(obj) <- pop_short
-  print(unique(pop(obj)))
+  pop(df) <- pop_short
+  print(unique(pop(df)))
   
   ## Collect the new names into a dataframe
-  pop_short.df <- as.data.frame(pop(obj))
+  pop_short.df <- as.data.frame(pop(df))
   colnames(pop_short.df) <- "pop_short"
   
   # Make numeric for matching with stock code below
@@ -125,11 +125,11 @@ update_pop_names <- function(sep_by = "collection", name_by = "stockname", add_C
     }
     
     # Use the newly designated identifier per individual
-    pop(obj) <- rosetta$name
+    pop(df) <- rosetta$name
     
     # Reporting
-    print(unique(pop(obj)))
-    print(table(pop(obj)))
+    print(unique(pop(df)))
+    print(table(pop(df)))
     
   } else {
     
@@ -137,7 +137,7 @@ update_pop_names <- function(sep_by = "collection", name_by = "stockname", add_C
     
   }
   
-  assign(x = "obj", value = obj, envir = .GlobalEnv)
+  assign(x = "df", value = df, envir = .GlobalEnv)
   assign(x = "obj.bck", value = obj.bck, envir = .GlobalEnv)
   assign(x = "sep_by", value = sep_by, envir = .GlobalEnv)
   assign(x = "name_by", value = name_by, envir = .GlobalEnv)
