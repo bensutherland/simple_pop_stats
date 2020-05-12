@@ -25,6 +25,14 @@ prepare_stockcode_file <- function(fix_names = TRUE, names_file.FN = NULL){
     print("The formatted stock and region code info is in all_pops_info.df")
     
     head(all_pops_info.df)
+    
+    # Clean up the region name, assuming that if there are three consecutive spaces it is delimited
+    all_pops_info.df$region.name <- gsub(pattern = "    .*", replacement = "", x = all_pops_info.df$region.name)
+    # Remove spaces
+    all_pops_info.df$region.name <- gsub(pattern = " ", replacement = "_", x = all_pops_info.df$region.name)
+    
+    
+    
     ###### NEXT: WRITE THIS OUT AS A SNP-TYPE STOCK CODE REPUNIT FILE ######
     
   }else{
