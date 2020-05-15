@@ -137,7 +137,7 @@ update_pop_names <- function(df = "obj", sep_by = "collection", name_by = "stock
     
   }
   
-  assign(x = "df", value = df, envir = .GlobalEnv)
+  assign(x = "obj", value = df, envir = .GlobalEnv)
   assign(x = "obj.bck", value = obj.bck, envir = .GlobalEnv)
   assign(x = "sep_by", value = sep_by, envir = .GlobalEnv)
   assign(x = "name_by", value = name_by, envir = .GlobalEnv)
