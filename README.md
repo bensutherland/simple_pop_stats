@@ -1,6 +1,8 @@
 # simple_pop_stats
 A short analysis of population statistics given specific inputs
 
+**Note: this repo is only meant to be used for the authors' purposes and is not meant for broader use. The main purpose is to increase reproducibility for the authors' manuscripts that use this repo. There are no guarantees of usefulness beyond this use.**
+
 Requirements:     
 <to do>
 Installation of related requires some special instructions on Windows. Follow tutorial:     
@@ -271,12 +273,3 @@ With `by_year=TRUE` it will add counts per year. Example:
 
 The rubias file requires the headers `collection`, `repunit` and `indiv` <- should be there by default.
 The repunits file requires the headers `Display_Order`, `CU`, `CU_Name`,`repunit`. 
-
-## Extra. Convert pop to repunit
-*update*: this is no longer suggested, as it skews allele frequencies towards the population with the largest sample size that is being grouped into the repunit.     
-Once you have built the file for the AMOVA with repunits, you can use this file to re-calculate FST using repunits instead of collections.      
-`pop_to_repunit(data = obj_pop_filt)`     
-
-Now you can go back to the FST calculation above and calculate with your repunit merged:    
-`calculate_FST(format="genind", dat = obj_repunit, separated = TRUE, cust_fn = "gen_diff_wcfst_repunit_by_stockname.csv")`       
-...make sure to use a custom filename, otherwise this will re-write over existing FST calculations.   
