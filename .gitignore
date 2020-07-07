@@ -7,3 +7,10 @@
 *.txt*
 *.xls*
 *.docx
+*.png
+*.jpg
+*.svg
+*.jpeg
+*.tiff
+*.eps
+*.pptx
