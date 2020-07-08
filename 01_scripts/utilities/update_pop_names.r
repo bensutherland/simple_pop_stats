@@ -3,7 +3,7 @@
 #  can rename populations using sep_by and "collection", "collection_and_year", or "none"
 #  If using collection, can also translate from number to name by using name_by = "stockname"
 
-update_pop_names <- function(df = "obj", sep_by = "collection", name_by = "stockname", add_CU = FALSE){
+update_pop_names <- function(df = obj, sep_by = "collection", name_by = "stockname", add_CU = FALSE){
   
   # Create backup
   obj.bck <- df
