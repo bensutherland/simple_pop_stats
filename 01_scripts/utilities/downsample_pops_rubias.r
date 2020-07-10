@@ -1,7 +1,7 @@
 # Reduce populations to a constant size; subset_method can be "chosen", "average", "minimum"
 
 downsample_pops_rubias <- function(rubias_data = "", subset_method = "chosen", 
-                                   set_sample_size = 40, output_name = "rubias_base_subset"){
+                                   set_sample_size = 100, output_name = "rubias_base_subset"){
   
   
   if(rubias_data == ""){
