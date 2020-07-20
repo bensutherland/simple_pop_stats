@@ -55,6 +55,7 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
   repunit.collection_CNT <- rubias_base %>%
     group_by(repunit, collection) %>%
     tally() %>%
+    select(-n) %>%
     count(repunit, name="#collections")
   
   # Drop column if exists (warning if doesn't)
@@ -163,7 +164,8 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
   # Merge outputs for report (automatically finds the joining )
   coll_all <- inner_join(collection.CNT, coll_to_coll_filt_res) %>%
                 inner_join(., coll_to_rep_filt_res) %>%
-                inner_join(., repunit.collection_CNT )
+                inner_join(., repunit.collection_CNT ) %>%
+                inner_join(., repunit.CNT )
   
   
   
