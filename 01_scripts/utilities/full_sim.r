@@ -13,7 +13,7 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
   
   #### 01. Load in baseline ####
   ## Load baseline data
-  rubias_base <- read_tsv(rubias_base.FN)
+  rubias_base <- read_tsv(rubias_base.FN,guess_max=100000)
   
   
   #### TODO: This is better somewhere else ####
