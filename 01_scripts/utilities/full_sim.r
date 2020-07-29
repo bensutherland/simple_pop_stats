@@ -213,6 +213,9 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
   write_tsv(x = coll_to_coll_filt_all, path = paste0(result.path, "collection_100_stats_all_pops_",format(Sys.time(), "%Y-%m-%d"),".txt"))
   write_tsv(x = coll_to_rep_filt_all, path = paste0(result.path, "collection_100_stats_all_reps_",format(Sys.time(), "%Y-%m-%d"),".txt"))
   
+  
+  coll_to_coll_filt_all_matrix <- dcast(coll_to_coll_filt_all,collection~collection_scenario,value.var="coll_post_mean_pi")
+  write_tsv(x = coll_to_coll_filt_all_matrix, path = paste0(result.path, "collection_100_stats_all_pops_matrix_",format(Sys.time(), "%Y-%m-%d"),".txt"))
 }
 
 

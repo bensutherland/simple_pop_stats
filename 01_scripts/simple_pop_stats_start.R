@@ -58,6 +58,7 @@ library("rubias")
 require("Demerelate")
 require("related")
 library("geosphere")
+library("reshape2")
 
 ## Set working directory
 current.path <- dirname(rstudioapi::getSourceEditorContext()$path)
