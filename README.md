@@ -218,6 +218,25 @@ Use a rubias baseline output by MGL_GSI_SNP or by the genepop_to_rubias() conver
 
 For now, save these to a separate folder to make sure they don't get written over.    
 
+**Alternate option**: can also run 100% simulations using Oncor for the microsatellite data.       
+Use MGL_GSI README to export an oncor baseline and grouping file. Groupings can be easily edited.       
+
+Format of the grouping file:      
+```
+TITLE LINE
+Basin_Cr_RT\t Alsek
+Bear_Slough_RT\t Taku
+```
+
+Open oncor.    
+File>Open Baseline data (and load your baseline)      
+File>Open Reporting Groups (and load your reporting groups)     
+Mixture Analysis>100% simulations    
+Set parameters (e.g., as defaults), and run the analysis.    
+
+Note: *if you get an error*, make sure that there are no cases where a single pop has no data whatsoever for at least one marker (e.g., make sure to remove the SNPs for sockeye, if all pops do not have the SNP data).     
+
+
 ## 15. Plot mean assignment per repunit from 100 sim
 ```
 plot_summarize_100_sim(axis_label="repunit",repunits_file = TRUE,
