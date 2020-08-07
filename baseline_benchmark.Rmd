@@ -1,0 +1,304 @@
+---
+output: pdf_document
+header-includes:
+- \usepackage{pdfpages}
+- \usepackage{lscape}
+- \newcommand{\blandscape}{\begin{landscape}}
+- \newcommand{\elandscape}{\end{landscape}}
+--- 
+
+<!-- Outputs as PDF, and allows for mixing landscape and portrain with header includes line -->
+<!-- Only lines that should have to be modified by User.   -->
+<!-- Point to baseline folder (with appropriate title to be carried over to report) and species. -->
+<!-- Rmarkdown doesn't pull directly from environment, so easiest just to specify species here. -->
+
+
+<!-- FOLLWING 2 LINES REQUIRE USER INTERVENTION. -->
+
+```{r,echo=FALSE}
+folder <- "2020_V1.0_2020-08-05_baseline"
+species <- "chinook"
+```
+
+<!-- Create apporpritate report title, and specify options to be carried through.   -->
+
+
+```{r setup, include=FALSE}
+title_var <- paste(species,folder,sep="_")
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = paste0("W:/9_PBT/01_",species,"/reference_databases/",folder,"/"))
+str_break = function(x, width = 80L) {
+  n = nchar(x)
+  if (n <= width) return(x)
+  n1 = seq(1L, n, by = width)
+  n2 = seq(width, n, by = width)
+  if (n %% width != 0) n2 = c(n2, n)
+  substring(x, n1, n2)
+}
+```
+
+<!-- Create report header.   -->
+
+---
+title: "`r title_var`"
+author: "Molecular Genetics Lab - DFO Pacific"
+date: "`r format(Sys.time(), "%Y-%m-%d")`"
+---
+
+<!-- Specify operator by drawing user name from the environment.   -->
+This is a baseline benchmarking document. This document was prepared by:
+
+```{r,echo=FALSE, comment=NA}
+Sys.getenv("USERNAME")
+```
+
+## Baseline examined
+
+<!-- Specify the baseline used.   -->
+The data presented here is tied to the baseline:
+
+```{r,echo=FALSE, comment=NA}
+print(gsub("^.*/", "", getwd()))
+```
+<!-- Specify the species used.   -->
+The species examined here is:
+```{r,echo=FALSE, comment=NA}
+print(species)
+```
+<!-- Specify the number of markers used.Option 3 in simple pop stats -->
+The number of markers genotyped within the baseline is:
+```{r,echo=FALSE, message=FALSE, comment=NA}
+mark_num.fn <- list.files(paste0(getwd(),"/Baseline_summary/"),pattern="*number_of_markers.csv$",full.names = T)
+library(readr)
+if (length(mark_num.fn)==1){
+mark_num <- read_tsv(mark_num.fn)
+print(mark_num$x)
+} else {
+  print("No marker number summary found")
+}
+
+```
+
+
+
+## Citations
+<!-- This will need to be a citation file that it pulls from based on species, TBD -->
+If you use reports generated from this baseline, please cite:
+
+```{r,echo=FALSE, comment=NA}
+#print(references, species=species)
+print("TBD")
+
+```
+
+\newpage
+## MD5s of utilized files
+
+<!-- Calculate MD5s for baseline files -->
+The md5sum of the files used to generate the presented report are:
+
+```{r,echo=FALSE, comment=NA}
+lf <- list.files(getwd())
+ld <- list.dirs(getwd(),recursive=F)
+lf <- lf[match(setdiff(normalizePath(lf),normalizePath(ld)), normalizePath(lf))]
+library(tools)
+md5sum(lf)
+
+```
+The following summaries were built off these files.
+
+\newpage
+## Summary file pathes
+
+<!-- Identify files used below -->
+Results presented in this document are pulled from the following files:
+
+Changes made between versions:
+```{r,echo=FALSE, comment=NA}
+fn.1 <- list.files(paste0(getwd(),"/Baseline_summary/"),pattern="*changes.txt$",full.names = T)
+if(length(fn.1>0)){
+str_break(fn.1)
+print(cat(str_break(fn.1), sep = '\n'))
+} else {
+  print("No changes were detailed")
+}
+```
+
+Notes regarding specific collections:
+```{r,echo=FALSE, comment=NA}
+fn.2 <- list.files(paste0(getwd(),"/Baseline_summary/"),pattern="*notes.txt$",full.names = T)
+if(length(fn.2>0)){
+str_break(fn.2)
+print(cat(str_break(fn.2), sep = '\n'))
+} else {
+  print("No changes were detailed")
+}
+```
+
+Baseline summary file:
+```{r,echo=FALSE, comment=NA}
+fn.3 <- list.files(paste0(getwd(),"/Baseline_summary/"),pattern="*.baseline_summary.txt$",full.names = T)
+if(length(fn.3>0)){
+str_break(fn.3)
+cat(str_break(fn.3), sep = '\n')
+} else {
+  print("No changes were detailed")
+}
+```
+
+
+Dendrogram PDF. Please note - .Tre file is found in the same folder:
+```{r,echo=FALSE, comment=NA}
+fn.4 <- list.files(paste0(getwd(),"/Dendrogram/"),pattern="*.pdf$",full.names = T)
+if(length(fn.4>0)){
+str_break(fn.4)
+cat(str_break(fn.4), sep = '\n')
+} else {
+  print("No changes were detailed")
+}
+```
+
+Summary of Simulations. Please note - remaining simulations results are found in the same folder:
+```{r,echo=FALSE, comment=NA}
+fn.5 <- list.files(paste0(getwd(),"/100_sims/"),pattern="*100_stats_2.*.txt$",full.names = T)
+if(length(fn.5>0)){
+str_break(fn.5)
+cat(str_break(fn.5), sep = '\n')
+} else {
+  print("No changes were detailed")
+}
+```
+
+Summary figure of Simulations:
+```{r,echo=FALSE, comment=NA}
+fn.6 <- list.files(paste0(getwd(),"/100_sims/"),pattern="*.pdf$",full.names = T)
+if(length(fn.6>0)){
+str_break(fn.6)
+cat(str_break(fn.6), sep = '\n')
+} else {
+  print("No changes were detailed")
+}
+```
+
+
+
+\newpage
+## Version history
+
+<!-- Detail any changes made between versions. No set format yet, but requires *changes.txt naming -->
+Changes made between versions:
+
+```{r, echo=FALSE, message=FALSE, comment=NA}
+changes.fn <- list.files(paste0(getwd(),"/Baseline_summary/"),pattern="*changes.txt$",full.names = T)
+library(readr)
+if (length(changes.fn)==1){
+changes <- read_tsv(changes.fn)
+
+library(pander)
+pander::pander(changes,split.cell=18,split.table=Inf,missing="")
+} else if (length(changes.fn)==0) {
+  print("No changes noted with this baseline summary")
+  
+}
+```
+
+\newpage
+##  Notes for specific collections:
+<!-- Detail any Specific notes per collections. No set format yet, but requires *notes.txt naming, and collections need in a column named "collections" -->
+```{r, echo=FALSE, message=FALSE, comment=NA}
+notes.fn <- list.files(paste0(getwd(),"/Baseline_summary/"),pattern="*notes.txt$",full.names = T)
+library(readr)
+if (length(notes.fn)==1){
+notes <- read_tsv(notes.fn)
+notes$collection <- gsub("_","-",notes$collection)
+library(pander)
+pander::pander(notes,split.cell=c(20,55),missing="")
+} else if (length(notes.fn)==0) {
+  print("No additional notes with this baseline summary")
+  
+}
+
+```
+
+
+
+
+
+\newpage
+## Dendrogram
+<!-- Dendrogram is exported from FigTree - will display exactly as is here, so make changes in FigTree -->
+
+A summary dendrogram produced following simple_pop_stats recommended pathway and the genepop file listed above.
+
+\includepdf[pages={-}]{"`r list.files(paste0(getwd(),"/Dendrogram/"),pattern="*.pdf$",full.names = T)`"}
+
+
+\newpage
+
+
+
+
+## 100% Simulation summary
+
+<!-- Files are produced by full_sim() and plot_summarize_100_sim()  -->
+A summary of 100% simulation results produced using the full_sims() script found in simple_pop_stats.
+
+\newpage
+```{r, echo=FALSE,fig.cap = "Mean accuracy to collection (white), repunit (grey), or region (if applicable - dark grey)."}
+library(knitr)
+sim_sum.fn <- list.files(paste0(getwd(),"/100_sims/"),pattern="*.pdf$",full.names = T)
+include_graphics(sim_sum.fn)
+
+```
+
+
+\newpage
+
+\newpage
+\blandscape
+
+
+\scriptsize
+```{r, echo=FALSE, message=FALSE}
+#setwd("W:/9_PBT/01_chinook/reference_databases/2020_V1.0_2020-08-05_baseline/")
+sims.fn <- list.files(paste0(getwd(),"/100_sims/"),pattern="*100_stats_2.*.txt$",full.names = T)
+library(readr)
+sims <- read_tsv(sims.fn)
+
+sims$collection <- gsub("_","-",sims$collection)
+sims$collection_scenario <- gsub("_","-",sims$collection_scenario)
+names(sims) <- gsub("_","-",names(sims))
+sims <- sims[order(sims$repunit),]
+
+
+library(pander)
+library(koRpus)
+pander::pander(sims,split.cell=18,split.table=Inf,missing="",use.hyphening=TRUE)
+
+```
+\normalsize
+
+\elandscape
+
+
+\newpage
+## Baseline summary - individual collections, years and N
+<!-- Files are produced by summarise_rubias_baseline()  -->
+Run by using `summarise_rubias_baseline()`:
+\footnotesize
+```{r, echo=FALSE, message=FALSE}
+#setwd("W:/9_PBT/01_chinook/reference_databases/2020_V1.0_2020-08-05_baseline/")
+bsum.fn <- list.files(paste0(getwd(),"/Baseline_summary/"),pattern="*.baseline_summary.txt$",full.names = T)
+library(readr)
+bsum <- read_tsv(bsum.fn)
+
+bsum$Population <- gsub("_","-",bsum$Population)
+
+
+library(pander)
+library(koRpus)
+pander::pander(bsum,split.cell=18,split.table=Inf,missing="",use.hyphening=TRUE)
+
+```
+\normalsize
+

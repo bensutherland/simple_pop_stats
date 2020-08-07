@@ -23,6 +23,9 @@
 # install.packages("R.methodsS3")
 # install.packages("dartR")
 # install.packages("rubias)
+# install.packages("rmarkdown)
+# install.packages("tinytex")
+# tinytex::install_tinytex()
 
 # For ask functionality
 # install.packages("gtools")
