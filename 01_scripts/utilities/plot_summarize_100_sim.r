@@ -142,7 +142,7 @@ plot_summarize_100_sim <- function(axis_label="repunit",repunits_file = TRUE,
     # Re-order by display order (highest to lowest)
 
     
-    pdf(file = paste0("03_results/",plot_prefix,"_plot.pdf"))
+    pdf(file = paste0("03_results/",plot_prefix,"_plot.pdf"),width=8,height=14)
     
     # Set plotting margins
     par(mar=c(4,9,1,2))
