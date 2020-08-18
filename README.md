@@ -3,6 +3,9 @@ A short analysis of population statistics given specific inputs
 
 **Note: this repo is only meant to be used for the authors' purposes and is not meant for broader use. The main purpose is to increase reproducibility for the authors' manuscripts that use this repo. There are no guarantees of usefulness beyond this use.**
 
+Also see Appendices for additional specific use-case instructions:     
+[Appendix A](README_benchmark_appendix.md)
+
 Requirements:     
 <to do>
 Installation of related requires some special instructions on Windows. Follow tutorial:     
