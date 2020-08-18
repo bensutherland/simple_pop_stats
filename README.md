@@ -133,7 +133,7 @@ You can build a tree using the previous genetic differentiation object:
 ...or you can build a new tree using bootstrap with the filtered genind file:        
 `make_tree(bootstrap = TRUE, boot_obj = obj_pop_filt, nboots = 10000, dist_metric = "edwards.dist", separated = TRUE)`      
 
-NOTE: Above bootsrapping did not work after upgrading Ape from 5.3 to 5.4. Unsure at this point why, TBD.
+NOTE: Above bootsrapping did not work after upgrading Ape from 5.3 to 5.4. It should be fixed as of Ape 5.4-1 according to: http://ape-package.ird.fr/NEWS 
 
 ## 08. Run multidimensional scaling techniques
 Conduct PCA using:     
