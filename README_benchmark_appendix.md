@@ -48,7 +48,7 @@ Within the newly created `Baseline_summary` folder, it is recommended to include
 - `*changes.txt`
 - `*notes.txt`
 
-In the "changes" file, this is a freestyle format to describe Version changes between baselines. It is recommended that this is a file that is appended to, such that all changes are tracked back to the initial document. An example from Chinook would would be:
+In the "changes" file, this is a freestyle format to describe Version changes between baselines. It is recommended that this is a file that is appended to, such that all changes are tracked back to the initial document. An example from Chinook would be:
 
 ```
 Changes from 2020_V1.0 to 2020_V1.1:
@@ -59,7 +59,7 @@ Changes from 2020_V1.0 to 2020_V1.1:
 	4) assigned both CHEHALIS_RIVER_summer and CHILLIWACK_RIVER_summer to new "suppl" repunit. 
 
 	Changes were made to better describe these transplanted, but genetically distinct collections. 
-  Grouping together under the new repunit is based primarily off of dendrogram results in version 1.0 of the baseline.
+  	Grouping together under the new repunit is based primarily off of dendrogram results in version 1.0 of the baseline.
 ```
 
 In the "notes" file, this is a two-column format of "collection" and "notes" that details specific notes on particular collections. This allows for tracking "known issues" - things that we are aware of or changes purposely made that might otherwise be questioned. An example from Chinook would be:
@@ -79,12 +79,12 @@ In the "notes" file, this is a two-column format of "collection" and "notes" tha
 ### Step 4: Rubias-based summaries
 
 
-1) Run `summarise_rubias_baseline()` to produce a summary of the rubias baseline. See [summarise_rubias_baseline](https://github.com/bensutherland/simple_pop_stats#16-summarize-a-rubias-base-for-collections-years-and-total-n) for more info. It is recommended here that by_year = TRUE, in order to report collection sizes by `N`; it is also recommended to use an informative prefix (default: `out_prefix = "rubias_base_summary"`. The resulting file will be sent to `03_results` - please copy and paste to the newly created `Baseline_summary` folder in step 2.
+A) Run `summarise_rubias_baseline()` to produce a summary of the rubias baseline. See [summarise_rubias_baseline](https://github.com/bensutherland/simple_pop_stats#16-summarize-a-rubias-base-for-collections-years-and-total-n) for more info. It is recommended here that `by_year = TRUE`, in order to report collection sizes by `N` separated by year; it is also recommended to use an informative prefix (default: `out_prefix = "rubias_base_summary"`). The resulting file will be sent to `03_results` - please copy and paste to the newly created `Baseline_summary` folder in step 2.
 
 The file naming is flexible, but the Rmarkdown  script recognizes the string `*baseline_summary.txt` [default suffix] so ensure that this string is not disrupted, and remains unique in the folder. It is therefore recommended only to change the prefix of the file.
 
 
-2) Run `full_sim()` to produce summary tables from the 100% simulations in rubias. See [full_sim](https://github.com/bensutherland/simple_pop_stats#14-run-simulated-individual-assignment-test) for more info. All resulting files (output to `03_results`) are recommended to be stored in the `100_sims` folder created in Step 2:
+B) Run `full_sim()` to produce summary tables from the 100% simulations in rubias. See [full_sim](https://github.com/bensutherland/simple_pop_stats#14-run-simulated-individual-assignment-test) for more info. All resulting files (output to `03_results`) are recommended to be stored in the `100_sims` folder created in Step 2:
 - `all_collection_results_<date>.txt.gz`
 - `collection_100_stats_<date>.txt`
 - `collection_100_stats_all_pops_<date>.txt`
@@ -94,7 +94,7 @@ The file naming is flexible, but the Rmarkdown  script recognizes the string `*b
 The file naming is flexible, but the Rmarkdown  script recognizes the string `*100_stats_2.*.txt$` so ensure that this string is not disrupted, and remains unique in the folder. It is therefore recommended only to change the prefix of the file. 
   
 
-3) Run `plot_summarize_100_sim` to produce an image summary of the 100% simmulation results. See [plot_summarize_100](https://github.com/bensutherland/simple_pop_stats#15-plot-mean-assignment-per-repunit-from-100-sim) for more info. The default file (`03_results\summarize_100_sim_plot.pdf`) should be copied to the 
+C) Run `plot_summarize_100_sim` to produce an image summary of the 100% simulation results. See [plot_summarize_100](https://github.com/bensutherland/simple_pop_stats#15-plot-mean-assignment-per-repunit-from-100-sim) for more info. The default file (`03_results\summarize_100_sim_plot.pdf`) should be copied to the 
 
 The file naming is flexible, but the Rmarkdown script recognizes the string `*plot.pdf$` so ensure that this string is not disrupted, and remains unique in the folder. It is therefore recommended only to change the prefix of the file. 
 
@@ -103,10 +103,10 @@ The file naming is flexible, but the Rmarkdown script recognizes the string `*pl
 ### Step 5: Genepop-based analyses
 
 
-1) Running simple_pop_stats steps 1-3 will generate a file called `03_results/number_of_markers.csv`. Please copy and paste to the newly created `Baseline_summary` folder in step 2 in order to display the number of markers in the baseline.
+A) Running simple_pop_stats steps 1-3 will generate a file called `03_results/number_of_markers.csv`. Please copy and paste to the newly created `Baseline_summary` folder in step 2 in order to display the number of markers in the baseline.
 
 
-2) Running simple_pop_stats steps 1-7 will allow for the dendrogram to be produced. There are multiple ways to produce and format the results, and multiple formatting options for displaying the output. Ultimately, a single `*.pdf` file is needed in the `Dendrogram` folder to be included in the summary document. Should multiple images be created, it is recommended that they are stored in a nested folder - the Rmarkdown script is not recursive, but does require a single PDF to be present. 
+B) Running simple_pop_stats steps 1-7 will allow for the dendrogram to be produced. There are multiple ways to produce and format the results, and multiple formatting options for displaying the output. Ultimately, a single `*.pdf` file is needed in the `Dendrogram` folder to be included in the summary document. Should multiple images be created, it is recommended that they are stored in a nested folder - the Rmarkdown script does not look recursively. 
 
 Things to consider when formatting the output:
 * i) R markdown will incorporate the image as it is formatted in the PDF. 
@@ -126,10 +126,10 @@ Things to consider when formatting the output:
 The file naming is flexible, but the Rmarkdown script recognizes the string `*.pdf$` so ensure that this string is not disrupted, and remains unique in the folder. 
 
 
-3) LOO - TBD
+C) LOO - TBD
 
 
-4) Fst - TBD
+D) Fst - TBD
 
 
 
