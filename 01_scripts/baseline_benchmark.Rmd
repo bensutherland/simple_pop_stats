@@ -14,6 +14,8 @@ header-includes:
 
 
 <!-- FOLLWING 2 LINES REQUIRE USER INTERVENTION. -->
+<!-- folder is the unique folder (quoted) containing all the necessary files -->
+<!-- species is a simple_pop_stats supported species (quoted) (eg. "chinook"; "coho"; "pink"; "eulachon"; "sockeye"; "chum") -->
 
 ```{r,echo=FALSE}
 folder <- "2020_V1.0_2020-08-05_baseline"
@@ -27,6 +29,8 @@ species <- "chinook"
 title_var <- paste(species,folder,sep="_")
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir = paste0("W:/9_PBT/01_",species,"/reference_databases/",folder,"/"))
+
+
 str_break = function(x, width = 80L) {
   n = nchar(x)
   if (n <= width) return(x)
@@ -171,7 +175,7 @@ cat(str_break(fn.5), sep = '\n')
 
 Summary figure of Simulations:
 ```{r,echo=FALSE, comment=NA}
-fn.6 <- list.files(paste0(getwd(),"/100_sims/"),pattern="*.pdf$",full.names = T)
+fn.6 <- list.files(paste0(getwd(),"/100_sims/"),pattern="*plot.pdf$",full.names = T)
 if(length(fn.6>0)){
 str_break(fn.6)
 cat(str_break(fn.6), sep = '\n')
