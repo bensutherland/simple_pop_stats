@@ -18,8 +18,8 @@ header-includes:
 <!-- species is a simple_pop_stats supported species (quoted) (eg. "chinook"; "coho"; "pink"; "eulachon"; "sockeye"; "chum") -->
 
 ```{r,echo=FALSE}
-folder <- "2020_V1.0_2020-08-05_baseline"
-species <- "chinook"
+folder <- NULL
+species <- NULL
 ```
 
 <!-- Create apporpritate report title, and specify options to be carried through.   -->
