@@ -12,7 +12,10 @@ drop_loci <- function(drop_monomorphic = TRUE, drop_file = NULL){
     # Reporting
     print(paste0("Dropping monomorphic markers, in total: ", length(loci_to_drop), " markers"))
     
-    obj <- obj[loc=-loci_to_drop]
+    # Avoid an == 0 error
+    if(length(loci_to_drop)>0){
+        obj <- obj[loc=-loci_to_drop]
+    }
     
     print(paste0("After dropping monomorphic markers, there are ", length(locNames(obj)), " markers"))
     
