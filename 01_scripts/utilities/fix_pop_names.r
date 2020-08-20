@@ -3,6 +3,8 @@
 
 fix_pop_names <- function(data = obj, append_region = FALSE, stockcode.FN = NULL){
   
+  assign(x = "obj.bck", value = data, envir = .GlobalEnv)
+  
   # Pull pop names out of the genind data
   print("Renaming populations")
   
@@ -77,9 +79,9 @@ fix_pop_names <- function(data = obj, append_region = FALSE, stockcode.FN = NULL
     
   }
 
-  print("Your data will be output as obj_renamed")
+  print("Your data will be output as obj, original assigned to obj.bck for backup")
   
-  assign(x = "obj_renamed", value = data, envir = .GlobalEnv)
+  assign(x = "obj", value = data, envir = .GlobalEnv)
 
 }
   
