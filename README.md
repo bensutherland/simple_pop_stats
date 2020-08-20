@@ -87,9 +87,9 @@ note: caution, if everything before the space is not unique between populations 
 
 ## 03. Characterize Data ##
 To find the number of samples, markers, alleles, and sample size per population, use the following:    
-`characterize_genepop(df = obj, pdf_width = 30, pdf_height = 6, cex_names = 0.3)`     
+`characterize_genepop(df = obj, pdf_width = 30, pdf_height = 6, cex_names = 0.3, N=30)`     
 Will produce a barchart of sample size per pop (`sample_size*.pdf`).     
-Set the parameters based on your plotting requirements, the above is an example for a very large number of pops.     
+Set the parameters based on your plotting requirements, the above is an example for a very large number of pops. Use `N` to set where the line will be drawn across the plot.     
 
 ## 04. Drop loci ##
 To remove loci, use the following script that can allow you to remove monomorphic loci, or remove loci using a tab-delimited file with a single column with marker names that are to be removed from the object. This will end up as `obj_filt`.    

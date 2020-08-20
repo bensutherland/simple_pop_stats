@@ -1,6 +1,6 @@
 # Characterize genepop details
 
-characterize_genepop <- function(df = obj, pdf_width = 8, pdf_height = 5, cex_names = 0.5, main_name = FALSE ){
+characterize_genepop <- function(df = obj, pdf_width = 8, pdf_height = 5, cex_names = 0.5, main_name = FALSE, N=30 ){
   
   # View features
   print("**Number of individuals and Number of marker-alleles**")
@@ -57,7 +57,7 @@ characterize_genepop <- function(df = obj, pdf_width = 8, pdf_height = 5, cex_na
           , main = main_name
           , cex.names = cex_names
   )
-  abline(h = c(30), lty=2)
+  abline(h = c(N), lty=2)
   dev.off()
   
   # Save out a text file as well
