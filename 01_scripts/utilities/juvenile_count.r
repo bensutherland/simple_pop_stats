@@ -28,13 +28,13 @@ juvenile_count <- function(by_year = TRUE){
     juvenile.SC <- merge(juvenile.SC,sc.base.df,all.x=TRUE,by.x="StockCode",by.y="Code")
 
     #Remove any unnamed collections (weird notations in ES)
-    juvenile.SC <- filter(juvenile.SC,!("collection" %in% NA))
+    juvenile.SC <- filter(juvenile.SC,!(collection %in% NA))
     
     #move collection to first column
     juvenile.SC <- juvenile.SC %>% 
                       select(collection,everything())
 
     # Assign to environment
-    assign(x="juv_coll_cnt",value=juvenile.SC)
+    assign(x="juv_coll_cnt",value=juvenile.SC,pos=1)
     write_tsv(x=juvenile.SC,path=paste0(result.path,"juvenile_by_collection_",format(Sys.time(), "%Y-%m-%d"),".txt"))
 }
