@@ -296,3 +296,15 @@ With `by_year=TRUE` it will add counts per year. Example:
 
 The rubias file requires the headers `collection`, `repunit` and `indiv` <- should be there by default.
 The repunits file requires the headers `Display_Order`, `CU`, `CU_Name`,`repunit`. 
+
+
+## 17. Summarize the Juvenile column in the Extraction sheets
+
+To create a summary of collections that are known to contain Juveniles, run:
+
+```
+juvenile_count(by_year=TRUE)
+```
+
+`by_year = TRUE` will identify specific years in the baseline, while `by_year = FALSE` will simply report the collection name.
+
