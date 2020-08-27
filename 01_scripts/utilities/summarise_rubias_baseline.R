@@ -94,19 +94,43 @@ summarise_rubias_baseline <- function(out_prefix = "rubias_base_summary",
     base_summary <- base_summary[order(base_summary$Display_Order,base_summary$collection),]
 
     # Keep the columns of interest
-    base_summary <- subset(base_summary, select = c("CU_NAME","CU","collection","Years","total_N"))
-    
-    if(by_year==TRUE){
+    if("region" %in% colnames(base_summary)){
+      base_summary <- subset(base_summary, select = c("CU_NAME","CU","region","collection","Years","total_N"))
+      
+      if(by_year==TRUE){
         # Rename the columns of interest
-        colnames(base_summary) <- c("Region/Conservation Unit","CU Number","Population","Years(N)","N")
+        colnames(base_summary) <- c("Repunit/Conservation Unit","CU Number","Region","Population","Years(N)","N")
+      } else {
+        # Rename the columns of interest
+        colnames(base_summary) <- c("Repunit/Conservation Unit","CU Number","Region","Population","Years","N")
+      }
+      
+      # Blank out repeated repunit and CU numbers
+      base_summary$`Repunit/Conservation Unit`[duplicated(base_summary$`Repunit/Conservation Unit`)] <- ""
+      base_summary$`CU Number`[duplicated(base_summary$`CU Number`)] <- ""
+      base_summary$`CU Number`[duplicated(base_summary$`Region`)] <- ""
+      
+      
     } else {
+      
+      base_summary <- subset(base_summary, select = c("CU_NAME","CU","collection","Years","total_N"))
+      if(by_year==TRUE){
         # Rename the columns of interest
-        colnames(base_summary) <- c("Region/Conservation Unit","CU Number","Population","Years","N")
+        colnames(base_summary) <- c("Repunit/Conservation Unit","CU Number","Population","Years(N)","N")
+      } else {
+        # Rename the columns of interest
+        colnames(base_summary) <- c("Repunit/Conservation Unit","CU Number","Population","Years","N")
+      }
+      
+      # Blank out repeated repunit and CU numbers
+      base_summary$`Repunit/Conservation Unit`[duplicated(base_summary$`Repunit/Conservation Unit`)] <- ""
+      base_summary$`CU Number`[duplicated(base_summary$`CU Number`)] <- ""
+      
     }
     
-    # Blank out repeated repunit and CU numbers
-    base_summary$`Region/Conservation Unit`[duplicated(base_summary$`Region/Conservation Unit`)] <- ""
-    base_summary$`CU Number`[duplicated(base_summary$`CU Number`)] <- ""
+
+    
+
 
     # Output the dataframe
     write.table(base_summary,file=paste0("03_results/",out_prefix,".baseline_summary.txt")
