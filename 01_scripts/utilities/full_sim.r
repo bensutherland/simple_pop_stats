@@ -6,6 +6,8 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
                      , filter_by_pop_size = FALSE
                      , min_pop_size = 10
                      , proportions.FN = NULL
+                     , custom_rollup = FALSE
+                     , custom_rollup.FN = NULL
                      #, repunit_sim = FALSE   # simulate by repunit
                      #, keep_false = FALSE     # Select whether all populations are retained (TRUE) or populations marked as FALSE in the keep column are dropped (FALSE)
                      #, all_collections = TRUE # Run all collections in 100 percent simulation; # Are all populations to be run, or only those that are specified by 'collections_to_use'
@@ -14,6 +16,14 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
   #### 01. Load in baseline ####
   ## Load baseline data
   rubias_base <- read_tsv(rubias_base.FN,guess_max=100000)
+  
+#  rubias_base <- filter(rubias_base,!(collection %in% c(NULL)))
+  
+  if(custom_rollup == TRUE){
+    
+    custom_rollup_DF <- read_tsv(custom_rollup.FN, guess_max=100000)
+    
+  }
   
   
   #### TODO: This is better somewhere else ####
@@ -160,6 +170,34 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
                                    , "repunit_mle_pi"
                                    , "repunit_true_pi")
   
+  if(custom_rollup ==TRUE){
+    
+    all_collection_results <- merge(all_collection_results,custom_rollup_DF,all.x=TRUE)
+  # Filter for same-on-same (targets); take the average of all reps for post_mean_pi, mle_pi, and true_pi
+  coll_to_grp_filt_res <- all_collection_results %>%
+    group_by(collection_scenario, group, repunit, collection) %>%
+    summarise_at(.vars=c("post_mean_pi","mle_pi","true_pi")
+                 , .funs=c(mean="mean")) %>%
+  group_by(collection_scenario,group) %>%
+  summarise_at(.vars=c("post_mean_pi_mean","mle_pi_mean","true_pi_mean")
+               , .funs=c(sum="sum"))  %>%
+  filter(true_pi_mean_sum > 0)
+  
+  names(coll_to_grp_filt_res) <- c("collection_scenario"
+                                , "group"
+                                , "group_post_mean_pi"
+                                , "group_mle_pi"
+                                , "group_true_pi")
+
+  # Merge outputs for report (automatically finds the joining )
+  coll_all <- inner_join(collection.CNT, coll_to_coll_filt_res) %>%
+    inner_join(., coll_to_rep_filt_res) %>%
+    inner_join(., coll_to_grp_filt_res) %>%
+    inner_join(., repunit.collection_CNT ) %>%
+    inner_join(., repunit.CNT )
+  
+  } else {
+  
   
   # Merge outputs for report (automatically finds the joining )
   coll_all <- inner_join(collection.CNT, coll_to_coll_filt_res) %>%
@@ -167,7 +205,7 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
                 inner_join(., repunit.collection_CNT ) %>%
                 inner_join(., repunit.CNT )
   
-  
+  }
   
   #### Collect all results to collection, to find everything past the first result assignment details ####
   coll_to_coll_filt_all <- all_collection_results %>%
@@ -199,6 +237,29 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
                                    ,"repunit_mle_pi"
                                    ,"repunit_true_pi")
   
+  if(custom_rollup ==TRUE){
+    
+    coll_to_grp_filt_all <- all_collection_results %>%
+      group_by(collection_scenario, group, collection) %>%
+      summarise_at(.vars=c("post_mean_pi","mle_pi","true_pi")
+                   , .funs=c(mean="mean")) %>%
+      group_by(collection_scenario, group) %>%
+      summarise_at(.vars=c("post_mean_pi_mean","mle_pi_mean","true_pi_mean")
+                   , .funs=c(sum="sum"))
+    # Provide names
+    names(coll_to_grp_filt_all) <- c("collection_scenario"
+                                     ,"group"
+                                     ,"group_post_mean_pi"
+                                     ,"group_mle_pi"
+                                     ,"group_true_pi")
+    
+    write_tsv(x = coll_to_grp_filt_all, path = paste0(result.path, "collection_100_stats_all_grps_",format(Sys.time(), "%Y-%m-%d"),".txt"))
+    
+    coll_to_grp_filt_all_matrix <- reshape2::dcast(coll_to_grp_filt_all,group~collection_scenario,value.var="group_post_mean_pi")
+    write_tsv(x = coll_to_grp_filt_all_matrix, path = paste0(result.path, "collection_100_stats_all_grps_matrix_",format(Sys.time(), "%Y-%m-%d"),".txt"))
+    
+  }
+  
   
   
   #### Export results ###
@@ -214,7 +275,7 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
   write_tsv(x = coll_to_rep_filt_all, path = paste0(result.path, "collection_100_stats_all_reps_",format(Sys.time(), "%Y-%m-%d"),".txt"))
   
   
-  coll_to_coll_filt_all_matrix <- dcast(coll_to_coll_filt_all,collection~collection_scenario,value.var="coll_post_mean_pi")
+  coll_to_coll_filt_all_matrix <- reshape2::dcast(coll_to_coll_filt_all,collection~collection_scenario,value.var="coll_post_mean_pi")
   write_tsv(x = coll_to_coll_filt_all_matrix, path = paste0(result.path, "collection_100_stats_all_pops_matrix_",format(Sys.time(), "%Y-%m-%d"),".txt"))
 }
 
