@@ -105,6 +105,7 @@ The md5sum of the files used to generate the presented report are:
 lf <- list.files(getwd())
 ld <- list.dirs(getwd(),recursive=F)
 lf <- lf[match(setdiff(normalizePath(lf),normalizePath(ld)), normalizePath(lf))]
+lf <- lf[!grepl(".pdf",lf)]
 library(tools)
 md5sum(lf)
 
@@ -122,7 +123,7 @@ Changes made between versions:
 fn.1 <- list.files(paste0(getwd(),"/Baseline_summary/"),pattern="*changes.txt$",full.names = T)
 if(length(fn.1>0)){
 str_break(fn.1)
-print(cat(str_break(fn.1), sep = '\n'))
+cat(str_break(fn.1), sep = '\n')
 } else {
   print("No changes were detailed")
 }
@@ -133,7 +134,7 @@ Notes regarding specific collections:
 fn.2 <- list.files(paste0(getwd(),"/Baseline_summary/"),pattern="*notes.txt$",full.names = T)
 if(length(fn.2>0)){
 str_break(fn.2)
-print(cat(str_break(fn.2), sep = '\n'))
+cat(str_break(fn.2), sep = '\n')
 } else {
   print("No changes were detailed")
 }
@@ -199,7 +200,7 @@ if (length(changes.fn)==1){
 changes <- read_tsv(changes.fn)
 
 library(pander)
-pander::pander(changes,split.cell=18,split.table=Inf,missing="")
+pander::pander(changes,split.cell=c(20,60),split.table=Inf,missing="")
 } else if (length(changes.fn)==0) {
   print("No changes noted with this baseline summary")
   
@@ -214,7 +215,7 @@ notes.fn <- list.files(paste0(getwd(),"/Baseline_summary/"),pattern="*notes.txt$
 library(readr)
 if (length(notes.fn)==1){
 notes <- read_tsv(notes.fn)
-notes$collection <- gsub("_","-",notes$collection)
+notes$collection <- gsub("_"," ",notes$collection)
 library(pander)
 pander::pander(notes,split.cell=c(20,55),missing="")
 } else if (length(notes.fn)==0) {
@@ -269,9 +270,9 @@ sims.fn <- list.files(paste0(getwd(),"/100_sims/"),pattern="*100_stats_2.*.txt$"
 library(readr)
 sims <- read_tsv(sims.fn)
 
-sims$collection <- gsub("_","-",sims$collection)
-sims$collection_scenario <- gsub("_","-",sims$collection_scenario)
-names(sims) <- gsub("_","-",names(sims))
+sims$collection <- gsub("_"," ",sims$collection)
+sims$collection_scenario <- gsub("_"," ",sims$collection_scenario)
+names(sims) <- gsub("_"," ",names(sims))
 sims <- sims[order(sims$repunit),]
 
 
@@ -296,7 +297,7 @@ bsum.fn <- list.files(paste0(getwd(),"/Baseline_summary/"),pattern="*.baseline_s
 library(readr)
 bsum <- read_tsv(bsum.fn)
 
-bsum$Population <- gsub("_","-",bsum$Population)
+bsum$Population <- gsub("_"," ",bsum$Population)
 
 
 library(pander)
