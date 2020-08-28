@@ -45,6 +45,16 @@ set_output_folder(result_path= "<your/full/path>")
 # note: the directory must already exist
 ```
 
+#### D. Notes on input files (microsat-specific) ####
+*NOTES*: Specific observations in microsats, in regards to the input genepop file
+* Please ensure that the "POP" line between collection does not contain anything other than "POP" (doesn't seem to play nice with the import)
+* Please ensure that collection names do not contain trailing underscores (eg. Not `Ash_`) as the script will remove it and no longer match stock codes.
+* Please ensure that the second column contains four digit year (or 4 digit number of some sort). (eg. Not `Nass_test    203   1`, rather `Nass_test     9999  1`)
+* Please ensure that the collection name does not contain four digits (eg. Not `Nitinat_1997    1997  1`, rather `Nitinat97     1997  1`)
+* Please ensure that the original names.dat file specifies a named region for ALL collections, not a blank (eg. Not `Bulkley NA`)
+
+
+
 ## 01. Loading Data ##
 Load a genepop with the following, using 'SNP' or 'microsat':    
 `load_genepop(datatype = "SNP")`     
@@ -52,6 +62,8 @@ Your data will be put into the 'obj', which is a genind object.
 
 To see what populations you have:     
 `unique(pop(obj))`      
+
+
 
 
 ## 02. Rename Data ##
