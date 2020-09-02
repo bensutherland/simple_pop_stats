@@ -5,7 +5,7 @@
 # 2. genetic distance file: set in argument for function
 ## ...from: calculate_FST()
 
-compare_phys_genet_dist <- function(FST_file = NULL, phys_dist_file = NULL){
+compare_phys_genet_dist <- function(FST_file = NULL, phys_dist_file = NULL, highlight_pops = "FALSE", highlight_selection = NULL){
   
   # Set input filenames
   phys_dist.FN  <- phys_dist_file
@@ -101,14 +101,42 @@ compare_phys_genet_dist <- function(FST_file = NULL, phys_dist_file = NULL){
   print("Combining physical and genetic distance values")
   all_data.df <- merge(x = fst_data.df, y = distance_full.df, by = "comparison")
   
+  # Make column for colouring
+  all_data.df$colour <- rep("black", times = nrow(all_data.df))
+  
+  # Make backup
+  #all_data.df.bck <- all_data.df 
+  #all_data.df <- all_data.df.bck
+  
+  # Are specific pops being coloured?
+  if(highlight_pops=="TRUE"){
+    
+    row_IDs <- NULL; row_IDs_all <- NULL
+    
+    for(i in 1:length(highlight_selection)){
+      
+    row_IDs  <- grep(pattern = highlight_selection[i], x = all_data.df$comparison)
+    row_IDs_all <- c(row_IDs_all, row_IDs)
+      
+    }
+    
+    row_IDs_all <- as.numeric(row_IDs_all)
+    
+    # Add red colour at the specific locs
+    all_data.df$colour[row_IDs_all] <- "red"
+    
+  }
+  
   
   # Plot
-  
   pdf(file = output_fig.FN, width = 6, height = 6)
   plot(x = all_data.df$dist.km, y = all_data.df$fst_all
        , xlab = "Physical Distance (km)"
        , ylab = "Pairwise Fst"
-       , las = 1)
+       , las = 1
+       , col = all_data.df$colour
+       , pch = 19
+       )
   
   # mod for adjusted Rsquared
   mod <- lm(all_data.df$fst_all ~ all_data.df$dist.km)
@@ -120,5 +148,39 @@ compare_phys_genet_dist <- function(FST_file = NULL, phys_dist_file = NULL){
        , labels = paste0("adj.rsquared = ", round(summary(mod)$adj.r.squared, digits = 3))
   )
   dev.off()
+  
+  # Also plot with highlight pops gone
+  if(highlight_pops=="TRUE"){
+    
+    # Drop highlight pop rows
+    all_data_limited.df <- all_data.df[all_data.df$colour=="black",]
+    output_fig_special.FN <- gsub(x = output_fig.FN, pattern = "\\.pdf", replacement = "_no_highlight_pops.pdf")
+    
+    pdf(file = output_fig_special.FN, width = 6, height = 6)
+    plot(x = all_data_limited.df$dist.km, y = all_data_limited.df$fst_all
+         , xlab = "Physical Distance (km)"
+         , ylab = "Pairwise Fst"
+         , las = 1
+         , col = all_data_limited.df$colour
+         , pch = 19
+    )
+    
+    # mod for adjusted Rsquared
+    mod <- lm(all_data_limited.df$fst_all ~ all_data_limited.df$dist.km)
+    summary(mod)
+    abline(mod)
+    
+    text(    x = (dist_max - (dist_max * 0.8))
+             , y = (fst_max - (fst_max * 0.05))
+             , labels = paste0("adj.rsquared = ", round(summary(mod)$adj.r.squared, digits = 3))
+    )
+    dev.off()
+  
+    
+      
+  }
+  
+  
+  
   
 }
