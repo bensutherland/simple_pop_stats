@@ -14,8 +14,7 @@ fix_pop_names <- function(data = obj, append_region = FALSE, stockcode.FN = NULL
   
   # # Confirm names are matching
   if(length(unique(all_pops))==length(unique(as.character(pop(data))))){
-    print("After removing everything after the first space, there are still the same number of populations")
-    print("Continuing...")
+    print("After removing everything after the first space, there are still the same number of populations, continuing...")
   }else{
     print("After removing everything after the first space, some loss of info happened. Stopping now.")
     stop()
