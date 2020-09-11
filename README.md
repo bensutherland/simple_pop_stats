@@ -138,19 +138,27 @@ If you already have a hierfstat object:
 ...note: same as above, you can use separated=TRUE.     
 ...note: if you used the above to format from genind to hf your hf will be the obj_pop_filt.hf     
 
-This will output your results as `pairwise_wc_fst`, and save to the `03_results` folder.      
+This will assign your results as `pairwise_wc_fst` object within the R environment, and save the results to the `03_results` folder as a file called `gen_diff_wcfst_<*>.csv` by default.      
 
-Note: if you want to have a custom filename for your FST csv file, use the argument `cust_fn` for your basename, which will automatically save into `03_results`.      
+If you want to have a custom filename for your FST csv file, use the argument `cust_fn` for your basename, which will automatically save into `03_results`.      
 
+Note - separated = FALSE for microsatellites (see [00.E](https://github.com/bensutherland/simple_pop_stats#e-parameter-definitions-or-notes-of-clarification))
 
 ## 07. Build a tree ##
-You can build a tree using the previous genetic differentiation object:      
-`make_tree(matrix = pairwise_wc_fst, tree_method = "NJ", separated = TRUE)`         
+To build a bootstrapped tree using the `aboot` function in poppr:
 
-...or you can build a new tree using bootstrap with the filtered genind file:        
 `make_tree(bootstrap = TRUE, boot_obj = obj_pop_filt, nboots = 10000, dist_metric = "edwards.dist", separated = TRUE)`      
 
 NOTE: Above bootsrapping did not work after upgrading Ape from 5.3 to 5.4. It should be fixed as of Ape 5.4-1 according to: http://ape-package.ird.fr/NEWS 
+
+
+You can also build a non-bootstrapped tree using the previous genetic differentiation object and the `NJ` function in phangorn. (`bootstrap` must equal `FALSE` and `tree_method  = "NJ"` in this scenario):      
+`make_tree(matrix = pairwise_wc_fst, tree_method = "NJ", separated = TRUE, bootstrap = FALSE)`
+
+NOTE: If you need to load your `pairwise_wc_fst` from the output file produced by `calculate_FST`, please use as an example:
+`pairwise_wc_fst <- as.matrix(read.table(file="03_results/gen_diff_wcfst_<*>.csv",row.names = 1, header=TRUE,sep=","))`           
+
+     
 
 ## 08. Run multidimensional scaling techniques
 Conduct PCA using:     
