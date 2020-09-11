@@ -149,7 +149,7 @@ To build a bootstrapped tree using the `aboot` function in poppr:
 
 `make_tree(bootstrap = TRUE, boot_obj = obj_pop_filt, nboots = 10000, dist_metric = "edwards.dist", separated = TRUE)`      
 
-NOTE: Above bootsrapping did not work after upgrading Ape from 5.3 to 5.4. It should be fixed as of Ape 5.4-1 according to: http://ape-package.ird.fr/NEWS 
+NOTE: Above bootstrapping did not work after upgrading Ape from 5.3 to 5.4. It should be fixed as of Ape 5.4-1 according to: http://ape-package.ird.fr/NEWS 
 
 
 You can also build a non-bootstrapped tree using the previous genetic differentiation object and the `NJ` function in phangorn. (`bootstrap` must equal `FALSE` and `tree_method  = "NJ"` in this scenario):      
