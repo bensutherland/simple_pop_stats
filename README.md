@@ -53,6 +53,8 @@ set_output_folder(result_path= "<your/full/path>")
 * Please ensure that the collection name does not contain four digits (eg. Not `Nitinat_1997    1997  1`, rather `Nitinat97     1997  1`)
 * Please ensure that the original names.dat file specifies a named region for ALL collections, not a blank (eg. Not `Bulkley NA`)
 
+#### E. Parameter definitions or notes of clarification ####
+* "Separated" - the option of `separated = TRUE` and `FALSE` is presented in downstream `calculate_FST` and `make_tree` functions. Please note - this is solely about naming the output file, and has no additional effect on the function  - if `separated = TRUE` in the `make_tree` or `calculate_FST` function, it will attempt to add the value of `sep_by` to the file-name. The value `sep_by` here is defined by the selection in the `update_pop_names` script.  As the microsatellite function does not currently output a value for `sep_by` when `fix_pop_names` is run, *separated == FALSE* for all functions downstream of Section 2. 
 
 
 ## 01. Loading Data ##
