@@ -111,7 +111,15 @@ To remove loci, use the following script that can allow you to remove monomorphi
 
 ## 05. Drop pops ##
 To remove pops from a user defined minimum number of individuals, or a tab-delimited text file (change from NULL), use the following to create `obj_pop_filt`:    
-`drop_pops(df = obj_filt, drop_by_pop_size = TRUE, min_indiv = 35, drop_file = NULL)`       
+`drop_pops(df = obj_filt, drop_by_pop_size = TRUE, min_indiv = 35, drop_file = NULL,  drop_unused = FALSE, names.dat.FN = NULL, drop_indivs = NULL)`       
+
+`drop_file` used to drop named pops.
+`drop_indivs` used to drop specific individuals. 
+
+The individual filter occurs before the pop size filter, so pop sizes will be calculated following the initial filter (if used).
+
+`drop_unused = TRUE` will allow for the dropping of region codes 98 + 99 from microsatellites. If true, the `names.dat.FN` should point to the tab delimited names.dat file created for `prepare_stockcode_file` in step 2. 
+
 
 ## 05.1 Reduce populations by sample size
 `downsample_pops(data = obj_filt, subset_method = "chosen", set_sample_size = 40)`      
