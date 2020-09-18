@@ -70,6 +70,24 @@ compare_phys_genet_dist <- function(FST_file = NULL, phys_dist_file = NULL, high
   
   # Retain records with no NAs (will remove same-on-same comparison)
   fst_data.df <- fst_data.df[complete.cases(fst_data.df), ]
+  
+  ## Remove duplicate comparisons
+  # Create vector with ordered contrasts
+  for(r in 1:nrow(fst_data.df)){
+    
+  fst_data.df$ordered_comp[r]  <- paste0(
+        min(c(fst_data.df$ref_loc_all[r], fst_data.df$comp_loc_all[r]))
+      , "__"
+      , max(c(fst_data.df$ref_loc_all[r], fst_data.df$comp_loc_all[r]))
+  )
+    
+  }
+  
+  # Mark duplicates for removal
+  fst_data.df$duplicates <- duplicated(fst_data.df$ordered_comp)
+  
+  fst_data.df <- fst_data.df[which(fst_data.df$duplicates=="FALSE") , ]
+  
   fst_data.df <- fst_data.df[,c("fst_all", "comparison")] # only keep necessary cols
   head(fst_data.df)
   
