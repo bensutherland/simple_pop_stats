@@ -71,6 +71,8 @@ annotate_rubias <- function(two_allele_data = two_allele_data, sample_type = sam
   colnames(all_data.df)[colnames(all_data.df)=="indiv.vec"] <- "indiv"
   
   
+
+  
   assign(x = "all_data.df", value = all_data.df, envir = .GlobalEnv)
   
   # Create filename
