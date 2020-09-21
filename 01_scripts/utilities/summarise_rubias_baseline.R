@@ -105,10 +105,11 @@ summarise_rubias_baseline <- function(out_prefix = "rubias_base_summary",
         colnames(base_summary) <- c("Repunit/Conservation Unit","CU Number","Region","Population","Years","N")
       }
       
+      base_sum_orig <- base_summary
       # Blank out repeated repunit and CU numbers
       base_summary$`Repunit/Conservation Unit`[duplicated(base_summary$`Repunit/Conservation Unit`)] <- ""
       base_summary$`CU Number`[duplicated(base_summary$`CU Number`)] <- ""
-      base_summary$`CU Number`[duplicated(base_summary$`Region`)] <- ""
+      base_summary$`Region`[duplicated(base_sum_orig$`CU Number`)] <- ""
       
       
     } else {
