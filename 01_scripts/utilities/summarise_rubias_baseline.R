@@ -7,7 +7,7 @@
 
 
 summarise_rubias_baseline <- function(out_prefix = "rubias_base_summary",
-                               by_year=FALSE){
+                               by_year=FALSE, type = "SNP"){
   library(readr)
     
 
@@ -22,14 +22,14 @@ summarise_rubias_baseline <- function(out_prefix = "rubias_base_summary",
   
   
 
+    if (type=="SNP"){
+        # Reduce repunits
+        repunit_desc.FN <- choose.files(getwd(),caption = "Path to repunits for analysis")
     
-    # Reduce repunits
-    repunit_desc.FN <- choose.files(getwd(),caption = "Path to repunits for analysis")
-    
-    # Load repunits file specified in config
-    print("Loading Reporting Units Detail")
-    repunits <- read_tsv(repunit_desc.FN)
-    
+        # Load repunits file specified in config
+        print("Loading Reporting Units Detail")
+        repunits <- read_tsv(repunit_desc.FN)
+    }
   
   
   # Load necessary libraries
@@ -87,6 +87,8 @@ summarise_rubias_baseline <- function(out_prefix = "rubias_base_summary",
             
     }
 
+    if (type=="SNP"){
+    
     # Merge the results with the repunits file
     base_summary <- merge(base_summary,repunits,by="repunit")
 
@@ -128,7 +130,25 @@ summarise_rubias_baseline <- function(out_prefix = "rubias_base_summary",
       base_summary$`CU Number`[duplicated(base_summary$`CU Number`)] <- ""
       
     }
-    
+    } else {
+
+      # Order based on the Display_Order column
+      base_summary <- base_summary[order(base_summary$repunit,base_summary$collection),]
+      
+      base_summary <- subset(base_summary, select = c("repunit","collection","Years","total_N"))
+      if(by_year==TRUE){
+        # Rename the columns of interest
+        colnames(base_summary) <- c("Region","Population","Years(N)","N")
+      } else {
+        # Rename the columns of interest
+        colnames(base_summary) <- c("Region","Population","Years","N")
+      }
+      
+      # Blank out repeated repunit and CU numbers
+      base_summary$`Region`[duplicated(base_summary$`Region`)] <- ""
+
+      
+    }
 
     
 
