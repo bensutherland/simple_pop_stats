@@ -225,20 +225,16 @@ This will output 'freq.df', but to add the actual genotype alleles to the file, 
 Note: this assumes that the hotspot file that is currently active is the same as the one that has been used to score all of the samples in your dataset.      
 
 ## 13. Convert format (genepop to rubias) 
-Convert genepop to rubias: 
-`genepop_to_rubias(data = obj, sample_type = "reference")`      
-Note: uses the datatype variable (SNP/microsat)            
+Convert genepop to rubias (SNP):     
+`genepop_to_rubias_SNP(data = obj, sample_type = "reference")`      
+        
+Convert genepop to rubias (microsatellite):    
+`genepop_to_rubias_microsat(data = obj_pop_filt, sample_type = "reference", micro_stock_code.FN = "</path/to/stock/repunit/file>")`        
 
 *For microsatellite data*
-To convert the microsat data to rubias, the repunits per stock code must be specified:      
-```
-# Prepare the following file: 00_archive/<sp>StockCodes_microsat.txt     
-# With the following format: 
-collection  repunit
-Bella_Coola CC
-Wannock     CC
-Fraser      FR
-```
+To convert the microsat data to rubias, the repunits per stock code must be specified. Use the same stock code file as was used to rename data in step 'Rename microsat data' above. It can be named anything, but make sure it has column names 'collection', and 'repunit', and the collection names should match those ones in the data.      
+This will output 'rubias_output_microsat.txt' in your results folder, which can be used for simulations (below).     
+Please note: this currently assumes you have stock name followed by a four digit year identifier in your individual name.    
 
 ## 14. Run simulated individual assignment test
 Use a rubias baseline output by MGL_GSI_SNP or by the genepop_to_rubias() converter as a 100% simulation input to test your reporting units using the rubias function assess_reference_loo().       
