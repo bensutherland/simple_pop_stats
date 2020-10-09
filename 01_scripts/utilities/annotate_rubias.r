@@ -3,7 +3,12 @@
 #collection	repunit
 #12Mile_Creek	GoA
 
-annotate_rubias <- function(two_allele_data = two_allele_data, sample_type = sample_type){
+annotate_rubias <- function(two_allele_data = two_allele_data, sample_type = sample_type, micro_stock_code.FN = micro_stock_code.FN){
+  
+  # Interactive read in stock name to repunit conversion (for use later)
+  # Select stock code file
+  # micro_stock_code.FN <-  choose.files(default=file.path("03_results/"), caption = "Select microsatellite stock code file (tab delim)")
+  sc.df <- read.delim2(file = micro_stock_code.FN, header = T, sep = "\t", stringsAsFactors = F)
   
   #### Adding non-genetic columns #####
   
@@ -26,15 +31,10 @@ annotate_rubias <- function(two_allele_data = two_allele_data, sample_type = sam
     
   }else if(datatype == "microsat"){
     
-    # Identify stock name per sample
+    # Identify stock name per individual
     # Take everything up to the first set of four numbers (year)
-    #collection.vec <- gsub(pattern = "\\_[0-9]+\\_.*", replacement = "", x = indiv.vec)
     collection.vec <- gsub(pattern = "\\_[0-9][0-9][0-9][0-9]\\_.*", replacement = "", x = indiv.vec)
     collection.vec <- as.data.frame(collection.vec)
-    
-    # Read in stock name to repunit conversion
-    microsat.sc.FN <- paste0(current.path, "/00_archive/", two.letter.code, "StockCodes_microsat.txt")
-    sc.df <- read.delim2(file = microsat.sc.FN, header = T, sep = "\t", stringsAsFactors = F)
     
     #### TODO ####
     #HACK to solve issue of multiple collection IDs the same:
@@ -56,12 +56,27 @@ annotate_rubias <- function(two_allele_data = two_allele_data, sample_type = sam
     # write.csv(x = combinations, file = "03_results/combinations.csv")
     # repunit.vec <- temp.sc$repunit
     # 
-    # Backup
+    
     sc.df <- merge(x = collection.vec, y = sc.df, by.x = "collection.vec", by.y = "collection", sort = F)
+    
+    # Data checking: 
+    if(nrow(collection.vec)==nrow(sc.df)){
+      
+      print("All input stock names were found in the stock code file, continuing...")
+      
+    }else{
+      
+      stop("At least one of your input file stock names was not found in your stock code file, stopping...")
+      
+    }
+    
     repunit.vec <- sc.df$repunit
 
   }
   
+  
+  # Reporting
+  print("Completed all merging, building full rubias file")
   
   # Add these together followed by genetic data
   all_data.df <- cbind(sample_type.vec, collection.vec, repunit.vec, indiv.vec, two_allele_data)
@@ -69,11 +84,8 @@ annotate_rubias <- function(two_allele_data = two_allele_data, sample_type = sam
   colnames(all_data.df)[colnames(all_data.df)=="collection.vec"] <- "collection"
   colnames(all_data.df)[colnames(all_data.df)=="repunit.vec"] <- "repunit"
   colnames(all_data.df)[colnames(all_data.df)=="indiv.vec"] <- "indiv"
-  
-  
 
-  
-  assign(x = "all_data.df", value = all_data.df, envir = .GlobalEnv)
+  assign(x = "rubias_data.df", value = all_data.df, envir = .GlobalEnv)
   
   # Create filename
   FN <- paste0(result.path, "rubias_output_", datatype, ".txt")
