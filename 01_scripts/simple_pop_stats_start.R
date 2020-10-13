@@ -45,7 +45,7 @@ require("adegenet")
 require("hierfstat")
 require("phangorn")
 require("poppr")
-require("SNPRelate") # Failed on windows Not available Version 3.5.3 
+require("SNPRelate")
 require("stringr")
 require("tidyr")
 require("R.methodsS3")
