@@ -16,7 +16,6 @@
 # install.packages("hierfstat")
 # install.packages("phangorn")
 # install.packages("poppr")
-# install.packages("SNPRelate")
 # install.packages("stringr")
 # install.packages("tidyr")
 # install.packages("dplyr")
