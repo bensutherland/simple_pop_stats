@@ -137,14 +137,14 @@ genepop_to_rubias_microsat <- function(data = data, sample_type = sample_type, m
   all_indiv_names <- names(all_data)
   all_indiv_names
   
-  # If each record has a four digit year, as needed for the downstream annotation, continue, else crash
-  if(length(grep(pattern = "\\_[0-9][0-9][0-9][0-9]\\_.*", x = all_indiv_names, perl = T))==length(all_indiv_names)){
+  # If each record has a four or three digit year, as needed for the downstream annotation, continue, else crash
+  if(length(grep(pattern = "\\_[0-9][0-9][0-9][0-9]\\_.*|\\_[0-9][0-9][0-9]\\_.*", x = all_indiv_names, perl = T))==length(all_indiv_names)){
     
-    print("All records have a four-digit year as necessary, continue")
+    print("All records have a four- or three-digit year as necessary, continue")
     
   }else{
     
-    stop("Not all records have a four-digit year, as is needed below. Please check input genepop and make sure four-digit year is present.")
+    stop("Not all records have a four- or three digit year, as is needed below. Please check input genepop and make sure four- or three-digit year is present.")
     
   }
   

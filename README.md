@@ -46,12 +46,12 @@ set_output_folder(result_path= "<your/full/path>")
 ```
 
 #### D. Notes on input files (microsat-specific) ####
-*NOTES*: Specific observations in microsats, in regards to the input genepop file
-* Please ensure that the "POP" line between collection does not contain anything other than "POP" (doesn't seem to play nice with the import)
-* Please ensure that collection names do not contain trailing underscores (eg. Not `Ash_`) as the script will remove it and no longer match stock codes.
-* Please ensure that the second column contains four digit year (or 4 digit number of some sort). (eg. Not `Nass_test    203   1`, rather `Nass_test     9999  1`)
-* Please ensure that the collection name does not contain four digits (eg. Not `Nitinat_1997    1997  1`, rather `Nitinat97     1997  1`)
-* Please ensure that the original names.dat file specifies a named region for ALL collections, not a blank (eg. Not `Bulkley NA`)
+*NOTES*: Specific observations in microsats, in regards to the input genepop file, please ensure that...
+* there is a "POP" line is present between collections, and only contains the string "POP" without anything else, otherwise will not import
+* collection names cannot have trailing underscores (e.g., not `Ash_`) as the script will remove it and no longer match stock codes
+* the second column contains a four- or three-digit numeric year separator (e.g., not `Nass_test    99   1`, but rather `Nass_test     9999  1`) (note: three digits was enabled to allow for the cod 999, which is used often as a replacement for an unknown year)
+* the collection name cannot contain four digits surrounded by underscores or spaces (e.g., not `Nitinat_1997    1997  1`, rather `Nitinat97     1997  1`)
+* the original names.dat file specifies a named region for ALL collections, not a blank (e.g., not `Bulkley NA`)
 
 #### E. Parameter definitions or notes of clarification ####
 * "Separated" - the option of `separated = TRUE` and `FALSE` is presented in downstream `calculate_FST` and `make_tree` functions. Please note - this is solely about naming the output file, and has no additional effect on the function  - if `separated = TRUE` in the `make_tree` or `calculate_FST` function, it will attempt to add the value of `sep_by` to the file-name. The value `sep_by` here is defined by the selection in the `update_pop_names` script.  As the microsatellite function does not currently output a value for `sep_by` when `fix_pop_names` is run, *separated == FALSE* for all functions downstream of Section 2. 
@@ -64,7 +64,6 @@ Your data will be put into the 'obj', which is a genind object.
 
 To see what populations you have:     
 `unique(pop(obj))`      
-
 
 
 

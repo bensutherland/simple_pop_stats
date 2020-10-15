@@ -33,7 +33,7 @@ annotate_rubias <- function(two_allele_data = two_allele_data, sample_type = sam
     
     # Identify stock name per individual
     # Take everything up to the first set of four numbers (year)
-    collection.vec <- gsub(pattern = "\\_[0-9][0-9][0-9][0-9]\\_.*", replacement = "", x = indiv.vec)
+    collection.vec <- gsub(pattern = "\\_[0-9][0-9][0-9][0-9]\\_.*|\\_[0-9][0-9][0-9]\\_.*", replacement = "", x = indiv.vec)
     collection.vec <- as.data.frame(collection.vec)
     
     #### TODO ####
