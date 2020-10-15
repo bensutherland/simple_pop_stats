@@ -16,7 +16,7 @@ summarise_rubias_baseline <- function(out_prefix = "rubias_base_summary",
     base.fn <- choose.files(caption = "Select a rubias formatted base file")
     
     # Load the rubias base file
-    baseline <- read_tsv(file=base.fn)
+    baseline <- read_tsv(file=base.fn,guess_max = 100000)
   
   
   
@@ -48,7 +48,7 @@ summarise_rubias_baseline <- function(out_prefix = "rubias_base_summary",
     baseline_reduced <- subset(baseline, select = c("collection","repunit","year"))
     
     # Dcast the table to summarize by year
-    base_summary <- dcast(baseline_reduced,collection+repunit~year,value.var="year",fun.aggregate = length)
+    base_summary <- reshape2::dcast(baseline_reduced,collection+repunit~year,value.var="year",fun.aggregate = length)
 
     # Count the number of fish in the "year" columns
     base_summary$total_N <- rowSums(base_summary[,3:length(colnames(base_summary))])
