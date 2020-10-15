@@ -7,9 +7,9 @@ characterize_genepop <- function(df = obj, pdf_width = 8, pdf_height = 5, cex_na
   print(dim(df$tab))
   
   print("**Number of Markers**")
-  print((dim(df$tab)/2)[2])
+  print(length(df$loc.n.all))
   
-  mark_num <- (dim(df$tab)/2)[2]
+  mark_num <- length(df$loc.n.all)
   
   write.csv(x = mark_num, file = paste0(result.path, "number_of_markers.csv"), row.names = F)
   
