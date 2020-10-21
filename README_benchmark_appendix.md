@@ -48,18 +48,20 @@ Within the newly created `Baseline_summary` folder, it is recommended to include
 - `*changes.txt`
 - `*notes.txt`
 
-In the "changes" file, this is a freestyle format to describe Version changes between baselines. It is recommended that this is a file that is appended to, such that all changes are tracked back to the initial document. An example from Chinook would be:
+In the "changes" file, this is a two-column format to describe Version changes between baselines. It is recommended that this is a file that is appended to, such that all changes are tracked back to the initial document. An example from Chinook would be:
 
 ```
-Changes from 2020_V1.0 to 2020_V1.1:
-
-	1) changed name of CHILLIWACK_RIVER to CHILLIWACK_RIVER_summer
+Baseline Version	Changes from prior baselines
+2020_V1.1	1) changed name of CHILLIWACK_RIVER to CHILLIWACK_RIVER_summer
 	2) changed name of CHEHALIS_RIVER to CHEHALIS_RIVER_summer
 	3) created new repunit LFR-suppl and associated it with CK-9006 Fraser supplementation exclusion bin. 
 	4) assigned both CHEHALIS_RIVER_summer and CHILLIWACK_RIVER_summer to new "suppl" repunit. 
-
-	Changes were made to better describe these transplanted, but genetically distinct collections. 
-  	Grouping together under the new repunit is based primarily off of dendrogram results in version 1.0 of the baseline.
+	5) Chehalis moved back into GSI baseline (was previously PBT only)
+	Changes were made to better describe these transplanted, but genetically distinct collections. Grouping together under the new repunit is based primarily off of dendrogram results in version 1.0 of the baseline.
+2020_V1.2	Nicola 2016 were added into the baseline. While they had been genotyped, they had not been added to the baseline previously due to a database error. 
+2020_V1.3	1) Cle Elum hatchery repunit changed from NCOR to MCR-Sp
+	2) Spring Creek Hatchery changed from MCR-Sp to LCR
+	3) Naches River is dropped from baseline, as position in the dendrogram implies it may not be correctly identified (groups with Puget Sound, should be Middle Columbia Spring)
 ```
 
 In the "notes" file, this is a two-column format of "collection" and "notes" that details specific notes on particular collections. This allows for tracking "known issues" - things that we are aware of or changes purposely made that might otherwise be questioned. An example from Chinook would be:
