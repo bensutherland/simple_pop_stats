@@ -91,8 +91,9 @@ If you use reports generated from this baseline, please cite:
 
 ```{r,echo=FALSE, comment=NA}
 #print(references, species=species)
+# example for how to format the reference. TBD to make it automated.
+#cat(str_break("Population structure of eulachon Thaleichthys pacificus from Northern California to Alaska using single nucleotide polymorphisms from direct amplicon sequencing (2020). Ben J. G. Sutherland, John R. Candy, Kayla Mohns, Olivia Cornies, Kim Jonsen, Khai Le, Richard G Gustafson, Krista M. Nichols, Terry D. Beacham. Canadian Journal of Fisheries and Aquatic Sciences, https://doi.org/10.1139/cjfas-2020-0200."), sep = '\n')
 print("TBD")
-
 ```
 
 \newpage
@@ -190,7 +191,7 @@ cat(str_break(fn.6), sep = '\n')
 \newpage
 ## Version history
 
-<!-- Detail any changes made between versions. No set format yet, but requires *changes.txt naming -->
+<!-- Detail any changes made between versions. Two column format, column 1 baseline name, column 2 notes; requires *changes.txt naming -->
 Changes made between versions:
 
 ```{r, echo=FALSE, message=FALSE, comment=NA}
