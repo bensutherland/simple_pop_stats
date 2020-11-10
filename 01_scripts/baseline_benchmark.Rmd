@@ -83,7 +83,19 @@ print(mark_num$x)
 
 ```
 
+<!-- Specify the number of markers used.Option 3 in simple pop stats -->
+The highest PBT tray number in the baseline:
+```{r,echo=FALSE, message=FALSE, comment=NA}
+tray.fn <- list.files(paste0(getwd(),"/Baseline_summary/"),pattern="*highest_tray_number.txt$",full.names = T)
+library(readr)
+if (length(tray.fn)==1){
+tray <- read_tsv(tray.fn)
+print(tray$Highest_Tray_Number)
+} else {
+  print("No Tray number summary found")
+}
 
+```
 
 ## Citations
 <!-- This will need to be a citation file that it pulls from based on species, TBD -->

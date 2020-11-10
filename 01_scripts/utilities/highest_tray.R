@@ -38,7 +38,7 @@ highest_tray <- function(){
   max_tray <- as.data.frame(max(base.ES$Tray))
   
   # Give it a column name
-  colnames(max_tray) <- "Highest_Tray_#"
+  colnames(max_tray) <- "Highest_Tray_Number"
   
   # Write out a summary table
   write_delim(max_tray,path=paste0(result.path,two.letter.code,"_highest_tray_number.txt"))
