@@ -333,3 +333,14 @@ juvenile_count(by_year=TRUE)
 
 `by_year = TRUE` will identify specific years in the baseline, while `by_year = FALSE` will simply report the collection name.
 
+
+## 18. Determine highest tray number in Rubias baseline
+
+To determine the highest tray number in a rubias baseline, run:
+
+```
+highest_tray()
+```
+
+It will prompt to select a rubias baseline, then match the individual IDs to the baseline extraction sheet. The highest tray number for an individual in the baseline will be exported to a file `<two.letter.code>_highest_tray_number.txt` in the folder `03_results/`
+
