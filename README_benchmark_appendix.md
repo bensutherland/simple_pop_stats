@@ -100,7 +100,7 @@ C) Run `plot_summarize_100_sim` to produce an image summary of the 100% simulati
 
 The file naming is flexible, but the Rmarkdown script recognizes the string `*plot.pdf$` so ensure that this string is not disrupted, and remains unique in the folder. It is therefore recommended only to change the prefix of the file. 
 
-
+D) Run `highest_tray()` to produce a file that has the highest tray number currently in the rubias baseline, based on matching to the extraction sheet. This file, `<two.letter.code>_highest_tray_number.txt` should be placed in the Baseline_summary folder, and requires the suffix `*highest_tray_number.txt$`.  
 
 ### Step 5: Genepop-based analyses
 
