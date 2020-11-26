@@ -13,19 +13,24 @@ header-includes:
 <!-- Rmarkdown doesn't pull directly from environment, so easiest just to specify species here. -->
 
 
-<!-- FOLLWING 2 LINES REQUIRE USER INTERVENTION. -->
+<!-- FOLLWING 3 LINES REQUIRE USER INTERVENTION. -->
 <!-- folder is the unique folder (quoted) containing all the necessary files -->
 <!-- species is a simple_pop_stats supported species (quoted) (eg. "chinook"; "coho"; "pink"; "eulachon"; "sockeye"; "chum") -->
+<!-- datatype is either "SNP" or "microsat", same notation as used in simple_pop_stats environment.
 
 ```{r,echo=FALSE}
-folder <- NULL
-species <- NULL
+folder <- "Coastwide_V1.0.0_2020-10-29"
+species <- "steelhead"
+datatype <- "microsat"
 ```
 
 <!-- Create apporpritate report title, and specify options to be carried through.   -->
 
 
 ```{r setup, include=FALSE}
+library(readr)
+getwd()
+citations <- read_tsv(file="reference_files/citations.txt")
 title_var <- paste(species,folder,sep="_")
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir = paste0("W:/9_PBT/01_",species,"/reference_databases/",folder,"/"))
@@ -70,7 +75,7 @@ The species examined here is:
 print(species)
 ```
 <!-- Specify the number of markers used. Option 3 in simple pop stats -->
-The number of markers genotyped within the baseline is:
+The number and type of markers genotyped within the baseline is:
 ```{r,echo=FALSE, message=FALSE, comment=NA}
 mark_num.fn <- list.files(paste0(getwd(),"/Baseline_summary/"),pattern="*number_of_markers.csv$",full.names = T)
 library(readr)
@@ -96,18 +101,31 @@ print(tray$Highest_Tray_Number)
 }
 
 ```
-
+\newpage
 ## Citations
 <!-- This will need to be a citation file that it pulls from based on species, TBD -->
 If you use reports generated from this baseline, please cite:
 
-```{r,echo=FALSE, comment=NA}
+```{r,echo=FALSE, comment=NA, message=FALSE}
 #print(references, species=species)
 # example for how to format the reference. TBD to make it automated.
 #cat(str_break("Population structure of eulachon Thaleichthys pacificus from Northern California to Alaska using single nucleotide polymorphisms from direct amplicon sequencing (2020). Ben J. G. Sutherland, John R. Candy, Kayla Mohns, Olivia Cornies, Kim Jonsen, Khai Le, Richard G Gustafson, Krista M. Nichols, Terry D. Beacham. Canadian Journal of Fisheries and Aquatic Sciences, https://doi.org/10.1139/cjfas-2020-0200."), sep = '\n')
 #cat(str_break("Accurate estimation of conservation unit contribution to coho salmon mixed-stock fisheries in British Columbia, Canada, using direct DNA sequencing for single nucleotide polymorphisms (2020). Terry D. Beacham, Colin Wallace, Kim Jonsen, Brenda McIntosh, John R. Candy, Eric B. Rondeau, Jean-Sébastien Moore, Louis Bernatchez, Ruth E. Withler. Canadian Journal of Fisheries and Aquatic Sciences, https://doi.org/10.1139/cjfas-2019-0339."), sep = '\n')
 
+library(dplyr)
+tmp_species <- species
+tmp_datatype <- datatype
+cite <- filter(citations,species %in% tmp_species)
+cite <- filter(citations,datatype %in% tmp_datatype)
+if(length(cite>0)){
+  for (i in 1:nrow(cite)){
+    cat(paste0("Reference #",i,"\n"))
+    cat(str_break(cite$citation[i]),sep="\n")
+    cat("\n")
+  }  
+} else {
 print("TBD")
+}
 ```
 
 \newpage
@@ -122,7 +140,11 @@ ld <- list.dirs(getwd(),recursive=F)
 lf <- lf[match(setdiff(normalizePath(lf),normalizePath(ld)), normalizePath(lf))]
 lf <- lf[!grepl(".pdf",lf)]
 library(tools)
-md5sum(lf)
+md5_lf <- as.data.frame(md5sum(lf),stringsAsFactors = FALSE)
+md5_lf <- cbind(rownames(md5_lf), data.frame(md5_lf, row.names=NULL))
+colnames(md5_lf) <- c("files","md5sum")
+library(pander)
+pander::pander(md5_lf,split.cell=c(55,35),split.table=Inf,missing="",use.hyphening=TRUE)
 
 ```
 The following summaries were built off these files.
@@ -232,7 +254,7 @@ if (length(notes.fn)==1){
 notes <- read_tsv(notes.fn)
 notes$collection <- gsub("_"," ",notes$collection)
 library(pander)
-pander::pander(notes,split.cell=c(20,55),missing="")
+pander::pander(notes,split.cell=c(20,55),missing="",split.table=Inf)
 } else if (length(notes.fn)==0) {
   print("No additional notes with this baseline summary.")
   
