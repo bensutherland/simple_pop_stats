@@ -246,6 +246,8 @@ Use a rubias baseline output by MGL_GSI_SNP or by the genepop_to_rubias() conver
 
 For now, save these to a separate folder to make sure they don't get written over.    
 
+Will also output a matrix-style table, used in very specific cases (ususally reduced regional baseline analyses).
+
 **Alternate option**: can also run 100% simulations using Oncor for the microsatellite data.       
 Use MGL_GSI README to export an oncor baseline and grouping file. Groupings can be easily edited.       
 
@@ -268,13 +270,19 @@ Note: *if you get an error*, make sure that there are no cases where a single po
 ## 15. Plot mean assignment per repunit from 100 sim
 ```
 plot_summarize_100_sim(axis_label="repunit",repunits_file = TRUE,
-                          plot_prefix = "summarize_100_sim")
+                          plot_prefix = "summarize_100_sim",plot_colls = FALSE,
+                          width=8,height=11,pdf_png="pdf")
 ```
-If you have a repunits file, use `repunits_file = TRUE`, otherwise set this to false (eg. usats). Will be chosen by interactive popup if TRUE. You can also add in "regional roll-up" by adding a column to the repunits file with the heading `region` - matches the format that Chum and Eulachon already use. 
 
-Repunits allows you to choose the axis_label - if you didn't use a repunits file, don't change the default. Could be repunit, CU or CU_NAME, but not extensively tested. 
+IF microsats - `repunits_file = FALSE` is a must.
 
-plot_prefix allows you to change the output file name, so you don't overwrite previous work. Will write to the 03_results folder. 
+To plot by individual collections instead of by repunit summary, use `plot_colls = TRUE`
+
+If using SNPs, and you have a repunits file, you can use `repunits_file = TRUE`. Will be chosen by interactive popup if TRUE. This allows the use of a "regional roll-up" by adding a column to the repunits file with the heading `region` - matches the format that Chum and Eulachon already use, and could easily be added to other species as needed.
+
+Seting `repunits_file = TRUE` also allows you to choose the axis_label - if you didn't use a repunits file, don't change the default. Could be repunit, CU or CU_NAME, but not extensively tested. 
+
+`plot_prefix` allows you to change the output file name, so you don't overwrite previous work. Will write to the 03_results folder. 
 
 Requires 2 files produced in `full_sim`
 
@@ -333,6 +341,7 @@ juvenile_count(by_year=TRUE)
 
 `by_year = TRUE` will identify specific years in the baseline, while `by_year = FALSE` will simply report the collection name.
 
+ONLY TESTED IN SNPS - CHINOOK + COHO
 
 ## 18. Determine highest tray number in Rubias baseline
 
@@ -343,4 +352,6 @@ highest_tray()
 ```
 
 It will prompt to select a rubias baseline, then match the individual IDs to the baseline extraction sheet. The highest tray number for an individual in the baseline will be exported to a file `<two.letter.code>_highest_tray_number.txt` in the folder `03_results/`
+
+ONLY TESTED IN SNPS
 
