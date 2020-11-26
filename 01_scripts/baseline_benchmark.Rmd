@@ -19,9 +19,9 @@ header-includes:
 <!-- datatype is either "SNP" or "microsat", same notation as used in simple_pop_stats environment.
 
 ```{r,echo=FALSE}
-folder <- "Coastwide_V1.0.0_2020-10-29"
-species <- "steelhead"
-datatype <- "microsat"
+folder <- NULL
+species <- NULL
+datatype <- NULL
 ```
 
 <!-- Create apporpritate report title, and specify options to be carried through.   -->
