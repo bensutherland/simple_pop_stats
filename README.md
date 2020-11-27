@@ -230,6 +230,9 @@ Convert genepop to rubias (SNP):
 Convert genepop to rubias (microsatellite):    
 `genepop_to_rubias_microsat(data = obj_pop_filt, sample_type = "reference", micro_stock_code.FN = "</path/to/stock/repunit/file>")`        
 
+For sample_type - must be a choice of "reference" or "mixture" - in almost all cases the default "reference" will be preferred in this pipeline, for both SNPs and microsats.
+
+
 *For microsatellite data*
 To convert the microsat data to rubias, the repunits per stock code must be specified. Use the same stock code file as was used to rename data in step 'Rename microsat data' above. It can be named anything, but make sure it has column names 'collection', and 'repunit', and the collection names should match those ones in the data.      
 This will output 'rubias_output_microsat.txt' in your results folder, which can be used for simulations (below).     
