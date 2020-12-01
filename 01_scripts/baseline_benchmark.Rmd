@@ -16,7 +16,7 @@ header-includes:
 <!-- FOLLWING 3 LINES REQUIRE USER INTERVENTION. -->
 <!-- folder is the unique folder (quoted) containing all the necessary files -->
 <!-- species is a simple_pop_stats supported species (quoted) (eg. "chinook"; "coho"; "pink"; "eulachon"; "sockeye"; "chum") -->
-<!-- datatype is either "SNP" or "microsat", same notation as used in simple_pop_stats environment.
+<!-- datatype is either "SNP" or "microsat", same notation as used in simple_pop_stats environment. -->
 
 ```{r,echo=FALSE}
 folder <- NULL
@@ -107,16 +107,12 @@ print(tray$Highest_Tray_Number)
 If you use reports generated from this baseline, please cite:
 
 ```{r,echo=FALSE, comment=NA, message=FALSE}
-#print(references, species=species)
-# example for how to format the reference. TBD to make it automated.
-#cat(str_break("Population structure of eulachon Thaleichthys pacificus from Northern California to Alaska using single nucleotide polymorphisms from direct amplicon sequencing (2020). Ben J. G. Sutherland, John R. Candy, Kayla Mohns, Olivia Cornies, Kim Jonsen, Khai Le, Richard G Gustafson, Krista M. Nichols, Terry D. Beacham. Canadian Journal of Fisheries and Aquatic Sciences, https://doi.org/10.1139/cjfas-2020-0200."), sep = '\n')
-#cat(str_break("Accurate estimation of conservation unit contribution to coho salmon mixed-stock fisheries in British Columbia, Canada, using direct DNA sequencing for single nucleotide polymorphisms (2020). Terry D. Beacham, Colin Wallace, Kim Jonsen, Brenda McIntosh, John R. Candy, Eric B. Rondeau, Jean-Sébastien Moore, Louis Bernatchez, Ruth E. Withler. Canadian Journal of Fisheries and Aquatic Sciences, https://doi.org/10.1139/cjfas-2019-0339."), sep = '\n')
 
 library(dplyr)
 tmp_species <- species
 tmp_datatype <- datatype
 cite <- filter(citations,species %in% tmp_species)
-cite <- filter(citations,datatype %in% tmp_datatype)
+cite <- filter(cite,datatype %in% tmp_datatype)
 if(length(cite>0)){
   for (i in 1:nrow(cite)){
     cat(paste0("Reference #",i,"\n"))
