@@ -21,6 +21,7 @@ highest_tray <- function(){
    base.ES$Sex <- gsub(1,"M",base.ES$Sex)
    base.ES$Sex <- gsub(2,"F",base.ES$Sex)
    base.ES$Sex <- gsub(0,"U",base.ES$Sex)
+   base.ES$Sex[is.na(base.ES$Sex)] <- "U"
    
   # Create the indiv column
    base.ES$indiv <- paste0(base.ES$StockCode,"_",
