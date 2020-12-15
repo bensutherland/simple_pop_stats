@@ -37,11 +37,13 @@ highest_tray <- function(){
   
   # Find the maximum tray number
   max_tray <- as.data.frame(max(base.ES$Tray))
+  uniq_tray <- as.data.frame(unique(base.ES$Tray))
   
   # Give it a column name
   colnames(max_tray) <- "Highest_Tray_Number"
+  colnames(uniq_tray) <- "Unique_Tray_Numbers"
   
   # Write out a summary table
   write_delim(max_tray,path=paste0(result.path,two.letter.code,"_highest_tray_number.txt"))
-  
+  write_delim(uniq_tray,path=paste0(result.path,two.letter.code,"_all_tray_numbers.txt"))
 }
