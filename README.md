@@ -35,8 +35,18 @@ Note: new experimental (caution! will overwrite existing files!) function to upd
 #### B. Source functions and set variables ####
 Source `01_scripts/simple_pop_stats_start.R` to activate all functions.    
 Select if you are on the DFO network or running local.          
-Select the species being analyzed from the available list.        
-      
+Select the species being analyzed from the available list.      
+
+NOTE: On first install, packages will need to be installed. They are currently commented out at the top of `01_scripts/simple_pop_stats_start.R`. Uncomment to install manually, or if using Rstudio use the yellow box at the top to install. Biocmanager and SNPrelate may require additional, manual effort eg.
+
+```
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("SNPRelate")      
+```
+
+Most scripts have been evaluated on R3.6.3 and RStudio 1.2.5019 on Windows 10. Additional testing has been performed on Linux, and occasionally R4.0.2, but would recommend continuing with R3.X for now if possible. 
+
 #### C. Set custom output directory ####
 By default, the results will go into directories within this repo, unless a custom output director is chosen:           
 ```
