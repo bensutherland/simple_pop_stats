@@ -234,6 +234,9 @@ This will output 'freq.df', but to add the actual genotype alleles to the file, 
 Note: this assumes that the hotspot file that is currently active is the same as the one that has been used to score all of the samples in your dataset.      
 
 ## 13. Convert format (genepop to rubias) 
+
+NOTE: Script only works if region was *NOT* appended in step 2 (`fix_pop_names()` or `update_pop_names()` depending on datatype).
+
 Convert genepop to rubias (SNP):     
 `genepop_to_rubias_SNP(data = obj, sample_type = "reference")`      
         
@@ -243,8 +246,7 @@ Convert genepop to rubias (microsatellite):
 For sample_type - must be a choice of "reference" or "mixture" - in almost all cases the default "reference" will be preferred in this pipeline, for both SNPs and microsats.
 
 
-*For microsatellite data*
-To convert the microsat data to rubias, the repunits per stock code must be specified. Use the same stock code file as was used to rename data in step 'Rename microsat data' above. It can be named anything, but make sure it has column names 'collection', and 'repunit', and the collection names should match those ones in the data.      
+*For microsatellite data* To convert the microsat data to rubias, the repunits per stock code must be specified. Use the same stock code file as was used to rename data in step 'Rename microsat data' above. It can be named anything, but make sure it has column names 'collection', and 'repunit', and the collection names should match those ones in the data.      
 This will output 'rubias_output_microsat.txt' in your results folder, which can be used for simulations (below).     
 Please note: this currently assumes you have stock name followed by a four digit year identifier in your individual name.    
 
