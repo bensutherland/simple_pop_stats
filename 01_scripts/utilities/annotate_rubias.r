@@ -46,6 +46,11 @@ annotate_rubias <- function(two_allele_data = two_allele_data, sample_type = sam
       # Alternate method
       sc.df[grep(pattern = "Remove", x = sc.df$repunit, ignore.case = T, invert = T), ]
       
+    } else if (species == "chum"){
+      # Alternate method
+      sc.df <- sc.df[grep(pattern = "Remove", x = sc.df$repunit, ignore.case = T, invert = T), ]
+      sc.df <- sc.df[grep(pattern = "outofdata", x = sc.df$repunit, ignore.case = T, invert = T), ]
+      
     }
     
     # dim(collection.vec)
@@ -66,7 +71,7 @@ annotate_rubias <- function(two_allele_data = two_allele_data, sample_type = sam
       
     }else{
       
-      stop("At least one of your input file stock names was not found in your stock code file, stopping...")
+      stop("At least one of your input file stock names was not found in your stock code file OR (occasionally AND) your stock code file has multiple stock codes for the same collection name stopping...")
       
     }
     
