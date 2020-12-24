@@ -250,6 +250,12 @@ For sample_type - must be a choice of "reference" or "mixture" - in almost all c
 This will output 'rubias_output_microsat.txt' in your results folder, which can be used for simulations (below).     
 Please note: this currently assumes you have stock name followed by a four digit year identifier in your individual name.    
 
+## 13.b. Rubias utilities
+### Re-add sample name (TTTT_LL) to an allele file
+Allele files are created using XXX, but in any case you won't have the sample name anymore. To add this back onto the dataframe, use:       
+`add_sample_name(input_type = "allele", base = TRUE)`      
+...after which you will be prompted to select an allele file (i.e., output of `rubias_to_alleles()` of MGL_GSI_Analysis.     
+
 ## 14. Run simulated individual assignment test
 Use a rubias baseline output by MGL_GSI_SNP or by the genepop_to_rubias() converter as a 100% simulation input to test your reporting units using the rubias function assess_reference_loo().       
 `full_sim(rubias_base.FN = "03_results/rubias_output.txt", num_sim_indiv = 200, sim_reps = 100)`          
