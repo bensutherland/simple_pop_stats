@@ -18,3 +18,4 @@
 *.log
 *.DAT
 *.dat
+!01_scripts/reference_files/*.txt

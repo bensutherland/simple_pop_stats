@@ -38,12 +38,28 @@ summarise_rubias_baseline <- function(out_prefix = "rubias_base_summary",
    
     # Create a backup of the baseline
     baseline_bck <- baseline
-
-    # Split the individual ID to get the collection year
-    baseline$year <- baseline$indiv %>%
-                              strsplit("_") %>%
-                              sapply( "[", 2 )
-  
+    
+    
+    if (type=="SNP"){
+        # Split the individual ID to get the collection year
+        baseline$year <- baseline$indiv %>%
+                                  strsplit("_") %>%
+                                  sapply( "[", 2 )
+    
+    } else if (type=="microsat"){
+        
+        # Replace the 999 (unknown year) with a 4 digit version
+        baseline$indiv <- gsub("_999_", "_9999_", baseline$indiv)
+        
+        # Find the 4 digit values, and keep the first as the "year"
+        baseline$year <- as.data.frame(str_extract_all(baseline$indiv,"\\d{4}", simplify = T)
+                                      ,stringsAsFactors = FALSE)[[1]]
+        
+        # If any years were missing (999 code or NA), replace with "unknown"
+        baseline$year[baseline$year==""] <- "unknown"
+        baseline$year[baseline$year=="9999"] <- "unknown"
+    }
+    
     # Reduce the dataframe to the necessary columsns
     baseline_reduced <- subset(baseline, select = c("collection","repunit","year"))
     

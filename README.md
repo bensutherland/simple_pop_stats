@@ -35,8 +35,18 @@ Note: new experimental (caution! will overwrite existing files!) function to upd
 #### B. Source functions and set variables ####
 Source `01_scripts/simple_pop_stats_start.R` to activate all functions.    
 Select if you are on the DFO network or running local.          
-Select the species being analyzed from the available list.        
-      
+Select the species being analyzed from the available list.      
+
+NOTE: On first install, packages will need to be installed. They are currently commented out at the top of `01_scripts/simple_pop_stats_start.R`. Uncomment to install manually, or if using Rstudio use the yellow box at the top to install. Biocmanager and SNPrelate may require additional, manual effort eg.
+
+```
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("SNPRelate")      
+```
+
+Most scripts have been evaluated on R3.6.3 and RStudio 1.2.5019 on Windows 10. Additional testing has been performed on Linux, and occasionally R4.0.2, but would recommend continuing with R3.X for now if possible. 
+
 #### C. Set custom output directory ####
 By default, the results will go into directories within this repo, unless a custom output director is chosen:           
 ```
@@ -224,14 +234,19 @@ This will output 'freq.df', but to add the actual genotype alleles to the file, 
 Note: this assumes that the hotspot file that is currently active is the same as the one that has been used to score all of the samples in your dataset.      
 
 ## 13. Convert format (genepop to rubias) 
+
+NOTE: Script only works if region was *NOT* appended in step 2 (`fix_pop_names()` or `update_pop_names()` depending on datatype).
+
 Convert genepop to rubias (SNP):     
 `genepop_to_rubias_SNP(data = obj, sample_type = "reference")`      
         
 Convert genepop to rubias (microsatellite):    
 `genepop_to_rubias_microsat(data = obj_pop_filt, sample_type = "reference", micro_stock_code.FN = "</path/to/stock/repunit/file>")`        
 
-*For microsatellite data*
-To convert the microsat data to rubias, the repunits per stock code must be specified. Use the same stock code file as was used to rename data in step 'Rename microsat data' above. It can be named anything, but make sure it has column names 'collection', and 'repunit', and the collection names should match those ones in the data.      
+For sample_type - must be a choice of "reference" or "mixture" - in almost all cases the default "reference" will be preferred in this pipeline, for both SNPs and microsats.
+
+
+*For microsatellite data* To convert the microsat data to rubias, the repunits per stock code must be specified. Use the same stock code file as was used to rename data in step 'Rename microsat data' above. It can be named anything, but make sure it has column names 'collection', and 'repunit', and the collection names should match those ones in the data.      
 This will output 'rubias_output_microsat.txt' in your results folder, which can be used for simulations (below).     
 Please note: this currently assumes you have stock name followed by a four digit year identifier in your individual name.    
 
@@ -245,6 +260,8 @@ Use a rubias baseline output by MGL_GSI_SNP or by the genepop_to_rubias() conver
 - all_collection_results_YYYY-MM-DD.txt.gz (raw output of all sims)
 
 For now, save these to a separate folder to make sure they don't get written over.    
+
+Will also output a matrix-style table, used in very specific cases (ususally reduced regional baseline analyses).
 
 **Alternate option**: can also run 100% simulations using Oncor for the microsatellite data.       
 Use MGL_GSI README to export an oncor baseline and grouping file. Groupings can be easily edited.       
@@ -268,13 +285,19 @@ Note: *if you get an error*, make sure that there are no cases where a single po
 ## 15. Plot mean assignment per repunit from 100 sim
 ```
 plot_summarize_100_sim(axis_label="repunit",repunits_file = TRUE,
-                          plot_prefix = "summarize_100_sim")
+                          plot_prefix = "summarize_100_sim",plot_colls = FALSE,
+                          width=8,height=11,pdf_png="pdf")
 ```
-If you have a repunits file, use `repunits_file = TRUE`, otherwise set this to false (eg. usats). Will be chosen by interactive popup if TRUE. You can also add in "regional roll-up" by adding a column to the repunits file with the heading `region` - matches the format that Chum and Eulachon already use. 
 
-Repunits allows you to choose the axis_label - if you didn't use a repunits file, don't change the default. Could be repunit, CU or CU_NAME, but not extensively tested. 
+IF microsats - `repunits_file = FALSE` is a must.
 
-plot_prefix allows you to change the output file name, so you don't overwrite previous work. Will write to the 03_results folder. 
+To plot by individual collections instead of by repunit summary, use `plot_colls = TRUE`
+
+If using SNPs, and you have a repunits file, you can use `repunits_file = TRUE`. Will be chosen by interactive popup if TRUE. This allows the use of a "regional roll-up" by adding a column to the repunits file with the heading `region` - matches the format that Chum and Eulachon already use, and could easily be added to other species as needed.
+
+Seting `repunits_file = TRUE` also allows you to choose the axis_label - if you didn't use a repunits file, don't change the default. Could be repunit, CU or CU_NAME, but not extensively tested. 
+
+`plot_prefix` allows you to change the output file name, so you don't overwrite previous work. Will write to the 03_results folder. 
 
 Requires 2 files produced in `full_sim`
 
@@ -332,4 +355,18 @@ juvenile_count(by_year=TRUE)
 ```
 
 `by_year = TRUE` will identify specific years in the baseline, while `by_year = FALSE` will simply report the collection name.
+
+ONLY TESTED IN SNPS - CHINOOK + COHO
+
+## 18. Determine highest tray number in Rubias baseline
+
+To determine the highest tray number in a rubias baseline, run:
+
+```
+highest_tray()
+```
+
+It will prompt to select a rubias baseline, then match the individual IDs to the baseline extraction sheet. The highest tray number for an individual in the baseline will be exported to a file `<two.letter.code>_highest_tray_number.txt` in the folder `03_results/`
+
+ONLY TESTED IN SNPS
 

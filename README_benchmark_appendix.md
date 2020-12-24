@@ -10,6 +10,32 @@
 The goal of this appendix is to walkthrough the minimum requirements for generating a summary document that describes a particular genetic baseline build. It is expected that the base of such an assessment will be kept in a common location, and not modified once this document is produced - should changes need to be made, a new time-stamped folder will be generated, and the summary document produced once again.
 
 
+## Versioning rules for numbering baselines
+
+Currently, the first baseline initialization for a species that would be considered "ready-for-use" will be V1.0.0. Prior to this (eg. during baseline building and early testing) will be given v0.x designations, incrementing by one each time REGARDLESS of how much has changed. All v0.x files will be treated "as-is", with the understanding that great changes will likely occur prior to use. 
+
+Starting from the initial version v1.0.0 (numbered with the first baseline benchmark document):
+
+VX.0.0 changes:
+* Add markers to the baseline
+* Add a year's worth of brood to the baseline
+* Create a new repunit
+* Change the name of a repunit
+* Collapse two repunits into one. 
+* Remove a large number of markers (>=10) from the SNP baseline (or >=1 from uSat). 
+
+V0.X.0 changes:
+* Move pops across repunit that already exist
+* Add a new collection to an existing repunit in the baseline
+* Remove a collection, or a significant number of individuals within a collection, from the baseline
+* Remove a handful (<10) poorly performing markers from the baseline
+* Addition of significant number of individuals to existing collection (N>=50 or 50% increase)
+
+V0.0.X changes:
+* Change the spelling of a collection name
+* Add or remove small numbers of individuals from the baseline (<50)
+
+
 
 ## A) Generate necessary data and file structure
 
@@ -100,7 +126,7 @@ C) Run `plot_summarize_100_sim` to produce an image summary of the 100% simulati
 
 The file naming is flexible, but the Rmarkdown script recognizes the string `*plot.pdf$` so ensure that this string is not disrupted, and remains unique in the folder. It is therefore recommended only to change the prefix of the file. 
 
-
+D) Run `highest_tray()` to produce a file that has the highest tray number currently in the rubias baseline, based on matching to the extraction sheet. This file, `<two.letter.code>_highest_tray_number.txt` should be placed in the Baseline_summary folder, and requires the suffix `*highest_tray_number.txt$`.  
 
 ### Step 5: Genepop-based analyses
 

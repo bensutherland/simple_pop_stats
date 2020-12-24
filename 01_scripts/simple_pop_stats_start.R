@@ -6,9 +6,13 @@
 # rm(list=ls())
 
 # Install packages
-#install.packages("BiocManager")
-#BiocManager::install("qvalue") # req for dartR
-#BiocManager::install("SNPRelate")
+
+# if (!requireNamespace("BiocManager", quietly = TRUE))
+#   install.packages("BiocManager")
+# 
+# BiocManager::install("SNPRelate")
+
+# BiocManager::install("qvalue") # req for dartR
 
 # install.packages("units")
 # install.packages("cluster")
@@ -78,6 +82,7 @@ rm(fun, file_sources) # clean up
 
 # User entry to determine if on local network or offline
 setup_network()
+# on_network <- FALSE
 
 # User entry to set species for filling in variables
 select_species()

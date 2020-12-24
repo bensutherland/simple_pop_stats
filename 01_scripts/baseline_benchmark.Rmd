@@ -13,19 +13,24 @@ header-includes:
 <!-- Rmarkdown doesn't pull directly from environment, so easiest just to specify species here. -->
 
 
-<!-- FOLLWING 2 LINES REQUIRE USER INTERVENTION. -->
+<!-- FOLLWING 3 LINES REQUIRE USER INTERVENTION. -->
 <!-- folder is the unique folder (quoted) containing all the necessary files -->
 <!-- species is a simple_pop_stats supported species (quoted) (eg. "chinook"; "coho"; "pink"; "eulachon"; "sockeye"; "chum") -->
+<!-- datatype is either "SNP" or "microsat", same notation as used in simple_pop_stats environment. -->
 
 ```{r,echo=FALSE}
 folder <- NULL
 species <- NULL
+datatype <- NULL
 ```
 
 <!-- Create apporpritate report title, and specify options to be carried through.   -->
 
 
 ```{r setup, include=FALSE}
+library(readr)
+getwd()
+citations <- read_tsv(file="reference_files/citations.txt")
 title_var <- paste(species,folder,sep="_")
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir = paste0("W:/9_PBT/01_",species,"/reference_databases/",folder,"/"))
@@ -69,10 +74,10 @@ The species examined here is:
 ```{r,echo=FALSE, comment=NA}
 print(species)
 ```
-<!-- Specify the number of markers used.Option 3 in simple pop stats -->
-The number of markers genotyped within the baseline is:
+<!-- Specify the number of markers used. Option 3 in simple pop stats -->
+The number and type of markers genotyped within the baseline is:
 ```{r,echo=FALSE, message=FALSE, comment=NA}
-mark_num.fn <- list.files(paste0(getwd(),"/Baseline_summary/"),pattern="*number_of_markers.csv$",full.names = T)
+mark_num.fn <- list.files(paste0(getwd(),"/Baseline_summary/"),pattern="*number_of_markers.csv$",full.names = T,ignore.case=TRUE)
 library(readr)
 if (length(mark_num.fn)==1){
 mark_num <- read_tsv(mark_num.fn)
@@ -83,17 +88,40 @@ print(mark_num$x)
 
 ```
 
+<!-- Specify the highest tray number for samples in the baseline. Option 18 in simple pop stats -->
+The highest tray number found in the baseline:
+```{r,echo=FALSE, message=FALSE, comment=NA}
+tray.fn <- list.files(paste0(getwd(),"/Baseline_summary/"),pattern="*highest_tray_number.txt$",full.names = T,ignore.case=TRUE)
+library(readr)
+if (length(tray.fn)==1){
+tray <- read_tsv(tray.fn)
+print(tray$Highest_Tray_Number)
+} else {
+  print("No Tray number summary found")
+}
 
-
+```
+\newpage
 ## Citations
 <!-- This will need to be a citation file that it pulls from based on species, TBD -->
 If you use reports generated from this baseline, please cite:
 
-```{r,echo=FALSE, comment=NA}
-#print(references, species=species)
-# example for how to format the reference. TBD to make it automated.
-#cat(str_break("Population structure of eulachon Thaleichthys pacificus from Northern California to Alaska using single nucleotide polymorphisms from direct amplicon sequencing (2020). Ben J. G. Sutherland, John R. Candy, Kayla Mohns, Olivia Cornies, Kim Jonsen, Khai Le, Richard G Gustafson, Krista M. Nichols, Terry D. Beacham. Canadian Journal of Fisheries and Aquatic Sciences, https://doi.org/10.1139/cjfas-2020-0200."), sep = '\n')
+```{r,echo=FALSE, comment=NA, message=FALSE}
+
+library(dplyr)
+tmp_species <- species
+tmp_datatype <- datatype
+cite <- filter(citations,species %in% tmp_species)
+cite <- filter(cite,datatype %in% tmp_datatype)
+if(length(cite>0)){
+  for (i in 1:nrow(cite)){
+    cat(paste0("Reference #",i,"\n"))
+    cat(str_break(cite$citation[i]),sep="\n")
+    cat("\n")
+  }  
+} else {
 print("TBD")
+}
 ```
 
 \newpage
@@ -108,81 +136,85 @@ ld <- list.dirs(getwd(),recursive=F)
 lf <- lf[match(setdiff(normalizePath(lf),normalizePath(ld)), normalizePath(lf))]
 lf <- lf[!grepl(".pdf",lf)]
 library(tools)
-md5sum(lf)
+md5_lf <- as.data.frame(md5sum(lf),stringsAsFactors = FALSE)
+md5_lf <- cbind(rownames(md5_lf), data.frame(md5_lf, row.names=NULL))
+colnames(md5_lf) <- c("files","md5sum")
+library(pander)
+pander::pander(md5_lf,split.cell=c(55,35),split.table=Inf,missing="",use.hyphening=TRUE)
 
 ```
 The following summaries were built off these files.
 
 \newpage
-## Summary file pathes
+## Summary file paths
 
 <!-- Identify files used below -->
 Results presented in this document are pulled from the following files:
 
 Changes made between versions:
 ```{r,echo=FALSE, comment=NA}
-fn.1 <- list.files(paste0(getwd(),"/Baseline_summary/"),pattern="*changes.txt$",full.names = T)
+fn.1 <- list.files(paste0(getwd(),"/Baseline_summary/"),pattern="*changes.txt$",full.names = T,ignore.case=TRUE)
 if(length(fn.1>0)){
 str_break(fn.1)
 cat(str_break(fn.1), sep = '\n')
 } else {
-  print("No changes were detailed")
+  print("No changes were detailed.")
 }
 ```
 
 Notes regarding specific collections:
 ```{r,echo=FALSE, comment=NA}
-fn.2 <- list.files(paste0(getwd(),"/Baseline_summary/"),pattern="*notes.txt$",full.names = T)
+fn.2 <- list.files(paste0(getwd(),"/Baseline_summary/"),pattern="*notes.txt$",full.names = T,ignore.case=TRUE)
 if(length(fn.2>0)){
 str_break(fn.2)
 cat(str_break(fn.2), sep = '\n')
 } else {
-  print("No changes were detailed")
+  print("No notes were detailed.")
 }
 ```
 
 Baseline summary file:
 ```{r,echo=FALSE, comment=NA}
-fn.3 <- list.files(paste0(getwd(),"/Baseline_summary/"),pattern="*.baseline_summary.txt$",full.names = T)
+fn.3 <- list.files(paste0(getwd(),"/Baseline_summary/"),pattern="*.baseline_summary.txt$",full.names = T,ignore.case=TRUE)
 if(length(fn.3>0)){
 str_break(fn.3)
 cat(str_break(fn.3), sep = '\n')
 } else {
-  print("No changes were detailed")
+  print("No baseline summary was found.")
 }
 ```
 
 
 Dendrogram PDF. Please note - .Tre file is found in the same folder:
 ```{r,echo=FALSE, comment=NA}
-fn.4 <- list.files(paste0(getwd(),"/Dendrogram/"),pattern="*.pdf$",full.names = T)
+fn.4 <- list.files(paste0(getwd(),"/Dendrogram/"),pattern="*.pdf$",full.names = T,ignore.case=TRUE)
 if(length(fn.4>0)){
 str_break(fn.4)
 cat(str_break(fn.4), sep = '\n')
 } else {
-  print("No changes were detailed")
+  print("No PDF-based dendrogram was found.")
 }
 ```
 
 Summary of Simulations. Please note - remaining simulations results are found in the same folder:
 ```{r,echo=FALSE, comment=NA}
-fn.5 <- list.files(paste0(getwd(),"/100_sims/"),pattern="*100_stats_2.*.txt$",full.names = T)
+fn.5 <- list.files(paste0(getwd(),"/100_sims/"),pattern="*100_stats_2.*.txt$",full.names = T,ignore.case=TRUE)
 if(length(fn.5>0)){
 str_break(fn.5)
 cat(str_break(fn.5), sep = '\n')
 } else {
-  print("No changes were detailed")
+  print("No 100% simulations file was found.")
 }
 ```
 
 Summary figure of Simulations:
 ```{r,echo=FALSE, comment=NA}
-fn.6 <- list.files(paste0(getwd(),"/100_sims/"),pattern="*plot.pdf$",full.names = T)
+fn.6 <- list.files(paste0(getwd(),"/100_sims/"),pattern="*plot.pdf$",full.names = T,ignore.case=TRUE)
 if(length(fn.6>0)){
 str_break(fn.6)
 cat(str_break(fn.6), sep = '\n')
 } else {
-  print("No changes were detailed")
+  print("No 100% simulations summary figure was found.")
 }
 ```
 
@@ -195,7 +227,7 @@ cat(str_break(fn.6), sep = '\n')
 Changes made between versions:
 
 ```{r, echo=FALSE, message=FALSE, comment=NA}
-changes.fn <- list.files(paste0(getwd(),"/Baseline_summary/"),pattern="*changes.txt$",full.names = T)
+changes.fn <- list.files(paste0(getwd(),"/Baseline_summary/"),pattern="*changes.txt$",full.names = T,ignore.case=TRUE)
 library(readr)
 if (length(changes.fn)==1){
 changes <- read_tsv(changes.fn)
@@ -212,15 +244,15 @@ pander::pander(changes,split.cell=c(20,60),split.table=Inf,missing="")
 ##  Notes for specific collections:
 <!-- Detail any Specific notes per collections. No set format yet, but requires *notes.txt naming, and collections need in a column named "collections" -->
 ```{r, echo=FALSE, message=FALSE, comment=NA}
-notes.fn <- list.files(paste0(getwd(),"/Baseline_summary/"),pattern="*notes.txt$",full.names = T)
+notes.fn <- list.files(paste0(getwd(),"/Baseline_summary/"),pattern="*notes.txt$",full.names = T,ignore.case=TRUE)
 library(readr)
 if (length(notes.fn)==1){
 notes <- read_tsv(notes.fn)
 notes$collection <- gsub("_"," ",notes$collection)
 library(pander)
-pander::pander(notes,split.cell=c(20,55),missing="")
+pander::pander(notes,split.cell=c(20,55),missing="",split.table=Inf)
 } else if (length(notes.fn)==0) {
-  print("No additional notes with this baseline summary")
+  print("No additional notes with this baseline summary.")
   
 }
 
@@ -236,7 +268,7 @@ pander::pander(notes,split.cell=c(20,55),missing="")
 
 A summary dendrogram produced following simple_pop_stats recommended pathway and the genepop file listed above.
 
-\includepdf[pages={-}]{"`r list.files(paste0(getwd(),"/Dendrogram/"),pattern="*.pdf$",full.names = T)`"}
+\includepdf[pages={-}]{"`r list.files(paste0(getwd(),"/Dendrogram/"),pattern="*.pdf$",full.names = T,ignore.case=TRUE)`"}
 
 
 \newpage
@@ -252,7 +284,7 @@ A summary of 100% simulation results produced using the full_sims() script found
 \newpage
 ```{r, echo=FALSE,fig.cap = "Mean accuracy to collection (white), repunit (grey), or region (if applicable - dark grey)."}
 library(knitr)
-sim_sum.fn <- list.files(paste0(getwd(),"/100_sims/"),pattern="*.pdf$",full.names = T)
+sim_sum.fn <- list.files(paste0(getwd(),"/100_sims/"),pattern="*.pdf$",full.names = T,ignore.case=TRUE)
 include_graphics(sim_sum.fn)
 
 ```
@@ -267,7 +299,7 @@ include_graphics(sim_sum.fn)
 \scriptsize
 ```{r, echo=FALSE, message=FALSE}
 #setwd("W:/9_PBT/01_chinook/reference_databases/2020_V1.0_2020-08-05_baseline/")
-sims.fn <- list.files(paste0(getwd(),"/100_sims/"),pattern="*100_stats_2.*.txt$",full.names = T)
+sims.fn <- list.files(paste0(getwd(),"/100_sims/"),pattern="*100_stats_2.*.txt$",full.names = T,ignore.case=TRUE)
 library(readr)
 sims <- read_tsv(sims.fn)
 
@@ -294,7 +326,7 @@ Run by using `summarise_rubias_baseline()`:
 \footnotesize
 ```{r, echo=FALSE, message=FALSE}
 #setwd("W:/9_PBT/01_chinook/reference_databases/2020_V1.0_2020-08-05_baseline/")
-bsum.fn <- list.files(paste0(getwd(),"/Baseline_summary/"),pattern="*.baseline_summary.txt$",full.names = T)
+bsum.fn <- list.files(paste0(getwd(),"/Baseline_summary/"),pattern="*.baseline_summary.txt$",full.names = T,ignore.case=TRUE)
 library(readr)
 bsum <- read_tsv(bsum.fn)
 
