@@ -81,8 +81,8 @@ for(fun in file_sources){
 rm(fun, file_sources) # clean up
 
 # User entry to determine if on local network or offline
-setup_network()
-# on_network <- FALSE
+# setup_network()  # function does not seem to work properly
+on_network <- TRUE # change to FALSE if off-network
 
 # User entry to set species for filling in variables
 select_species()
