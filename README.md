@@ -119,16 +119,18 @@ To remove loci, use the following script that can allow you to remove monomorphi
 `drop_loci(drop_monomorphic = TRUE, drop_file = <path/to/drop/file.txt>)`       
 
 ## 05. Drop pops ##
-To remove pops from a user defined minimum number of individuals, or a tab-delimited text file (change from NULL), use the following to create `obj_pop_filt`:    
+To remove populations based on a minimum sample size, or based on a tab-delimited text file, use the following:    
 `drop_pops(df = obj_filt, drop_by_pop_size = TRUE, min_indiv = 35, drop_file = NULL,  drop_unused = FALSE, names.dat.FN = NULL, drop_indivs = NULL)`       
 
-`drop_file` used to drop named pops.
-`drop_indivs` used to drop specific individuals. 
+Change `drop_file` from NULL to a filename to drop named populations. The drop file should be tab-delimited, only one column, with no header.          
+note: if you have attached regions previously, this will not work as the pattern matching is to the name in the text file.       
 
-The individual filter occurs before the pop size filter, so pop sizes will be calculated following the initial filter (if used).
+Change `drop_indivs` from NULL to drop specific individuals.           
+note: the drop_indivs will occur prior to pop size filter; the pop size filter will operate on the remaining samples.        
 
-`drop_unused = TRUE` will allow for the dropping of region codes 98 + 99 from microsatellites. If true, the `names.dat.FN` should point to the tab delimited names.dat file created for `prepare_stockcode_file` in step 2. 
+New: `drop_unused = TRUE` will allow for the dropping of region codes 98 + 99 from microsatellites. If true, the `names.dat.FN` should point to the tab delimited names.dat file created for `prepare_stockcode_file` in step 2.         
 
+This step will generate `obj_pop_filt`.        
 
 ## 05.1 Reduce populations by sample size
 `downsample_pops(data = obj_filt, subset_method = "chosen", set_sample_size = 40)`      
