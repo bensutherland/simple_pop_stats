@@ -60,7 +60,12 @@ characterize_genepop <- function(df = obj, pdf_width = 8, pdf_height = 5, cex_na
   abline(h = c(N), lty=2)
   dev.off()
   
+  # Create text file output
+  pop_size.df <- as.data.frame(x = table(pop(df)), stringsAsFactors = F)
+  colnames(pop_size.df) <- c("population", "sample_size")
+  
+  
   # Save out a text file as well
-  write.csv(x = table(pop(df)), file = paste0(result.path, "per_pop_sample_size.csv"), row.names = F)
+  write.csv(x = pop_size.df, file = paste0(result.path, "per_pop_sample_size.csv"), row.names = F)
   
 }
