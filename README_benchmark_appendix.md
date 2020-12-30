@@ -170,9 +170,8 @@ The script is kept at `01_scripts\baseline_benchmark.Rmd` currently, within the 
 
 As written, it currently requires user intervention on two lines:
 
-* [folder](https://github.com/bensutherland/simple_pop_stats/blob/b6a45553761486b1eff7669f2d61938817bc77ed/01_scripts/baseline_benchmark.Rmd#L21) needs to be set with the folder name (not full path) of the baseline to be considered. Should be in the standard ` W:\9_PBT\01_<species>\reference_databases\` place.
-* [species](https://github.com/bensutherland/simple_pop_stats/blob/b6a45553761486b1eff7669f2d61938817bc77ed/01_scripts/baseline_benchmark.Rmd#L22) needs to be set with the species name. Currently one of: `chinook`; `coho`; `pink`; `eulachon`; `sockeye`; `chum`
-
+* [folder](https://github.com/bensutherland/simple_pop_stats/blob/b6a45553761486b1eff7669f2d61938817bc77ed/01_scripts/baseline_benchmark.Rmd#L21) needs to be set with the folder name (**not full path**) of the baseline to be considered. It is assumed that this folder is in the standard location: ` W:\9_PBT\01_<species>\reference_databases\`.                    
+* [species](https://github.com/bensutherland/simple_pop_stats/blob/b6a45553761486b1eff7669f2d61938817bc77ed/01_scripts/baseline_benchmark.Rmd#L22) needs to be set with the species name in double quotes. Currently one of: "chinook", "coho", "pink", "eulachon", "sockeye", or "chum".            
 
 
 ### Run the script
