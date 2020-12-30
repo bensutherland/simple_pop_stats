@@ -7,7 +7,7 @@ plot_summarize_100_sim <- function(axis_label="repunit",repunits_file = TRUE,
                                    width=8,height=11,pdf_png="pdf"){
 
     # Find simulation files. 
-    coll_sims.fn <-  choose.files( default=file.path("03_results/")
+    coll_sims.fn <-  choose.files( default=file.path(result.path)
                                         , caption = "Select all_pops file")
     
     # Load in Sims - collection    
@@ -15,7 +15,7 @@ plot_summarize_100_sim <- function(axis_label="repunit",repunits_file = TRUE,
 
     
     # Find repunit simulation files
-    rep_sims.fn <-  choose.files( default=file.path("03_results/")
+    rep_sims.fn <-  choose.files( default=file.path(result.path)
                               , caption = "Select all_reps file")
     # Load in Sims - repunit
     rep_sims <- read_tsv(rep_sims.fn)
@@ -201,22 +201,22 @@ plot_summarize_100_sim <- function(axis_label="repunit",repunits_file = TRUE,
     # Create the plot name using the prefix
     
     
-    #pdf(file = paste0("03_results/",plot_prefix,"_plot.pdf"),width=width,height=height)
+    #pdf(file = paste0(result.path,plot_prefix,"_plot.pdf"),width=width,height=height)
     
     # Set different margins for collection plotting or repunit plotting. 
     if (plot_colls == TRUE){
         # Set plotting margins
         if(pdf_png == "pdf"){
-            pdf(file = paste0("03_results/",plot_prefix,"_plot.pdf"),width=width,height=height)
+            pdf(file = paste0(result.path,plot_prefix,"_plot.pdf"),width=width,height=height)
             par(mar=c(4,15,1,2))
         } 
     } else {
         # Set plotting margins
         if(pdf_png == "pdf"){
-          pdf(file = paste0("03_results/",plot_prefix,"_plot.pdf"),width=width,height=height)
+          pdf(file = paste0(result.path,plot_prefix,"_plot.pdf"),width=width,height=height)
           
       } else if (pdf_png =="png"){
-          png(filename=paste0("03_results/",plot_prefix,"_plot.png"),width = width, height=height,units = "in",res=400)
+          png(filename=paste0(result.path,plot_prefix,"_plot.png"),width = width, height=height,units = "in",res=400)
       }
       
         par(mar=c(4,9,1,2))
@@ -292,7 +292,7 @@ plot_summarize_100_sim <- function(axis_label="repunit",repunits_file = TRUE,
         j <- j + 1
         
         if(pdf_png=="png"){
-          png(filename=paste0("03_results/",plot_prefix,"_",j,"_plot.png")
+          png(filename=paste0(result.path,plot_prefix,"_",j,"_plot.png")
               ,width = width, height=height,units = "in",res=400)
           par(mar=c(4,16,1,2))
         }
@@ -364,7 +364,11 @@ plot_summarize_100_sim <- function(axis_label="repunit",repunits_file = TRUE,
       }
     
     }
+    
     dev.off()
+    
+    # Reporting
+    print("Finished and writing the image to the results path")
     
     }
 
