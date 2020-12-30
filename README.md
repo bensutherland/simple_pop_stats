@@ -291,28 +291,25 @@ Note: *if you get an error*, make sure that there are no cases where a single po
 
 
 ## 15. Plot mean assignment per repunit from 100 sim
+Plot summaries of assignment per repunit based on results of the 100% simulations.      
+Requires 2 files produced in `full_sim`, and these are selected interactively so they can be anywhere on your computer.     
+- collection_100_stats_all_reps_YYYY-MM-DD.txt (not just the top repunit assignment)
+- collection_100_stats_all_pops_YYYY-MM-DD.txt (not just the top collection assignment)
+
 ```
 plot_summarize_100_sim(axis_label="repunit",repunits_file = TRUE,
                           plot_prefix = "summarize_100_sim",plot_colls = FALSE,
                           width=8,height=11,pdf_png="pdf")
+
+# plot_colls = TRUE    # will plot by individual collections instead of summarized by repunit
+# plot_prefix          # allows to change the output filename
+# repunits_file = TRUE # allows for selection (interactively) of a regional roll-up if a column is added to the repunits file 'region' (beta)    
+                       # also allows for choosing axis label (e.g., CU, CU_Name, repunit) (beta)
 ```
 
-IF microsats - `repunits_file = FALSE` is a must.
+If microsats - `repunits_file = FALSE` is a must.     
 
-To plot by individual collections instead of by repunit summary, use `plot_colls = TRUE`
-
-If using SNPs, and you have a repunits file, you can use `repunits_file = TRUE`. Will be chosen by interactive popup if TRUE. This allows the use of a "regional roll-up" by adding a column to the repunits file with the heading `region` - matches the format that Chum and Eulachon already use, and could easily be added to other species as needed.
-
-Seting `repunits_file = TRUE` also allows you to choose the axis_label - if you didn't use a repunits file, don't change the default. Could be repunit, CU or CU_NAME, but not extensively tested. 
-
-`plot_prefix` allows you to change the output file name, so you don't overwrite previous work. Will write to the 03_results folder. 
-
-Requires 2 files produced in `full_sim`
-
-- collection_100_stats_all_reps_YYYY-MM-DD.txt (not just the top repunit assignment)
-- collection_100_stats_all_pops_YYYY-MM-DD.txt (not just the top collection assignment)
-
-These are selected interactively. Could use the - collection_100_stats_YYYY-MM-DD.txt file probably, but would break the regional roll-up.
+Note: could use the - collection_100_stats_YYYY-MM-DD.txt file probably, but would break the regional roll-up.
 
 ## 16. Summarize a rubias base for collections, years and total N
 Summarize a filtered rubias base (SNP or microsat), and export a table reporting the repunit, CU number, collection, years per collection, and total N.      
