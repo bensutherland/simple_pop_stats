@@ -122,7 +122,7 @@ B) Run `full_sim()` to produce summary tables from the 100% simulations in rubia
 The file naming is flexible, but the Rmarkdown  script recognizes the string `*100_stats_2.*.txt$` so ensure that this string is not disrupted, and remains unique in the folder. It is therefore recommended only to change the prefix of the file. 
   
 
-C) Run `plot_summarize_100_sim` to produce an image summary of the 100% simulation results. See [plot_summarize_100](https://github.com/bensutherland/simple_pop_stats#15-plot-mean-assignment-per-repunit-from-100-sim) for more info. The default file (`03_results\summarize_100_sim_plot.pdf`) should be copied to the 
+C) Run `plot_summarize_100_sim` to produce an image summary of the 100% simulation results. See [plot_summarize_100](https://github.com/bensutherland/simple_pop_stats#15-plot-mean-assignment-per-repunit-from-100-sim) for more info. The default file (`03_results\summarize_100_sim_plot.pdf`) should be copied to the Baseline_summary folder.     
 
 The file naming is flexible, but the Rmarkdown script recognizes the string `*plot.pdf$` so ensure that this string is not disrupted, and remains unique in the folder. It is therefore recommended only to change the prefix of the file. 
 
