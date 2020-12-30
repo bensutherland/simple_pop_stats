@@ -315,17 +315,26 @@ Requires 2 files produced in `full_sim`
 These are selected interactively. Could use the - collection_100_stats_YYYY-MM-DD.txt file probably, but would break the regional roll-up.
 
 ## 16. Summarize a rubias base for collections, years and total N
-Will summarize a filtered rubias base, and export a table that reports the Repunit, CU number, Collection, years per collection and Total N. This is a commonly produced table for publication, so provided here for reproducability.
+Summarize a filtered rubias base (SNP or microsat), and export a table reporting the repunit, CU number, collection, years per collection, and total N.      
+This is a commonly produced table for publication or baseline benchmarks.     
+Both the **microsatellite and SNP versions** require a repunit file. This file should be tab-delimited, with columns "Display_Order", "CU", "CU_Name", and "repunit".           
 
 ```
-summarise_rubias_baseline(baseline = rubias_base,
-                          out_prefix = "rubias_base_summary",
-                          repunit_desc = repunit_desc,
-                          by_year=FALSE)
+summarise_rubias_baseline(baseline = <rubias_base filename>
+                          , out_prefix = "rubias_base_summary"
+                          , repunit_desc = <repunits filename>
+                          , by_year=<TRUE or FALSE>
+                          , type = "<SNP or microsat>"
+                          )
+
 ```
 
-Takes a filtered baseline, an output prefix and a repunit file. Will export to 03_results. Please do not provide a path in the output prefix, only a prefix for the output file. Tacked on to the prefix will be `.baseline_summary.txt` and output will be tab delimited. Example:
+This function takes a filtered baseline, an output prefix and a repunit file. Will export to results path.      
+Do not provide a path in the output prefix, only a prefix for the output file.       
+Tacked on to the prefix will be `.baseline_summary.txt` and output will be tab delimited.      
+Example:
 
+With `by_year=FALSE`, no tally by year will be conducted:       
 |                                    |           |                         |                        |     | 
 |------------------------------------|-----------|-------------------------|------------------------|-----| 
 | Region/Conservation Unit           | CU Number | Population              | Years                  | N   | 
@@ -339,7 +348,7 @@ Takes a filtered baseline, an output prefix and a repunit file. Will export to 0
 |                                    |           | KITWANGA_RIVER          | 2003                   | 93  | 
 |                                    |           | KULDO_CREEK             | 2008, 2009             | 95  | 
 
-With `by_year=TRUE` it will add counts per year. Example:
+With `by_year=TRUE`, tally by year will be conducted:      
 
 |                                    |           |                     |                                      |    | 
 |------------------------------------|-----------|---------------------|--------------------------------------|----| 
@@ -350,8 +359,7 @@ With `by_year=TRUE` it will add counts per year. Example:
 |                                    |           | KITWANGA_RIVER      | 2003(93)                             | 93 | 
 
 
-The rubias file requires the headers `collection`, `repunit` and `indiv` <- should be there by default.
-The repunits file requires the headers `Display_Order`, `CU`, `CU_Name`,`repunit`. 
+
 
 
 ## 17. Summarize the Juvenile column in the Extraction sheets
