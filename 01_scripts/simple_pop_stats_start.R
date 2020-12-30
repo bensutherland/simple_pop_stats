@@ -30,10 +30,10 @@
 # install.packages("tinytex")
 # tinytex::install_tinytex()
 
-# For ask functionality
+#For ask functionality
 # install.packages("gtools")
 
-# For reading data
+#For reading data
 # install.packages("readr")
 
 
@@ -42,6 +42,10 @@
 
 # install.packages("geosphere")
 
+#For baseline benchmark functionality
+# install.packages("pander")
+# install.packages("koRpus")
+# install.packages("xfun") # (needs >= 0.19)
 
 require("units")
 require("cluster")
@@ -65,6 +69,10 @@ require("Demerelate")
 require("related")
 library("geosphere")
 library("reshape2")
+library("pander")
+library("koRpus")
+library("xfun")
+
 
 ## Set working directory
 current.path <- dirname(rstudioapi::getSourceEditorContext()$path)
