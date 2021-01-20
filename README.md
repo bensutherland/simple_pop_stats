@@ -145,6 +145,16 @@ popname_microsat, popname_SNP
 ...save it, and then load it using:    
 `connect_two_datatypes(df = obj_pop_filt, crosswalk.FN = "path/to/crosswalk/file")`    
 
+## 05.3 Keep pops
+To keep certain populations based on a list. Works the exact opposite to the `drop_file` from Drop pops. 
+
+`keep_pops(df = obj_filt, keep_file = NULL)`      
+
+Change `keep_file` from NULL to a path to a file containing names of collections to keep. The keep file should be tab-delimited, with collections in the first column, with no header. Additional columns in file beyond the first are ignored.
+          
+note: if you have attached regions or CUs in Step 2 previously, this will not work as the pattern matching is to the name in the text file. If you have done so, please attach the region/CU to the collection name.
+
+eg. `Tatchun_R_MYR` instead of `Tatchun_R`
 
 ## 06. Genetic Differentiation ##
 For this step, you will need your data prepared for analysis in hierfstat, so use the following:    
