@@ -9,6 +9,15 @@
 
 The goal of this appendix is to walkthrough the minimum requirements for generating a summary document that describes a particular genetic baseline build. It is expected that the base of such an assessment will be kept in a common location, and not modified once this document is produced - should changes need to be made, a new time-stamped folder will be generated, and the summary document produced once again.
 
+## Naming convention for benchmark baselines
+Use the following naming conventions for all baseline benchmarks post 2021:     
+```
+b<sp>_<mtype>_<scope>_v.X.X.X
+e.g., 
+beu_SNP_coastwide_v.1.0.1
+bso_msat_skeena_v.1.0.0
+```
+note: capitals only for acronyms. See below for full details on what changes entail different new version updates.        
 
 ## Versioning rules for numbering baselines
 
