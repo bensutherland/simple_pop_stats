@@ -72,6 +72,7 @@ library("reshape2")
 library("pander")
 library("koRpus")
 library("xfun")
+require("tinytex")
 
 
 ## Set working directory
