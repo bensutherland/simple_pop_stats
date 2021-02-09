@@ -86,65 +86,57 @@ MOYEHA_RIVER	Moved from SWVI (official CU) to NoKy as genetically it is very sim
 ```
 
 ### Step 4: Rubias-based summaries
-A) Run `summarise_rubias_baseline()` to produce a summary of the rubias baseline. See [summarise_rubias_baseline](https://github.com/bensutherland/simple_pop_stats#16-summarize-a-rubias-base-for-collections-years-and-total-n) for more info. It is recommended here that `by_year = TRUE`, in order to report collection sizes by `N` separated by year; it is also recommended to use an informative prefix (default: `out_prefix = "rubias_base_summary"`). The resulting file will be sent to `03_results` - please copy and paste to the newly created `Baseline_summary` folder in step 2.
+Run the following scripts and include in the new benchmark folders:       
 
-The file naming is flexible, but the Rmarkdown  script recognizes the string `*baseline_summary.txt` [default suffix] so ensure that this string is not disrupted, and remains unique in the folder. It is therefore recommended only to change the prefix of the file.
+**Baseline summary** - use `summarise_rubias_baseline()` (see [summarise_rubias_baseline](https://github.com/bensutherland/simple_pop_stats#16-summarize-a-rubias-base-for-collections-years-and-total-n)).       
+note: `by_year = TRUE`, and `out_prefix = "rubias_base_summary"` are recommended. 
+note: suffix default `*baseline_summary.txt` is required.     
+Copy the file to `Baseline_summary` folder.        
 
-
-B) Run `full_sim()` to produce summary tables from the 100% simulations in rubias. See [full_sim](https://github.com/bensutherland/simple_pop_stats#14-run-simulated-individual-assignment-test) for more info. All resulting files (output to `03_results`) are recommended to be stored in the `100_sims` folder created in Step 2:
+**100% simulations** - use `full_sim()` (see [full_sim](https://github.com/bensutherland/simple_pop_stats#14-run-simulated-individual-assignment-test)).       
+note: the string `*100_stats_2.*.txt$` is required, and must be unique in the folder. It is therefore recommended only to change the prefix of the file.       
+Copy all resulting files to the `100_sims` folder:     
 - `all_collection_results_<date>.txt.gz`
 - `collection_100_stats_<date>.txt`
 - `collection_100_stats_all_pops_<date>.txt`
 - `collection_100_stats_all_reps_<date>.txt`
 - `collection_100_stats_all_pops_matrix_<date>.txt`
 
-The file naming is flexible, but the Rmarkdown  script recognizes the string `*100_stats_2.*.txt$` so ensure that this string is not disrupted, and remains unique in the folder. It is therefore recommended only to change the prefix of the file. 
-  
+**Simulations plot** - use `plot_summarize_100_sim` (see [plot_summarize_100](https://github.com/bensutherland/simple_pop_stats#15-plot-mean-assignment-per-repunit-from-100-sim). 
+note: the string `*plot.pdf$` is required, and must be unique in the folder         
+Copy the resultant pdf to the `100_sims` folder.     
 
-C) Run `plot_summarize_100_sim` to produce an image summary of the 100% simulation results. See [plot_summarize_100](https://github.com/bensutherland/simple_pop_stats#15-plot-mean-assignment-per-repunit-from-100-sim) for more info. The default file (`03_results\summarize_100_sim_plot.pdf`) should be copied to the Baseline_summary folder.     
+_Optional:_ **Highest Tray** - (SNPs only) use `highest_tray()` to produce a file that has the highest tray number currently in the rubias baseline, based on matching to the extraction sheet.         
+note: requires the suffix `*highest_tray_number.txt$`      
+Copy the output file, `<two.letter.code>_highest_tray_number.txt` to the Baseline_summary folder      
 
-The file naming is flexible, but the Rmarkdown script recognizes the string `*plot.pdf$` so ensure that this string is not disrupted, and remains unique in the folder. It is therefore recommended only to change the prefix of the file. 
+### Step 5: Genepop-based summaries
+**Number Markers** - use `characterize_genepop()` to produce `number_of_markers.csv`.      
+Copy this file to `Baseline_summary` folder.        
 
-D) Run `highest_tray()` to produce a file that has the highest tray number currently in the rubias baseline, based on matching to the extraction sheet. This file, `<two.letter.code>_highest_tray_number.txt` should be placed in the Baseline_summary folder, and requires the suffix `*highest_tray_number.txt$`.  
+**Dendrogram** - use `XXX` to generate a dendrogram, modify as needed, then save a PDF. 
+Copy the PDF and the .tre file to the folder `Dendrogram`. Only the PDF will be copied into the benchmark.       
+It is possible to have multiple dendrogram PDFs
+#todo#: (not clear) -- created, it is recommended that they are stored in a nested folder - the Rmarkdown script does not look recursively.     
 
-### Step 5: Genepop-based analyses
+Consider when formatting the dendrogram for display:     
+* i) R markdown will incorporate the image as it is formatted in the PDF, so ensure you are happy with the format in the PDF. 
+* ii) If it is on a single page, it will incorporate it as a single page; if split across multiple pages, it will incorporate it as multiple pages.
+* iii) Use [FigTree](http://tree.bio.ed.ac.uk/software/figtree/t) to view and format the trees
+* iv) To split your PDF, use the "print" option in Adobe Acrobat Reader DC, combined with "print to PDF" to create a multi-page PDF from the single page PDF exported from FigTree
+* v) It is recommended that "Expansion" be used to spread the tree, and "Tip Labels" and "Node Labels" font sizes be increased to allow easier reading with minimum zooming.
+* vi) Don't forget in FigTree to ensure bootstrapping is selected for the "Node Labels"
 
-
-A) Running simple_pop_stats steps 1-3 will generate a file called `03_results/number_of_markers.csv`. Please copy and paste to the newly created `Baseline_summary` folder in step 2 in order to display the number of markers in the baseline.
-
-
-B) Running simple_pop_stats steps 1-7 will allow for the dendrogram to be produced. There are multiple ways to produce and format the results, and multiple formatting options for displaying the output. Ultimately, a single `*.pdf` file is needed in the `Dendrogram` folder to be included in the summary document. Should multiple images be created, it is recommended that they are stored in a nested folder - the Rmarkdown script does not look recursively. 
-
-Things to consider when formatting the output:
-* i) R markdown will incorporate the image as it is formatted in the PDF. 
-
-* ii) If it is on a single page, it will incorporate it as a single page; if split across multiples, it will incorporate it as multiples.
-
-* iii) Please be sure you are happy with the way it appears in the initial PDF. 
-
-* iv) MGL has been using [FigTree](http://tree.bio.ed.ac.uk/software/figtree/t) to view and format the trees
-
-* v) The "print" option combined with "print to PDF" in Adobe Acrobat Reader DC can be used to create a multi-page PDF from the single page PDF exported from FigTree
-
-* vi) It is recommended that "Expansion" be used to spread the tree, and "Tip Labels" and "Node Labels" font sizes be increased to allow easier reading with minimum zooming.
-
-* vii) Don't forget in FigTree to ensure bootstrapping is selected for the "Node Labels"
-
-The file naming is flexible, but the Rmarkdown script recognizes the string `*.pdf$` so ensure that this string is not disrupted, and remains unique in the folder. 
+note: the file naming is flexible, but the Rmarkdown script recognizes the string `*.pdf$` so ensure that this string is not disrupted, and remains unique in the folder. 
 
 
-C) LOO - TBD
+C) LOO - _in development_
 
 
-D) Fst - TBD
-
-
+D) Fst - _in development_
 
 ## B) Run the Rmarkdown script
-
-
 ### Open and edit the script
-
 The script is kept at `01_scripts\baseline_benchmark.Rmd` currently, within the Simple Pop Stats package. 
 
 As written, it currently requires user intervention on two lines:
