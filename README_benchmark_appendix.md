@@ -106,7 +106,7 @@ Copy all resulting files to the `100_sims` folder:
 note: the string `*plot.pdf$` is required, and must be unique in the folder         
 Copy the resultant pdf to the `100_sims` folder.     
 
-_Optional:_ **Highest Tray** - (SNPs only) use `highest_tray()` to produce a file that has the highest tray number currently in the rubias baseline, based on matching to the extraction sheet.         
+**Highest Tray** _(optional)_ - (SNPs only) use `highest_tray()` to produce a file that has the highest tray number currently in the rubias baseline, based on matching to the extraction sheet.         
 note: requires the suffix `*highest_tray_number.txt$`      
 Copy the output file, `<two.letter.code>_highest_tray_number.txt` to the Baseline_summary folder      
 
@@ -129,28 +129,24 @@ Consider when formatting the dendrogram for display:
 
 note: the file naming is flexible, but the Rmarkdown script recognizes the string `*.pdf$` so ensure that this string is not disrupted, and remains unique in the folder. 
 
-
-C) LOO - _in development_
-
-
-D) Fst - _in development_
+#todo#
+LOO - _in development_
+Fst - _in development_
 
 ## B) Run the Rmarkdown script
 ### Open and edit the script
-The script is kept at `01_scripts\baseline_benchmark.Rmd` currently, within the Simple Pop Stats package. 
-
-As written, it currently requires user intervention on two lines:
+The script is kept at `01_scripts\baseline_benchmark.Rmd` currently, within the simple_pop_stats package.      
+As written, it currently requires user intervention on two lines:       
 
 * [folder](https://github.com/bensutherland/simple_pop_stats/blob/b6a45553761486b1eff7669f2d61938817bc77ed/01_scripts/baseline_benchmark.Rmd#L21) needs to be set with the folder name (**not full path**) of the baseline to be considered. It is assumed that this folder is in the standard location: ` W:\9_PBT\01_<species>\reference_databases\`.                    
 * [species](https://github.com/bensutherland/simple_pop_stats/blob/b6a45553761486b1eff7669f2d61938817bc77ed/01_scripts/baseline_benchmark.Rmd#L22) needs to be set with the species name in double quotes. Currently one of: "chinook", "coho", "pink", "eulachon", "sockeye", or "chum".            
 
 
 ### Run the script
-
 Press `Knit` at the top of the script in Rstudio! Should automatically output the necessary document. Currently writes to the same folder as the script (01_scripts - default behaviour), so drag it over to the root folder for the baseline
 
  - TBD to re-direct to the working folder, likely via a `rmarkdown::render()` wrapper script
 
 **Note**: outputing a "Float too large" error relatively regularly as a warning message. Likely to do with trying to shove too much info into too small a page. However, I have not noticed data loss. Please let me know if you do.
 
-
+**Note** if crashes, or states that LaTeX rendering is not enabled, confirm tinytex is loaded, and also that all necessary input files are included in the folders.      
