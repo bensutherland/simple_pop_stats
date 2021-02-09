@@ -42,34 +42,24 @@ Very Minor (v.0.0.**X**) changes:
 * Change the spelling of a collection name
 * Add or remove small numbers of individuals from the baseline (<50)
 
-## A) Generate necessary data and file structure
-### Step 1: Baseline formats
+## A) Create file structure and create necessary inputs
+### Step 1: Folder structure
+Create a new folder at `W:\9_PBT\01_<species>\reference_databases\<UNIQUE-DATE-STAMP-VERSION-STAMP-FOLDER>`. Use naming convention described above.           
+e.g., `bso_msat_coastwide_v.1.0.0_2021-02-08`       
 
-It is assumed at this point that the data exists in [rubias](https://github.com/eriqande/rubias#input-data) format . If not, please ensure that a Rubias-formatted baseline exists.
-
-It is also advised that the data exists in [genepop](https://genepop.curtin.edu.au/help_input.html#Input) format . This can be accomplished a number of ways, but if access is available to the `MGL_GSI_SNP` github repo, a script exists to make the conversion (Currently in `01_scripts/PBT_Menu_functions/z-development/rubias_to_genepop.r`) - if access is required please contact the `simple_pop_stats` author or contributors.
-
-These files should exist at the root of a date-stamped and version stamped folder. In MGL, these exist on:
-
-` W:\9_PBT\01_<species>\reference_databases\<UNIQUE-DATE-STAMP-VERSION-STAMP-FOLDER>`
-
-An example folder name is `2020_V1.0_2020-08-05_baseline` for chinook. 
-
-Additional files can be stored at the root of this folder, and any that appear here will ultimately be added to md5 listed files in the summary. Ultimately, this is meant to store files that led to subsequent summary formats, so it is recommended that these files represent the minimum requirements to re-create the analyses. If multiple files do exist, please make it clear why (eg. PBT-base vs. GSI-base if certain collections are used for PBT but dropped from GSI).
-
-
-
-### Step 2: Nested folder structure
-
-In the newly created folder, please generate the following folders to store summary files:
+In this folder, create the following folders (exact names required):         
  * `Baseline_summary`
  * `Dendrogram`
  * `100_sims`
- * `LOO` (TBD)
- * `FST` (TBD)
- 
- 
- 
+ * `LOO` (_in development_)
+ * `FST` (_in development_)
+
+### Step 2: Add baseline inputs
+At the root of your new directory, include a [rubias](https://github.com/eriqande/rubias#input-data) baseline and a [genepop](https://genepop.curtin.edu.au/help_input.html#Input) baseline. If you are working with microsatellite data, also include a BCF and BSE file matching these.      
+Note: these should all be identical in character (e.g., # indiv., # collections, etc.) and produced at the same time.      
+
+Additional files can be stored at the root of this folder, and any that appear here will ultimately be added to md5 listed files in the summary. Ultimately, this is meant to store files that led to subsequent summary formats, so it is recommended that these files represent the minimum requirements to re-create the analyses. If multiple files do exist, please make it clear why (eg. PBT-base vs. GSI-base if certain collections are used for PBT but dropped from GSI).
+
 ### Step 3: Version-change summaries
 
 Within the newly created `Baseline_summary` folder, it is recommended to include 2 files with the following suffixes or file names:
