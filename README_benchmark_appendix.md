@@ -58,6 +58,10 @@ In this folder, create the following folders (exact names required):
 At the root of your new directory, include a [rubias](https://github.com/eriqande/rubias#input-data) baseline and a [genepop](https://genepop.curtin.edu.au/help_input.html#Input) baseline. If you are working with microsatellite data, also include a BCF and BSE file matching these.      
 Note: these should all be identical in character (e.g., # indiv., # collections, etc.) and produced at the same time.      
 
+For SNPs: Please include the repunits and stock code files used in producing the baseline. This is important, as many changes to the baseline will be due to collection naming or repunit delineation - thus, it is important to maintain a record of names and repunits at the time of baseline build. 
+
+For microsats: It is strongly recommended to build a `repunits_full.txt` style file in order to apply Display Order, etc. in summarizing the data. At minimum, the names.dat file at the time of baseline build should be included to represent collection and region names. 
+
 Additional files can be stored at the root of this folder, and any that appear here will ultimately be added to md5 listed files in the summary. Ultimately, this is meant to store files that led to subsequent summary formats, so it is recommended that these files represent the minimum requirements to re-create the analyses. If multiple files do exist, please make it clear why (eg. PBT-base vs. GSI-base if certain collections are used for PBT but dropped from GSI).
 
 ### Step 3: Version-change summaries
