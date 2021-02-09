@@ -61,14 +61,11 @@ Note: these should all be identical in character (e.g., # indiv., # collections,
 Additional files can be stored at the root of this folder, and any that appear here will ultimately be added to md5 listed files in the summary. Ultimately, this is meant to store files that led to subsequent summary formats, so it is recommended that these files represent the minimum requirements to re-create the analyses. If multiple files do exist, please make it clear why (eg. PBT-base vs. GSI-base if certain collections are used for PBT but dropped from GSI).
 
 ### Step 3: Version-change summaries
+Within the newly created `Baseline_summary` folder, add two files with the following suffixes or file names:      
+- `*changes.txt`, a two-column tab-delimited file describing version changes between baselines. Append details to previous changes files track changes.     
+- `*notes.txt`, a two-column tab-delimited file describing details on specific collections (i.e., known issues)      
 
-Within the newly created `Baseline_summary` folder, it is recommended to include 2 files with the following suffixes or file names:
-
-- `*changes.txt`
-- `*notes.txt`
-
-In the "changes" file, this is a two-column format to describe Version changes between baselines. It is recommended that this is a file that is appended to, such that all changes are tracked back to the initial document. An example from Chinook would be:
-
+Example changes.txt file:        
 ```
 Baseline Version	Changes from prior baselines
 2020_V1.1	1) changed name of CHILLIWACK_RIVER to CHILLIWACK_RIVER_summer
@@ -78,28 +75,17 @@ Baseline Version	Changes from prior baselines
 	5) Chehalis moved back into GSI baseline (was previously PBT only)
 	Changes were made to better describe these transplanted, but genetically distinct collections. Grouping together under the new repunit is based primarily off of dendrogram results in version 1.0 of the baseline.
 2020_V1.2	Nicola 2016 were added into the baseline. While they had been genotyped, they had not been added to the baseline previously due to a database error. 
-2020_V1.3	1) Cle Elum hatchery repunit changed from NCOR to MCR-Sp
-	2) Spring Creek Hatchery changed from MCR-Sp to LCR
-	3) Naches River is dropped from baseline, as position in the dendrogram implies it may not be correctly identified (groups with Puget Sound, should be Middle Columbia Spring)
 ```
 
-In the "notes" file, this is a two-column format of "collection" and "notes" that details specific notes on particular collections. This allows for tracking "known issues" - things that we are aware of or changes purposely made that might otherwise be questioned. An example from Chinook would be:
-
-| collection              | notes                                                                                                                                                                                                 | 
-|-------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| 
-| CAPILANO_RIVER          | Is used for PBT only, as direct transplanting from Chilliwack River-fall interferes with GSI.                                                                                                         | 
-| GOLD_RIVER              | Is used for PBT only, as high-frequency of Robertson strays interfere with GSI. Moved from NoKy (official CU) to SWVI for same reason, as genetically it is very similar to Robertson due to straying | 
-| CHEHALIS_RIVER_summer   | Has been placed into CK-9006 (LFR-suppl) to reflect the historical transplanting from the upper Fraser                                                                                                | 
-| CHILLIWACK_RIVER_summer | Has been placed into CK-9006 (LFR-suppl) to reflect the historical transplanting from the upper Fraser                                                                                                | 
-| CHEAKAMUS_RIVER_FALL    | Moved from SMn-GStr (official CU) to QP-fall as genetically it is very similar to Qualicum due to historical transplanting                                                                            | 
-| MEGIN_RIVER             | Moved from SWVI (official CU) to NoKy as genetically it is very similar to Conuma due to straying                                                                                                     | 
-| MOYEHA_RIVER            | Moved from SWVI (official CU) to NoKy as genetically it is very similar to Conuma due to straying                                                                                                     | 
-
-
+Example notes.txt file: 
+```
+collection	notes
+CAPILANO_RIVER	Is used for PBT only, as direct transplanting from Chilliwack River-fall interferes with GSI.
+GOLD_RIVER	Is used for PBT only, as high-frequency of Robertson strays interfere with GSI. Moved from NoKy (official CU) to SWVI for same reason, as genetically it is very similar to Robertson due to straying
+MOYEHA_RIVER	Moved from SWVI (official CU) to NoKy as genetically it is very similar to Conuma due to straying
+```
 
 ### Step 4: Rubias-based summaries
-
-
 A) Run `summarise_rubias_baseline()` to produce a summary of the rubias baseline. See [summarise_rubias_baseline](https://github.com/bensutherland/simple_pop_stats#16-summarize-a-rubias-base-for-collections-years-and-total-n) for more info. It is recommended here that `by_year = TRUE`, in order to report collection sizes by `N` separated by year; it is also recommended to use an informative prefix (default: `out_prefix = "rubias_base_summary"`). The resulting file will be sent to `03_results` - please copy and paste to the newly created `Baseline_summary` folder in step 2.
 
 The file naming is flexible, but the Rmarkdown  script recognizes the string `*baseline_summary.txt` [default suffix] so ensure that this string is not disrupted, and remains unique in the folder. It is therefore recommended only to change the prefix of the file.
