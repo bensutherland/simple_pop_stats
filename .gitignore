@@ -20,3 +20,6 @@
 *.dat
 *.tex
 !01_scripts/reference_files/*.txt
+*.mix
+*.bse
+*.emf
