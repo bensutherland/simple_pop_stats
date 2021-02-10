@@ -16,7 +16,7 @@ https://github.com/timothyfrasier/related
 Required files are automatically identified on network, or if off network:       
 ```
 # Put essential files in 00_archive, including     
-# Extraction sheets: 
+# Extraction sheets: Standard abbreviations for species naming: SK, CN, CO, CM, PK, and STH
 <species>_PBT_ES.txt or <species>_mix_PBT_ES.txt (base/mix ES)     
 # Hotspot file:    
 <species>_hotspot_detail.txt (hotspot file)     
