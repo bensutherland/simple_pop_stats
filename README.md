@@ -269,9 +269,11 @@ Allele files are created using XXX, but in any case you won't have the sample na
 ...after which you will be prompted to select an allele file (i.e., output of `rubias_to_alleles()` of MGL_GSI_Analysis.     
 
 ## 14. Run simulated individual assignment test
-Use a rubias baseline output by MGL_GSI_SNP or by the genepop_to_rubias() converter as a 100% simulation input to test your reporting units using the rubias function assess_reference_loo().       
+Using a rubias baseline, perform simulations to test baseline power using the rubias function [assess_reference_loo()](https://rdrr.io/cran/rubias/man/assess_reference_loo.html) as follows:        
+
+For **100% simulations**           
 `full_sim(rubias_base.FN = "03_results/rubias_output.txt", num_sim_indiv = 200, sim_reps = 100)`          
-...will save output into 03_results, including:
+...will save output into 03_results, including:        
 - collection_100_stats_YYYY-MM-DD.txt (summary info of sum of all iteration assignments)
 - collection_100_stats_all_reps_YYYY-MM-DD.txt (not just the top repunit assignment)
 - collection_100_stats_all_pops_YYYY-MM-DD.txt (not just the top collection assignment)
@@ -280,6 +282,22 @@ Use a rubias baseline output by MGL_GSI_SNP or by the genepop_to_rubias() conver
 For now, save these to a separate folder to make sure they don't get written over.    
 
 Will also output a matrix-style table, used in very specific cases (ususally reduced regional baseline analyses).
+
+#### in development ####
+For **realistic fishery scenarios**, first use the following function to make a proportions template, then manually edit the file to the custom proportions:          
+```
+# Prepare proportion file
+prep_ppn(rubias_base.FN = <rubias.FN>, ppn.FN = "ppn.txt")
+# ...then edit to add proportions in <result.path>/<ppn.FN>
+
+# Run simulation using the ppn file
+full_sim(rubias_base.FN = <rubias.FN>
+         , num_sim_indiv = 200
+         , sim_reps = 100
+         , proportions.FN = paste0(current_path_to_set, "ppn_north_orgn.txt")
+         )
+```
+#### end in-development ####
 
 **Alternate option**: can also run 100% simulations using Oncor for the microsatellite data.       
 Use MGL_GSI README to export an oncor baseline and grouping file. Groupings can be easily edited.       
