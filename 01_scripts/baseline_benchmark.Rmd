@@ -303,8 +303,15 @@ sims.fn <- list.files(paste0(getwd(),"/100_sims/"),pattern="*100_stats_2.*.txt$"
 library(readr)
 sims <- read_tsv(sims.fn)
 
-sims$collection <- gsub("_"," ",sims$collection)
-sims$collection_scenario <- gsub("_"," ",sims$collection_scenario)
+
+if("collection" %in% colnames(sims)){
+    sims$collection <- gsub("_"," ",sims$collection)
+}
+
+if("collection_scenario" %in% colnames(sims)){
+    sims$collection_scenario <- gsub("_"," ",sims$collection_scenario)
+}
+
 names(sims) <- gsub("_"," ",names(sims))
 sims <- sims[order(sims$repunit),]
 
