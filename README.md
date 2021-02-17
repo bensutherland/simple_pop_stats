@@ -268,6 +268,12 @@ Allele files are created using XXX, but in any case you won't have the sample na
 `add_sample_name(input_type = "allele", base = TRUE)`      
 ...after which you will be prompted to select an allele file (i.e., output of `rubias_to_alleles()` of MGL_GSI_Analysis.     
 
+### Separate a rubias baseline file by year
+Method to separate a rubias baseline file (SNP only) by year for downstream simulations        
+`sep_rubias_by_yr(rubias_base.FN = <rubias_base.FN)>`       
+Note: could use additional testing to validate method.      
+
+
 ## 14. Run simulated individual assignment test
 Using a rubias baseline, perform simulations to test baseline power using the rubias function [assess_reference_loo()](https://rdrr.io/cran/rubias/man/assess_reference_loo.html) as follows:        
 
