@@ -289,6 +289,9 @@ For now, save these to a separate folder to make sure they don't get written ove
 
 Will also output a matrix-style table, used in very specific cases (ususally reduced regional baseline analyses).
 
+Note: use the following function to create a 'Display Order' sorted result file for browsing using the repunit file (do not use for plotting):        
+`format_sims_output()` # and select manually your input 100% sims stats text file. This will output to your results file folder.            
+
 #### in development ####
 For **realistic fishery scenarios**, first use the following function to make a proportions template, then manually edit the file to the custom proportions:          
 ```
