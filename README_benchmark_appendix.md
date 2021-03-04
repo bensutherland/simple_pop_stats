@@ -137,20 +137,18 @@ note: the file naming is flexible, but the Rmarkdown script recognizes the strin
 LOO - _in development_
 Fst - _in development_
 
-## B) Run the Rmarkdown script
+## B) Create the benchmark PDF
 ### Open and edit the script
-The script is kept at `01_scripts\baseline_benchmark.Rmd` currently, within the simple_pop_stats package.      
-As written, it currently requires user intervention on two lines:       
+Open `01_scripts\baseline_benchmark.Rmd`, and edit the following:       
 
-* [folder](https://github.com/bensutherland/simple_pop_stats/blob/b6a45553761486b1eff7669f2d61938817bc77ed/01_scripts/baseline_benchmark.Rmd#L21) needs to be set with the folder name (**not full path**) of the baseline to be considered. It is assumed that this folder is in the standard location: ` W:\9_PBT\01_<species>\reference_databases\`.                    
+* [folder](https://github.com/bensutherland/simple_pop_stats/blob/b6a45553761486b1eff7669f2d61938817bc77ed/01_scripts/baseline_benchmark.Rmd#L21) needs to be set with the folder name (**not full path**) of the target baseline. The script assumes that this folder is in the standard location: ` W:\9_PBT\01_<species>\reference_databases\`.                    
 * [species](https://github.com/bensutherland/simple_pop_stats/blob/b6a45553761486b1eff7669f2d61938817bc77ed/01_scripts/baseline_benchmark.Rmd#L22) needs to be set with the species name in double quotes. Currently one of: "chinook", "coho", "pink", "eulachon", "sockeye", or "chum".            
 
+* [datatype](https://github.com/bensutherland/simple_pop_stats/blob/b6a45553761486b1eff7669f2d61938817bc77ed/01_scripts/baseline_benchmark.Rmd#L24) needs to be set with the data type, either "SNP" or "microsat".        
 
 ### Run the script
 Press `Knit` at the top of the script in Rstudio! Should automatically output the necessary document. Currently writes to the same folder as the script (01_scripts - default behaviour), so drag it over to the root folder for the baseline
 
- - TBD to re-direct to the working folder, likely via a `rmarkdown::render()` wrapper script
-
-**Note**: outputing a "Float too large" error relatively regularly as a warning message. Likely to do with trying to shove too much info into too small a page. However, I have not noticed data loss. Please let me know if you do.
-
-**Note** if crashes, or states that LaTeX rendering is not enabled, confirm tinytex is loaded, and also that all necessary input files are included in the folders.      
+**Common Issues**:       
+- outputs a "Float too large" warning message regularly. Likely to do with trying to shove too much info into too small a page. Data loss has not been noted by developers, but please contact if you identify this occurring.    
+- render crashes or states that LaTeX rendering is not enabled. If this occurs, confirm tinytex is loaded, and also that all necessary input files are included in all of the folders.      
