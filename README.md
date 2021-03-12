@@ -200,7 +200,7 @@ Conduct DAPC using:
 To use custom colours, set the path to a csv file with header 'collection' and 'colour' containing the population name and colour name to set your custom colours.     
 
 
-## 09. Calculate relatedness
+## 09.1 Calculate relatedness
 First, convert data (SNP or microsat) from genind to relatedness format and calculate relatedness values:      
 `relatedness_calc(data = obj_pop_filt, datatype = "SNP")`        
 ...this will output to `03_results/kinship_analysis_<date>.Rdata`      
@@ -211,6 +211,11 @@ Second, plot your results:
 `relatedness_plot(file = "03_results/kinship_analysis_<date>.Rdata", same_pops = TRUE, plot_by = "names")`     
 ...where you can use either "names" or "codes" if using only same-on-same.      
 ...and if you set `same_pops` to FALSE, you will get all pops pairwise comparisons. (but can't use names)      
+
+## 09.2 Population marker HWE evaluation summary
+To run a test of whether markers are following Hardy-Weinberg proportions, use the following function to find the number and percentage of markers per population that deviate from H-W proportions:          
+`hwe_eval(data = <obj>, alpha = 0.01)`          
+...to produce 'HWE_result_alpha_0.01.txt'          
 
 ## 10. Compare geographic and genetic distance
 If you have GPS coordinates in the stock code file, you can automatically calculate the distance between all pairs of locations using the following script:     
