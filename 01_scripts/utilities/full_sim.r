@@ -1,5 +1,6 @@
-## Running 100 percent simulations
-# proportions.FN should be a tab-delim file with header collections \t ppn
+## Running 100 percent simulations with rubias 
+# For custom fishery proportions, proportions.FN should be a tab-delim file with header collections \t ppn
+
 full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
                      , num_sim_indiv = 200 # number of indiv to sim from the baseline
                      , sim_reps = 100 
@@ -11,14 +12,19 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
                      #, repunit_sim = FALSE   # simulate by repunit
                      #, keep_false = FALSE     # Select whether all populations are retained (TRUE) or populations marked as FALSE in the keep column are dropped (FALSE)
                      #, all_collections = TRUE # Run all collections in 100 percent simulation; # Are all populations to be run, or only those that are specified by 'collections_to_use'
+                     , ncore_linux = 0 # if Linux, and dev version of rubias, can use multiple cores
+                     
                      ){
   
   #### 01. Load in baseline ####
   ## Load baseline data
   rubias_base <- read_tsv(rubias_base.FN,guess_max=100000)
+
+  ### Can this be removed? ###  
+  #  rubias_base <- filter(rubias_base,!(collection %in% c(NULL)))
+  ### /end/ Can this be removed? ###
   
-#  rubias_base <- filter(rubias_base,!(collection %in% c(NULL)))
-  
+  # Read in custom roll-up file
   if(custom_rollup == TRUE){
     
     custom_rollup_DF <- read_tsv(custom_rollup.FN, guess_max=100000)
@@ -26,8 +32,7 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
   }
   
   
-  #### TODO: This is better somewhere else ####
-  ## Optional # filtering
+  ## Optional ## Filter rubias baseline by minimum sample size
   if(filter_by_pop_size==TRUE){
     
     # Reporting
@@ -42,12 +47,11 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
     # Reporting
     print("After filtering, save out the rubias base")
     
-    # Save
+    # Save out the filtered rubias baseline
     filtered_base.FN <- gsub(pattern = ".txt", replacement = "", x = rubias_base.FN)
     filtered_base.FN <- paste0(filtered_base.FN, "_coll_10_", format(Sys.time(), "%Y-%m-%d"),".txt")
     write_tsv(x = rubias_base, path = filtered_base.FN)
   }
-  #### END\TODO: This is better somewhere else ####
   
   
   #### 02. Generate counts per collection and per repunit ####
@@ -55,19 +59,19 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
   
   # Number of fish per collection
   collection.CNT <- rubias_base %>%
-    count(collection, name="n_per_collection")
+                        count(collection, name="n_per_collection")
   
   # Number of fish per repunit
   repunit.CNT <- rubias_base %>%
-    count(repunit, name="n_per_repunit")
+                        count(repunit, name="n_per_repunit")
   
   # Number of collections per repunit
   repunit.collection_CNT <- rubias_base %>%
-    group_by(repunit, collection) %>%
-    tally() %>%
-    select(-n) %>%
-    count(repunit, name="#collections")
-  
+                        group_by(repunit, collection) %>%
+                        tally() %>%
+                        select(-n) %>%
+                        count(repunit, name="#collections")
+                      
   # Drop column if exists (warning if doesn't)
   # rubias_base <- select(rubias_base, -one_of("allele.Count"))
   
@@ -119,7 +123,7 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
       names(all_collection_scenario)[[i]] <- all_collection_scenario[[i]]$collection
     }
     
-    all_collection_scenario
+    #all_collection_scenario
     
   
   }
@@ -128,19 +132,42 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
   #### 04. Run Simulation ####
   print("Running simulation and assessing the simulation assignments")
   print(paste0("This will include a total of ***", length(all_collection_scenario), "*** scenarios"))
+  
   # Run simulation and put results into the repunit list
-  # creates genotype-logL matrix based on simulation-by-indiv w/ randomly drawn popn proportions
-  # then uses two estimates of mixture (maxL, MCMC)
-  all_collection_results <- assess_reference_loo(reference = rubias_base
-                                                 , gen_start_col = (which(colnames(rubias_base)=="indiv") + 1)
-                                                 , reps = sim_reps
-                                                 , mixsize = num_sim_indiv
-                                                 , alpha_collection = all_collection_scenario
-  )
+  # Creates genotype-logL matrix based on simulation-by-indiv w/ randomly drawn popn proportions
+  #  then uses two estimates of mixture (maxL, MCMC)
   
-  
-
-  
+  # Parallel mode
+  if( .Platform$OS.type == "unix" && ncore_linux > 0 ) {
+    
+    # Reporting
+    print(paste0("Running simulation in parallel with ", ncore_linux, " cores"))
+    
+    
+    # Simulations
+    all_collection_results <- assess_reference_loo(reference = rubias_base
+                                                   , gen_start_col = (which(colnames(rubias_base)=="indiv") + 1)
+                                                   , reps = sim_reps
+                                                   , mixsize = num_sim_indiv
+                                                   , alpha_collection = all_collection_scenario
+                                                   , mc.cores = ncore_linux
+    )
+    
+  } else {
+    
+    # Reporting
+    print("Running simulations not in parallel")
+          
+          # Standard mode
+          all_collection_results <- assess_reference_loo(reference = rubias_base
+                                                         , gen_start_col = (which(colnames(rubias_base)=="indiv") + 1)
+                                                         , reps = sim_reps
+                                                         , mixsize = num_sim_indiv
+                                                         , alpha_collection = all_collection_scenario
+          )
+  }
+    
+    
   #### 05. Collect and summarize output ####
   print("Collecting and summarizing outputs")
   
@@ -173,24 +200,25 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
   if(custom_rollup ==TRUE){
     
     all_collection_results <- merge(all_collection_results,custom_rollup_DF,all.x=TRUE)
-  # Filter for same-on-same (targets); take the average of all reps for post_mean_pi, mle_pi, and true_pi
-  coll_to_grp_filt_res <- all_collection_results %>%
+    
+    # Filter for same-on-same (targets); take the average of all reps for post_mean_pi, mle_pi, and true_pi
+    coll_to_grp_filt_res <- all_collection_results %>%
     group_by(collection_scenario, group, repunit, collection) %>%
     summarise_at(.vars=c("post_mean_pi","mle_pi","true_pi")
                  , .funs=c(mean="mean")) %>%
-  group_by(collection_scenario,group) %>%
-  summarise_at(.vars=c("post_mean_pi_mean","mle_pi_mean","true_pi_mean")
+    group_by(collection_scenario,group) %>%
+    summarise_at(.vars=c("post_mean_pi_mean","mle_pi_mean","true_pi_mean")
                , .funs=c(sum="sum"))  %>%
-  filter(true_pi_mean_sum > 0)
+    filter(true_pi_mean_sum > 0)
   
-  names(coll_to_grp_filt_res) <- c("collection_scenario"
+    names(coll_to_grp_filt_res) <- c("collection_scenario"
                                 , "group"
                                 , "group_post_mean_pi"
                                 , "group_mle_pi"
                                 , "group_true_pi")
 
-  # Merge outputs for report (automatically finds the joining )
-  coll_all <- inner_join(collection.CNT, coll_to_coll_filt_res) %>%
+    # Merge outputs for report (automatically finds the joining )
+    coll_all <- inner_join(collection.CNT, coll_to_coll_filt_res) %>%
     inner_join(., coll_to_rep_filt_res) %>%
     inner_join(., coll_to_grp_filt_res) %>%
     inner_join(., repunit.collection_CNT ) %>%
@@ -246,17 +274,17 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
       group_by(collection_scenario, group) %>%
       summarise_at(.vars=c("post_mean_pi_mean","mle_pi_mean","true_pi_mean")
                    , .funs=c(sum="sum"))
-    # Provide names
-    names(coll_to_grp_filt_all) <- c("collection_scenario"
+      # Provide names
+      names(coll_to_grp_filt_all) <- c("collection_scenario"
                                      ,"group"
                                      ,"group_post_mean_pi"
                                      ,"group_mle_pi"
                                      ,"group_true_pi")
     
-    write_tsv(x = coll_to_grp_filt_all, path = paste0(result.path, "collection_100_stats_all_grps_",format(Sys.time(), "%Y-%m-%d"),".txt"))
+      write_tsv(x = coll_to_grp_filt_all, path = paste0(result.path, "collection_100_stats_all_grps_",format(Sys.time(), "%Y-%m-%d"),".txt"))
     
-    coll_to_grp_filt_all_matrix <- reshape2::dcast(coll_to_grp_filt_all,group~collection_scenario,value.var="group_post_mean_pi")
-    write_tsv(x = coll_to_grp_filt_all_matrix, path = paste0(result.path, "collection_100_stats_all_grps_matrix_",format(Sys.time(), "%Y-%m-%d"),".txt"))
+      coll_to_grp_filt_all_matrix <- reshape2::dcast(coll_to_grp_filt_all,group~collection_scenario,value.var="group_post_mean_pi")
+      write_tsv(x = coll_to_grp_filt_all_matrix, path = paste0(result.path, "collection_100_stats_all_grps_matrix_",format(Sys.time(), "%Y-%m-%d"),".txt"))
     
   }
   
@@ -264,6 +292,7 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
   
   #### Export results ###
   print("Exporting results")
+  
   # Write out the full raw result of the simulation assignments
   write_tsv(x = all_collection_results, path = paste0(result.path, "all_collection_results_", format(Sys.time(), "%Y-%m-%d"),".txt.gz"))
   
@@ -278,5 +307,3 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
   coll_to_coll_filt_all_matrix <- reshape2::dcast(coll_to_coll_filt_all,collection~collection_scenario,value.var="coll_post_mean_pi")
   write_tsv(x = coll_to_coll_filt_all_matrix, path = paste0(result.path, "collection_100_stats_all_pops_matrix_",format(Sys.time(), "%Y-%m-%d"),".txt"))
 }
-
-

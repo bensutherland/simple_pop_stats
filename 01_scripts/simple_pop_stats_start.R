@@ -27,6 +27,11 @@
 # install.packages("R.methodsS3")
 # install.packages("dartR")
 # install.packages("rubias)
+## For parallel processing of sims, require dev version of rubias
+# install.packages("remotes")
+# require(remotes)
+# remotes::install_github("eriqande/rubias", ref = "mclapply-assess-reference-loo")
+
 # install.packages("rmarkdown)
 # install.packages("tinytex")
 # tinytex::install_tinytex()
