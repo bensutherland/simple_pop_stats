@@ -1,23 +1,20 @@
 # Appendix A - Benchmarking document
 
-## Methods to produce the baseline summary document using Rmarkdown.
-(initialized 2020-08-18)
+## Produce the baseline benchmark document using Rmarkdown.
 
-Walkthrough the minimum requirements for generating a summary document that describes a particular genetic baseline build. The foundation of such an assessment will be kept in a common location and will not be modified once this document is produced. If changes need to be made, a new time-stamped folder will be generated, and the summary document needs to be produced again.     
+Walkthrough the minimum requirements for generating a summary document that describes a particular genetic baseline build. The foundation of such an assessment will be kept in a common location and **will not be modified once this document is produced**. If changes need to be made, a new time-stamped folder will be generated, and the summary document needs to be produced again.     
 
 #todo#: automate creation of the benchmark folder structure.        
 
-## Naming convention
-Use the following naming conventions for all baseline benchmarks (post 2020):     
+## 00. Front matter: naming and versioning conventions
+**Naming conventions** of the benchmark:     
 ```
 b<sp>_<mtype>_<scope>_v.X.X.X
-e.g., 
-beu_SNP_coastwide_v.1.0.1
-bso_msat_skeena_v.1.0.0
+e.g., beu_SNP_coastwide_v.1.0.1 (SNPs) or bso_msat_skeena_v.1.0.0 (microsats)
 ```
-note: capitals only for acronyms.        
+note: capitals for acronyms only.      
 
-## Versioning conventions
+**Versioning conventions**          
 First baseline initialization for a species that would be considered "ready-for-use" will be v.1.0.0.       
 Before initialization, use the v.0.x.x. designations, incrementing by one each time REGARDLESS of how much has changed. All v0.x files will be treated "as-is", with the understanding that great changes will likely occur prior to use.     
 
@@ -42,10 +39,9 @@ Very Minor (v.0.0.**X**) changes:
 * Change the spelling of a collection name
 * Add or remove small numbers of individuals from the baseline (<50)
 
-## A) Create file structure and create necessary inputs
-### Step 1: Folder structure
-Create a new folder at `W:\9_PBT\01_<species>\reference_databases\<UNIQUE-DATE-STAMP-VERSION-STAMP-FOLDER>`. Use naming convention described above.           
-e.g., `bso_msat_coastwide_v.1.0.0_2021-02-08`       
+## 01. Create file structure and collect inputs
+### 01.(A) Folder structure
+Create a new folder at `W:\9_PBT\01_<species>\reference_databases\<UNIQUE-DATE-STAMP-VERSION-STAMP-FOLDER>`. Use naming convention described above but with date-stamp (e.g., `bso_msat_coastwide_v.1.0.0_2021-02-08`)       
 
 In this folder, create the following folders (exact names required):         
  * `Baseline_summary`
@@ -54,20 +50,21 @@ In this folder, create the following folders (exact names required):
  * `LOO` (_in development_)
  * `FST` (_in development_)
 
-### Step 2: Add baseline inputs
+### 01.(B) Add baseline inputs
 At the root of your new directory, include a [rubias](https://github.com/eriqande/rubias#input-data) baseline and a [genepop](https://genepop.curtin.edu.au/help_input.html#Input) baseline. If you are working with microsatellite data, also include a BCF and BSE file matching these.      
 Note: these should all be identical in character (e.g., # indiv., # collections, etc.) and produced at the same time.      
 
-For SNPs: Please include the repunits and stock code files used in producing the baseline. This is important, as many changes to the baseline will be due to collection naming or repunit delineation - thus, it is important to maintain a record of names and repunits at the time of baseline build. 
+**SNP baselines** should also include the repunits and stock code files used to produce the baseline. This allows tracking of collection name change or repunit delineation change.       
 
-For microsats: It is strongly recommended to build a `repunits_full.txt` style file in order to apply Display Order, etc. in summarizing the data. At minimum, the names.dat file at the time of baseline build should be included to represent collection and region names. 
+**microsat baselines** should include a names.dat file here (stock code/groupings), but also recommended to build a `repunits_full.txt`-style file in order to apply Display Order, etc. in summarizing the data.      
 
-Additional files can be stored at the root of this folder, and any that appear here will ultimately be added to md5 listed files in the summary. Ultimately, this is meant to store files that led to subsequent summary formats, so it is recommended that these files represent the minimum requirements to re-create the analyses. If multiple files do exist, please make it clear why (eg. PBT-base vs. GSI-base if certain collections are used for PBT but dropped from GSI).
+Additional files can be stored at the root of this folder, and any that appear here will ultimately be added to md5 listed files in the summary. Ultimately, this is meant to store files that led to subsequent summary formats, so it is recommended that these files represent the minimum requirements to re-create the analyses. If multiple files exist, please make it clear why in the notes.txt file (see below) (eg. PBT-base vs. GSI-base if certain collections are used for PBT but dropped from GSI).        
 
-### Step 3: Version-change summaries
-Within the newly created `Baseline_summary` folder, add two files with the following suffixes or file names:      
-- `*changes.txt`, a two-column tab-delimited file describing version changes between baselines. Append details to previous changes files track changes.     
+### 01.(C) Version-change summaries
+Add to the `Baseline_summary` folder two files with the following suffixes or file names:      
+- `*changes.txt`, a two-column tab-delimited file describing version changes between baselines.      
 - `*notes.txt`, a two-column tab-delimited file describing details on specific collections (i.e., known issues)      
+**important note:** carry forward changes.txt and notes.txt from previous baseline increments to bring forward previous notes. Append new notes to bottom of file.    
 
 Example changes.txt file:        
 ```
@@ -89,37 +86,32 @@ GOLD_RIVER	Is used for PBT only, as high-frequency of Robertson strays interfere
 MOYEHA_RIVER	Moved from SWVI (official CU) to NoKy as genetically it is very similar to Conuma due to straying
 ```
 
-### Step 4: Rubias-based summaries
-Run the following scripts and include in the new benchmark folders:       
-
-**Baseline summary** - use `summarise_rubias_baseline()` (see [summarise_rubias_baseline](https://github.com/bensutherland/simple_pop_stats#16-summarize-a-rubias-base-for-collections-years-and-total-n)).       
+### 01.D) Rubias-based summaries
+Ensure the following were run and collect outputs and copy to benchmark folders as follows:       
+**Baseline summary** to `Baseline_summary` folder. This file is generated with `summarise_rubias_baseline()` (see [summarise_rubias_baseline](https://github.com/bensutherland/simple_pop_stats#16-summarize-a-rubias-base-for-collections-years-and-total-n)).       
 note: `by_year = TRUE`, and `out_prefix = "rubias_base_summary"` are recommended. 
 note: suffix default `*baseline_summary.txt` is required.     
-Copy the file to `Baseline_summary` folder.        
 
-**100% simulations** - use `full_sim()` (see [full_sim](https://github.com/bensutherland/simple_pop_stats#14-run-simulated-individual-assignment-test)).       
+**100% simulations** to `100_sims` folder. These files are generated with `full_sim()` (see [full_sim](https://github.com/bensutherland/simple_pop_stats#14-run-simulated-individual-assignment-test)).       
 note: the string `*100_stats_2.*.txt$` is required, and must be unique in the folder. It is therefore recommended only to change the prefix of the file.       
-Copy all resulting files to the `100_sims` folder:     
+Include:     
 - `all_collection_results_<date>.txt.gz`
 - `collection_100_stats_<date>.txt`
 - `collection_100_stats_all_pops_<date>.txt`
 - `collection_100_stats_all_reps_<date>.txt`
 - `collection_100_stats_all_pops_matrix_<date>.txt`
 
-**Simulations plot** - use `plot_summarize_100_sim` (see [plot_summarize_100](https://github.com/bensutherland/simple_pop_stats#15-plot-mean-assignment-per-repunit-from-100-sim). 
+**Simulations plot** to `100_sims` folder. This file is generated with `plot_summarize_100_sim` (see [plot_summarize_100](https://github.com/bensutherland/simple_pop_stats#15-plot-mean-assignment-per-repunit-from-100-sim). 
 note: the string `*plot.pdf$` is required, and must be unique in the folder         
-Copy the resultant pdf to the `100_sims` folder.     
 
-**Highest Tray** _(optional)_ - (SNPs only) use `highest_tray()` to produce a file that has the highest tray number currently in the rubias baseline, based on matching to the extraction sheet.         
+**Highest Tray** to `Baseline_summary` folder _(SNP only, optional)_. This file is generated with `highest_tray()` to produce a file that has the highest tray number currently in the rubias baseline, based on matching to the extraction sheet.         
 note: requires the suffix `*highest_tray_number.txt$`      
-Copy the output file, `<two.letter.code>_highest_tray_number.txt` to the Baseline_summary folder      
 
-### Step 5: Genepop-based summaries
-**Number Markers** - use `characterize_genepop()` to produce `number_of_markers.csv`.      
-Copy this file to `Baseline_summary` folder.        
-
-**Dendrogram** - use `XXX` to generate a dendrogram, modify as needed, then save a PDF. 
-Copy the PDF and the .tre file to the folder `Dendrogram`. Only the PDF will be copied into the benchmark.       
+### 01.E) Genepop-based summaries
+**Number Markers** to `Baseline summary` folder. Generate with `characterize_genepop()` to produce `number_of_markers.csv`.      
+     
+**Dendrogram** to `Dendrogram` folder. Generate with `make_tree()`, modify as needed in FigTree, and then save a PDF.     
+Copy both the PDF and the .tre file to the folder. Only the PDF will be copied into the benchmark.       
 It is possible to have multiple dendrogram PDFs
 #todo#: (not clear) -- created, it is recommended that they are stored in a nested folder - the Rmarkdown script does not look recursively.     
 
@@ -137,7 +129,7 @@ note: the file naming is flexible, but the Rmarkdown script recognizes the strin
 LOO - _in development_
 Fst - _in development_
 
-## B) Create the benchmark PDF
+## 02. Create the benchmark PDF
 ### Open and edit the script
 Open `01_scripts\baseline_benchmark.Rmd`, and edit the following:       
 
