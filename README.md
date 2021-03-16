@@ -292,7 +292,9 @@ For **100% simulations**
 
 For now, save these to a separate folder to make sure they don't get written over.    
 
-Will also output a matrix-style table, used in very specific cases (ususally reduced regional baseline analyses).
+Will also output a matrix-style table, used in very specific cases (usually reduced regional baseline analyses).      
+
+Note: **for linux only** speed the above up using the parallel option `ncore_linux = <# cores to use>`. Requires a remote install, see the initializing script for installation instruction for parallel linux.          
 
 Note: use the following function to create a 'Display Order' sorted result file for browsing using the repunit file (do not use for plotting):        
 `format_sims_output()` # and select manually your input 100% sims stats text file. This will output to your results file folder.            
