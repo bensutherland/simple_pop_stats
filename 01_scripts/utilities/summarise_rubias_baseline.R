@@ -110,7 +110,7 @@ summarise_rubias_baseline <- function(baseline = NULL, repunit_desc = NULL
     base_summary$Years <- NA
 
     # Prepare which columns need to be removed below
-    cols_to_drop <- c("collection", "repunit", "total_N", "Years")
+    cols_to_drop <- c("collection", "stockcode", "repunit", "total_N", "Years")
     
     # Create the year string per collection.
     for (i in 1:nrow(base_summary)){
