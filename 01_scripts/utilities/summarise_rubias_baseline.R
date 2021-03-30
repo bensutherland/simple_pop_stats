@@ -4,7 +4,7 @@
 
 summarise_rubias_baseline <- function(baseline = NULL, repunit_desc = NULL
                                       , out_prefix = "rubias_base_summary", by_year=FALSE
-                                      , type = "SNP"){
+                                      , type = "SNP",stock_code_desc = NULL){
 
     # Set baseline FN if defined
     base.fn <- baseline  
@@ -13,7 +13,7 @@ summarise_rubias_baseline <- function(baseline = NULL, repunit_desc = NULL
     if(is.null(base.fn)){
       
       # Select the file
-      base.fn <- choose.files(caption = "Select a rubias formatted base file")
+      base.fn <- choose.files(default=paste0("W:/9_PBT/01_",species,"/reference_databases/*.*"),caption = "Select a rubias formatted base file")
       
     }
     
@@ -28,13 +28,16 @@ summarise_rubias_baseline <- function(baseline = NULL, repunit_desc = NULL
     if(is.null(repunit_desc.FN)){
       
       # Reduce repunits
-      repunit_desc.FN <- choose.files(getwd(),caption = "Path to repunits for analysis")
+      repunit_desc.FN <- choose.files(default=paste0("W:/9_PBT/01_",species,"/reference_databases/*.*"),caption = "Path to repunits for analysis")
       
     }
     
     # Load repunits file specified
     print("Loading Reporting Units Detail")
     repunits <- read_tsv(repunit_desc.FN)
+    
+    
+    
     
     ### Can this be removed? ###
     # Create a backup of the baseline
@@ -48,6 +51,10 @@ summarise_rubias_baseline <- function(baseline = NULL, repunit_desc = NULL
       baseline$year <- baseline$indiv %>%
                                   strsplit("_") %>%
                                   sapply( "[", 2 )
+      
+      baseline$stockcode <- baseline$indiv %>%
+        strsplit("_") %>%
+        sapply( "[", 1 )
     
     }else if(type=="microsat"){
         
@@ -62,14 +69,36 @@ summarise_rubias_baseline <- function(baseline = NULL, repunit_desc = NULL
         # If any years were missing (999 code or NA), replace with "unknown"
         baseline$year[baseline$year==""] <- "unknown"
         baseline$year[baseline$year=="9999"] <- "unknown"
+        
+        
+        # Set stock_code FN if defined
+        stock_code_desc.FN <- stock_code_desc
+        
+        # If the stock_code is not defined, choose it
+        if(is.null(stock_code_desc.FN)){
+          
+          # Reduce repunits
+          stock_code_desc.FN <- choose.files(default=paste0("W:/9_PBT/01_",species,"/reference_databases/*.*"),caption = "Path to stock code file created from names.dat in step 2")
+          
+        }
+        
+        # Load stock_code file specified
+        print("Loading Reporting Units Detail")
+        stock_code <- read_tsv(stock_code_desc.FN)
+        
+        names(stock_code)[names(stock_code) == "Code"] <- "stockcode"
+        stock_code <- stock_code[ , -which(names(stock_code) %in% c("repunit"))]
+        baseline <- merge(baseline,stock_code,by="collection",all.x=TRUE)
+        
+        
     }
     
     # Reduce the dataframe to the necessary columns
-    cols_to_retain <- c("collection","repunit","year")
+    cols_to_retain <- c("collection","repunit","year","stockcode")
     baseline_reduced <- subset(baseline, select = cols_to_retain)
     
     # Dcast the table to summarize by year
-    base_summary <- reshape2::dcast(baseline_reduced, collection + repunit ~ year
+    base_summary <- reshape2::dcast(baseline_reduced, collection + stockcode + repunit ~ year
                                     , value.var="year"
                                     , fun.aggregate = length
                                     )
@@ -123,17 +152,17 @@ summarise_rubias_baseline <- function(baseline = NULL, repunit_desc = NULL
       # Keep the columns of interest if region is included
       if("region" %in% colnames(base_summary)){
         
-        base_summary <- subset(base_summary, select = c("CU_NAME","CU","region","collection","Years","total_N"))
+        base_summary <- subset(base_summary, select = c("CU_NAME","CU","region","collection","stockcode","Years","total_N"))
       
         if(by_year==TRUE){
         
           # Rename the columns of interest
-          colnames(base_summary) <- c("Repunit/Conservation Unit","CU Number","Region","Population","Years(N)","N")
+          colnames(base_summary) <- c("Repunit/Conservation Unit","CU Number","Region","Population","Stock Code","Years(N)","N")
           
         } else {
           
           # Rename the columns of interest
-          colnames(base_summary) <- c("Repunit/Conservation Unit","CU Number","Region","Population","Years","N")
+          colnames(base_summary) <- c("Repunit/Conservation Unit","CU Number","Region","Population","Stock Code","Years","N")
           
         }
       
@@ -147,17 +176,17 @@ summarise_rubias_baseline <- function(baseline = NULL, repunit_desc = NULL
       # Keep the columns of interest if region is not included in base_summary
       } else {
       
-        base_summary <- subset(base_summary, select = c("CU_NAME","CU","collection","Years","total_N"))
+        base_summary <- subset(base_summary, select = c("CU_NAME","CU","collection","stockcode","Years","total_N"))
         
         # If retained by-year counts
         if(by_year==TRUE){
           
           # Rename the columns of interest
-          colnames(base_summary) <- c("Repunit/Conservation Unit","CU Number","Population","Years(N)","N")
+          colnames(base_summary) <- c("Repunit/Conservation Unit","CU Number","Population","Stock Code","Years(N)","N")
         } else {
           
           # Rename the columns of interest
-          colnames(base_summary) <- c("Repunit/Conservation Unit","CU Number","Population","Years","N")
+          colnames(base_summary) <- c("Repunit/Conservation Unit","CU Number","Population","Stock Code","Years","N")
         }
       
         # Blank out repeated repunit and CU numbers
@@ -176,15 +205,15 @@ summarise_rubias_baseline <- function(baseline = NULL, repunit_desc = NULL
       base_summary <- base_summary[order(base_summary$Display_Order, base_summary$collection), ]
       
       # Keep only the necessar cols
-      base_summary <- subset(base_summary, select = c("repunit","collection","Years","total_N"))
+      base_summary <- subset(base_summary, select = c("repunit","collection","stockcode","Years","total_N"))
       
       # Rename cols depending on if count by year is on
       if(by_year==TRUE){
         # Rename the columns of interest
-        colnames(base_summary) <- c("Region","Population","Years(N)","N")
+        colnames(base_summary) <- c("Region","Population","Stock Code","Years(N)","N")
       } else {
         # Rename the columns of interest
-        colnames(base_summary) <- c("Region","Population","Years","N")
+        colnames(base_summary) <- c("Region","Population","Stock Code","Years","N")
       }
       
       # Blank out repeated repunit and CU numbers
