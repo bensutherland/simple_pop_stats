@@ -283,20 +283,19 @@ Note: could use additional testing to validate method.
 Using a rubias baseline, perform simulations to test baseline power using the rubias function [assess_reference_loo()](https://rdrr.io/cran/rubias/man/assess_reference_loo.html) as follows:        
 
 For **100% simulations**           
-`full_sim(rubias_base.FN = "03_results/rubias_output.txt", num_sim_indiv = 200, sim_reps = 100)`          
-...will save output into 03_results, including:        
-- collection_100_stats_YYYY-MM-DD.txt (summary info of sum of all iteration assignments)
-- collection_100_stats_all_reps_YYYY-MM-DD.txt (not just the top repunit assignment)
-- collection_100_stats_all_pops_YYYY-MM-DD.txt (not just the top collection assignment)
+`full_sim(rubias_base.FN = <full path to rubias baseline>, num_sim_indiv = 200, sim_reps = 100)` ...saves output into 03_results, including:        
+- collection_100_stats_YYYY-MM-DD.txt (main item: summary info of sum of all iteration assignments)
+- collection_100_stats_all_pops_YYYY-MM-DD.txt (full info on collection)
+- collection_100_stats_all_reps_YYYY-MM-DD.txt (full info on repunits)
 - all_collection_results_YYYY-MM-DD.txt.gz (raw output of all sims)
+- matrix-style table (used in specific cases, typically with reduced regional baseline analyses)
+Save to a separate folder to make sure they don't get written over.    
 
-For now, save these to a separate folder to make sure they don't get written over.    
+Parallel option to speed up (**for linux only**), add flag: `ncore_linux = <# cores to use>`.        
+To install follow instructions in full_sim.R because requires a 'remote' repo install.       
+Assume 20 Gb per thread. Note: if it produces warnings, it is likely there will be populations that did not complete due to lack of RAM (start over with fewer threads).          
 
-Will also output a matrix-style table, used in very specific cases (usually reduced regional baseline analyses).      
-
-Note: **for linux only** speed up the simulation by adding the parallel flag: `ncore_linux = <# cores to use>`. Requires a 'remote' repo install, see the initializing script for installation instruction for parallel linux. Assume 20 Gb per thread. If you get warnings, it is likely there will be populations that did not complete due to lack of RAM (start over with fewer threads).          
-
-Note: use the following function to create a 'Display Order' sorted result file for browsing using the repunit file (do not use for plotting):        
+Note: use thse following function to create a 'Display Order' sorted result file for browsing using the repunit file (do not use for plotting):        
 `format_sims_output()` # and select manually your input 100% sims stats text file. This will output to your results file folder.            
 
 #### in development ####
