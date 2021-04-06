@@ -4,7 +4,10 @@
 
 Walkthrough the minimum requirements for generating a summary document that describes a particular genetic baseline build. The foundation of such an assessment will be kept in a common location and **will not be modified once this document is produced**. If changes need to be made, a new time-stamped folder will be generated, and the summary document needs to be produced again.     
 
-#todo#: automate creation of the benchmark folder structure.        
+New: automated benchmark folder creation with:       
+`prep_benchmark_folder(mtype = "SNP", scope = "coastwide", version = "X.X.X")`      
+...will prepare your folder structure and will put the current network stock code and repunit file in the necessary location.       
+(note: still relatively experimental, could use some more evaluation)      
 
 ## 00. Front matter: naming and versioning conventions
 **Naming conventions** of the benchmark:     
