@@ -28,7 +28,7 @@ datatype <- NULL
 
 
 ```{r setup, include=FALSE}
-library(readr)
+suppressWarnings(library(readr))
 getwd()
 citations <- read_tsv(file="reference_files/citations.txt")
 title_var <- paste(species,folder,sep="_")
@@ -78,7 +78,7 @@ print(species)
 The number and type of markers genotyped within the baseline is:
 ```{r,echo=FALSE, message=FALSE, comment=NA}
 mark_num.fn <- list.files(paste0(getwd(),"/Baseline_summary/"),pattern="*number_of_markers.csv$",full.names = T,ignore.case=TRUE)
-library(readr)
+suppressWarnings(library(readr))
 if (length(mark_num.fn)==1){
 mark_num <- read_tsv(mark_num.fn)
 print(mark_num$x)
@@ -92,7 +92,7 @@ print(mark_num$x)
 The highest tray number found in the baseline:
 ```{r,echo=FALSE, message=FALSE, comment=NA}
 tray.fn <- list.files(paste0(getwd(),"/Baseline_summary/"),pattern="*highest_tray_number.txt$",full.names = T,ignore.case=TRUE)
-library(readr)
+suppressWarnings(library(readr))
 if (length(tray.fn)==1){
 tray <- read_tsv(tray.fn)
 print(tray$Highest_Tray_Number)
@@ -108,7 +108,7 @@ If you use reports generated from this baseline, please cite:
 
 ```{r,echo=FALSE, comment=NA, message=FALSE}
 
-library(dplyr)
+suppressWarnings(library(dplyr))
 tmp_species <- species
 tmp_datatype <- datatype
 cite <- filter(citations,species %in% tmp_species)
@@ -135,11 +135,11 @@ lf <- list.files(getwd())
 ld <- list.dirs(getwd(),recursive=F)
 lf <- lf[match(setdiff(normalizePath(lf),normalizePath(ld)), normalizePath(lf))]
 lf <- lf[!grepl(".pdf",lf)]
-library(tools)
+suppressWarnings(library(tools))
 md5_lf <- as.data.frame(md5sum(lf),stringsAsFactors = FALSE)
 md5_lf <- cbind(rownames(md5_lf), data.frame(md5_lf, row.names=NULL))
 colnames(md5_lf) <- c("files","md5sum")
-library(pander)
+suppressWarnings(library(pander))
 pander::pander(md5_lf,split.cell=c(55,35),split.table=Inf,missing="",use.hyphening=TRUE)
 
 ```
@@ -228,11 +228,11 @@ Changes made between versions:
 
 ```{r, echo=FALSE, message=FALSE, comment=NA}
 changes.fn <- list.files(paste0(getwd(),"/Baseline_summary/"),pattern="*changes.txt$",full.names = T,ignore.case=TRUE)
-library(readr)
+suppressWarnings(library(readr))
 if (length(changes.fn)==1){
 changes <- read_tsv(changes.fn)
 
-library(pander)
+suppressWarnings(library(pander))
 pander::pander(changes,split.cell=c(20,60),split.table=Inf,missing="")
 } else if (length(changes.fn)==0) {
   print("No changes noted with this baseline summary")
@@ -245,11 +245,11 @@ pander::pander(changes,split.cell=c(20,60),split.table=Inf,missing="")
 <!-- Detail any Specific notes per collections. No set format yet, but requires *notes.txt naming, and collections need in a column named "collections" -->
 ```{r, echo=FALSE, message=FALSE, comment=NA}
 notes.fn <- list.files(paste0(getwd(),"/Baseline_summary/"),pattern="*notes.txt$",full.names = T,ignore.case=TRUE)
-library(readr)
+suppressWarnings(library(readr))
 if (length(notes.fn)==1){
 notes <- read_tsv(notes.fn)
 notes$collection <- gsub("_"," ",notes$collection)
-library(pander)
+suppressWarnings(library(pander))
 pander::pander(notes,split.cell=c(20,55),missing="",split.table=Inf)
 } else if (length(notes.fn)==0) {
   print("No additional notes with this baseline summary.")
@@ -283,7 +283,7 @@ A summary of 100% simulation results produced using the full_sims() script found
 
 \newpage
 ```{r, echo=FALSE,fig.cap = "Mean accuracy to collection (white), repunit (grey), or region (if applicable - dark grey)."}
-library(knitr)
+suppressWarnings(library(knitr))
 sim_sum.fn <- list.files(paste0(getwd(),"/100_sims/"),pattern="*.pdf$",full.names = T,ignore.case=TRUE)
 include_graphics(sim_sum.fn)
 
@@ -300,7 +300,7 @@ include_graphics(sim_sum.fn)
 ```{r, echo=FALSE, message=FALSE}
 #setwd("W:/9_PBT/01_chinook/reference_databases/2020_V1.0_2020-08-05_baseline/")
 sims.fn <- list.files(paste0(getwd(),"/100_sims/"),pattern="*100_stats_2.*.txt$",full.names = T,ignore.case=TRUE)
-library(readr)
+suppressWarnings(library(readr))
 sims <- read_tsv(sims.fn)
 
 
@@ -316,8 +316,8 @@ names(sims) <- gsub("_"," ",names(sims))
 sims <- sims[order(sims$repunit),]
 
 
-library(pander)
-library(koRpus)
+suppressWarnings(library(pander))
+suppressWarnings(library(koRpus))
 pander::pander(sims,split.cell=18,split.table=Inf,missing="",use.hyphening=TRUE)
 
 ```
@@ -334,14 +334,14 @@ Run by using `summarise_rubias_baseline()`:
 ```{r, echo=FALSE, message=FALSE}
 #setwd("W:/9_PBT/01_chinook/reference_databases/2020_V1.0_2020-08-05_baseline/")
 bsum.fn <- list.files(paste0(getwd(),"/Baseline_summary/"),pattern="*.baseline_summary.txt$",full.names = T,ignore.case=TRUE)
-library(readr)
+suppressWarnings(library(readr))
 bsum <- read_tsv(bsum.fn)
 
 bsum$Population <- gsub("_"," ",bsum$Population)
 
 
-library(pander)
-library(koRpus)
+suppressWarnings(library(pander))
+suppressWarnings(library(koRpus))
 pander::pander(bsum,split.cell=18,split.table=Inf,missing="",use.hyphening=TRUE)
 
 ```
