@@ -28,6 +28,7 @@ hwe_eval <- function(data = obj, alpha = 0.01){
   print(dim(hwe.mat))
   print("p-values retained in a matrix, a subset shown below")
   hwe.mat[1:5,1:2]
+  
   print("Confirm the p-values from a slot of the original list")
   head(hwe.dat[[1]])
   
@@ -67,6 +68,6 @@ hwe_eval <- function(data = obj, alpha = 0.01){
   all_pops.df <- all_pops.df[,c("collection", "nmar.non.hw", "per.non.hw")]
   
   # Save out result
-  write_delim(x = all_pops.df, path = paste0(result_path, "HWE_result_alpha_", alpha, ".txt"), delim = "\t", col_names = T)
+  write_delim(x = all_pops.df, file = paste0(result.path, "HWE_result_alpha_", alpha, ".txt"), delim = "\t", col_names = T)
   
 }
