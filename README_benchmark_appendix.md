@@ -61,7 +61,15 @@ Note: these should all be identical in character (e.g., # indiv., # collections,
 
 **microsat baselines** should include a names.dat file here (stock code/groupings), but also recommended to build a `repunits_full.txt`-style file in order to apply Display Order, etc. in summarizing the data.      
 
-Additional files can be stored at the root of this folder, and any that appear here will ultimately be added to md5 listed files in the summary. Ultimately, this is meant to store files that led to subsequent summary formats, so it is recommended that these files represent the minimum requirements to re-create the analyses. If multiple files exist, please make it clear why in the notes.txt file (see below) (eg. PBT-base vs. GSI-base if certain collections are used for PBT but dropped from GSI).        
+Additional files can be stored at the root of this folder, and any that appear here will ultimately be added to md5 listed files in the summary. Ultimately, this is meant to store files that led to subsequent summary formats, so it is recommended that these files represent the minimum requirements to re-create the analyses. If multiple files exist, please make it clear why in the notes.txt file (see below) (eg. PBT-base vs. GSI-base if certain collections are used for PBT but dropped from GSI).
+
+**NOTE:** It is strongly recommended to rename these baseline files using the same naming convention for the folder eg:         
+```
+b<sp>_<mtype>_<scope>_v.X.X.X
+e.g., beu_SNP_coastwide_v.1.0.1 (SNPs) or bso_msat_skeena_v.1.0.0 (microsats)
+```
+
+It should include the file-type suffix to identify file-type (eg. `.gen` for genepop), or specifically name the file-type for more generic file-type suffixes (eg. `_rubias.txt` for rubias formatted text file). This allows a client to identify the baseline used by the version number and date in the file name. 
 
 ### 01.(C) Version-change summaries
 Add to the `Baseline_summary` folder two files with the following suffixes or file names:      
