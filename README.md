@@ -357,7 +357,7 @@ Note: could use the - collection_100_stats_YYYY-MM-DD.txt file probably, but wou
 ## 16. Summarize a rubias base for collections, years and total N
 Summarize a filtered rubias base (SNP or microsat), and export a table reporting the repunit, CU number, collection, years per collection, and total N.      
 This is a commonly produced table for publication or baseline benchmarks.     
-Both the **microsatellite and SNP versions** require a repunit file. This file should be tab-delimited, with columns "Display_Order", "CU", "CU_Name", and "repunit".           
+Both the **microsatellite and SNP versions** require a repunit file. This file should be tab-delimited, with columns "Display_Order", "CU", "CU_NAME", and "repunit".           
 
 ```
 summarise_rubias_baseline(baseline = <rubias_base filename>
