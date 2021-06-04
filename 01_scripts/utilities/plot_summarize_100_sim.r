@@ -32,7 +32,7 @@ plot_summarize_100_sim <- function(axis_label="repunit",repunits_file = TRUE,
         # Load repunits file specified in config
         print("Loading Reporting Units Detail")
         repunits <- read_tsv(repunit_desc.FN)
-        
+        repunits$repunit <- gsub(" ","_",repunits$repunit)
         # Merge in the repunits file, and effectively filter for only those repunits in file. 
         ### Note - the way this works, "Region" will only calculate for retained repunits
         ### So, if you want to have a true representationof "region, 

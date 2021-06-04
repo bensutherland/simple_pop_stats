@@ -36,6 +36,7 @@ summarise_rubias_baseline <- function(baseline = NULL, repunit_desc = NULL
     print("Loading Reporting Units Detail")
     repunits <- read_tsv(repunit_desc.FN)
     
+    repunits$repunit <- gsub(" ","_",repunits$repunit)
     
     
     
