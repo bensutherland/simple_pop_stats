@@ -74,8 +74,11 @@ It should include the file-type suffix to identify file-type (eg. `.gen` for gen
 ### 01.(C) Version-change summaries
 Add to the `Baseline_summary` folder two files with the following suffixes or file names:      
 - `*changes.txt`, a two-column tab-delimited file describing version changes between baselines.      
-- `*notes.txt`, a two-column tab-delimited file describing details on specific collections (i.e., known issues)      
-**important note:** carry forward changes.txt and notes.txt from previous baseline increments to bring forward previous notes. Append new notes to bottom of file.    
+- `*notes.txt`, a two-column tab-delimited file describing details on specific collections (i.e., known issues)   
+     
+**important note #1:** carry forward changes.txt and notes.txt from previous baseline increments to bring forward previous notes. Append new notes to bottom of file.   
+
+**important note #2:** changes and notes files must either be a) completely absent from the folder (in which case a message about "no changes/notes file present" will be noted in the benchmark), or present with information within it (eg. headers, at least one line of information even if "No changes noted"). A present but empty file will cause an error in knitting.   
 
 Example changes.txt file:        
 ```
