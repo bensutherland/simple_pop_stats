@@ -42,6 +42,10 @@ Very Minor (v.0.0.**X**) changes:
 * Change the spelling of a collection name
 * Add or remove small numbers of individuals from the baseline (<50)
 
+Reduced baseline scope changes:    
+* Change the `<scope>` to something appopriate that reflects the change from Coastwide, but keep versioning number from the source baseline (eg. Fraser_v.3.0.0 would be a Fraser-scope baseline created from the v.3.0.0 coastwide.    
+	
+
 ## 01. Create file structure and collect inputs
 ### 01.(A) Folder structure
 Create a new folder at `W:\9_PBT\01_<species>\reference_databases\<UNIQUE-DATE-STAMP-VERSION-STAMP-FOLDER>`. Use naming convention described above but with date-stamp (e.g., `bso_msat_coastwide_v.1.0.0_2021-02-08`)       
@@ -80,16 +84,18 @@ Add to the `Baseline_summary` folder two files with the following suffixes or fi
 
 **important note #2:** changes and notes files must either be a) completely absent from the folder (in which case a message about "no changes/notes file present" will be noted in the benchmark), or present with information within it (eg. headers, at least one line of information even if "No changes noted"). A present but empty file will cause an error in knitting.   
 
+**important note #3:** if the scope of the baseline is sub-Coastwide, but it is being derived directly from a specific coastwide baseline (eg. Using only two CUs, but by reducing the V3.0.0 baseline and not recreating from scratch), have the changes file note: "For this subset baseline, changes don't describe baseline versioning, but rather changes relative to the originating baseline [`<original baseline name>`], then subsequently describe any changes that make this sub-coastwide scope baseline unique (eg. split CU-A into CU-A1 and CU-A2).     
+
 Example changes.txt file:        
 ```
 Baseline Version	Changes from prior baselines
-2020_V1.1	1) changed name of CHILLIWACK_RIVER to CHILLIWACK_RIVER_summer
+bch_Coastwide_v.1.1.0	1) changed name of CHILLIWACK_RIVER to CHILLIWACK_RIVER_summer
 	2) changed name of CHEHALIS_RIVER to CHEHALIS_RIVER_summer
 	3) created new repunit LFR-suppl and associated it with CK-9006 Fraser supplementation exclusion bin. 
 	4) assigned both CHEHALIS_RIVER_summer and CHILLIWACK_RIVER_summer to new "suppl" repunit. 
 	5) Chehalis moved back into GSI baseline (was previously PBT only)
 	Changes were made to better describe these transplanted, but genetically distinct collections. Grouping together under the new repunit is based primarily off of dendrogram results in version 1.0 of the baseline.
-2020_V1.2	Nicola 2016 were added into the baseline. While they had been genotyped, they had not been added to the baseline previously due to a database error. 
+bch_Coastwide_v.1.2.0	Nicola 2016 were added into the baseline. While they had been genotyped, they had not been added to the baseline previously due to a database error. 
 ```
 
 Example notes.txt file: 
