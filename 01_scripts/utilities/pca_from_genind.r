@@ -3,7 +3,8 @@
 
 pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
                             , plot_eigen = TRUE, plot_allele_loadings = TRUE
-                            , colour_file = NULL){
+                            , colour_file = NULL
+                            , retain_pca_obj = FALSE){
   
   print("Converting genind to genlight")
     
@@ -15,6 +16,20 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
         
   # Perform PCA
   pca1 <- glPca(my.data, nf = PCs_ret)
+  
+  # Save out pca1 obj to retain data
+  if(retain_pca_obj == TRUE){
+    
+    print("Keeping pca.obj in global enviro")
+    
+    assign(x = "pca.obj", value = pca1, envir = .GlobalEnv)
+    
+  }else{
+    
+    print("Not retaining pca.obj, only running outputs")
+    
+  }
+  
   
   if(is.null(colour_file)){
     
