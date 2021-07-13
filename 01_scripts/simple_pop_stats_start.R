@@ -27,6 +27,9 @@
 # install.packages("R.methodsS3")
 # install.packages("dartR")
 # install.packages("rubias)
+# install.packages("RGenetics")
+# install.packages("diveRsity")
+ 
 ## For parallel processing of sims, require dev version of rubias
 # install.packages("remotes")
 # require(remotes)
@@ -71,6 +74,8 @@ require("ggplot2")
 library("gtools")
 library("readr")
 library("rubias")
+library("RGenetics")
+library("diveRsity")
 
 require("Demerelate")
 require("related")
