@@ -114,6 +114,11 @@ To find the number of samples, markers, alleles, and sample size per population,
 Will produce a barchart of sample size per pop (`sample_size*.pdf`).     
 Set the parameters based on your plotting requirements, the above is an example for a very large number of pops. Use `N` to set where the line will be drawn across the plot.     
 
+        
+To characterize your loci, run the following to get a summary per locus including Fst, Fit, Fis, Hobs, Hexp:      
+`per_locus_stats(data = obj)`      
+...this will produce in `03_results/per_locus_stats_<YYYY-MM-DD>.txt`      
+
 ## 04. Drop loci ##
 To remove loci, use the following script that can allow you to remove monomorphic loci, or remove loci using a tab-delimited file with a single column with marker names that are to be removed from the object. This will end up as `obj_filt`.    
 `drop_loci(drop_monomorphic = TRUE, drop_file = <path/to/drop/file.txt>)`       
