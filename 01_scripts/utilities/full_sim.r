@@ -338,10 +338,10 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
                                      ,"region_mle_pi"
                                      ,"region_true_pi")
     
-    write_tsv(x = coll_to_reg_filt_all, file = paste0(result.path, "collection_100_stats_all_regs_",format(Sys.time(), "%Y-%m-%d"),".txt"))
+    write_tsv(x = coll_to_reg_filt_all, file = paste0(result.path, "collection_100_stats_all_regions_",format(Sys.time(), "%Y-%m-%d"),".txt"))
     
     coll_to_reg_filt_all_matrix <- reshape2::dcast(coll_to_reg_filt_all,region~collection_scenario,value.var="region_post_mean_pi")
-    write_tsv(x = coll_to_reg_filt_all_matrix, file = paste0(result.path, "collection_100_stats_all_regs_matrix_",format(Sys.time(), "%Y-%m-%d"),".txt"))
+    write_tsv(x = coll_to_reg_filt_all_matrix, file = paste0(result.path, "collection_100_stats_all_regions_matrix_",format(Sys.time(), "%Y-%m-%d"),".txt"))
   }
   
   
