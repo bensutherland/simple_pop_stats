@@ -16,8 +16,8 @@ dapc_from_genind <- function(data = obj_pop_filt, plot_allele_loadings = TRUE
     
     # Set colours default
     library(RColorBrewer)
-    cols1 <- brewer.pal(n = nPop(my.data), name = "Paired")
-    cols2 <- brewer.pal(n = (nPop(my.data)-length(cols1)), name = "Spectral")
+    cols1 <- brewer.pal(n = nPop(data), name = "Paired")
+    cols2 <- brewer.pal(n = (nPop(data)-length(cols1)), name = "Spectral")
     cols <- c(cols1, cols2)
     
     ordered_colours <- cols
