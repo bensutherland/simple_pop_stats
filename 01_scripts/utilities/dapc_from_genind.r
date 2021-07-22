@@ -63,15 +63,21 @@ dapc_from_genind <- function(data = obj_pop_filt, plot_allele_loadings = TRUE
   loadingplot(dapc$var.contr, thres=1e-3, las = 1, xlab = "Loci", ylab = "Locus contribution", las = 1, main = "")
   dev.off()
   
-  
+  # Create loading plot
   dapc_loadings_all <- loadingplot(dapc$var.contr, threshold = 0)
+  
+  # obtain variance contribution values and their corresponding names
   dapc_loadings_vals <- dapc_loadings_all$var.values # obtain var.contr vals
-  names(dapc_loadings_vals) <- names(dapc$pca.cent) # bring in loci names instead of just index
+  
+  names(dapc_loadings_vals) <- dapc_loadings_all$var.names # bring in loci names instead of just index
   head(dapc_loadings_vals)
+  
   dapc_loadings_vals <- as.data.frame(dapc_loadings_vals) # make a df
   head(dapc_loadings_vals)
   colnames(dapc_loadings_vals) <- "var.contr" # rename column
   head(dapc_loadings_vals)
+  
+  # Keep rownames in df
   dapc_loadings_vals$mname <- rownames(x = dapc_loadings_vals) # make rownames a vector within df
   head(dapc_loadings_vals)
   
