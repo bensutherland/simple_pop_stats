@@ -234,7 +234,7 @@ plot_summarize_100_sim <- function(axis_label="repunit",repunits_file = TRUE,
                                                                 "repunit_post_mean_pi_extra",
                                                                 "reg_post_mean_pi_extra"))))
                         ,xlab = "", ylab = "",horiz=TRUE,col=c("white","grey","dark grey")
-                        ,axes = FALSE, las=1,xlim=c(0,1),cex.names=0.6)
+                        ,axes = FALSE, las=1,xlim=c(0,1),cex.names=0.6,space=0.02)
           
           # Determine where counts should go. 
           xx <- plot_temp2$reg_post_mean_pi + 0.015
@@ -246,7 +246,7 @@ plot_summarize_100_sim <- function(axis_label="repunit",repunits_file = TRUE,
           yy <- barplot(as.matrix(t(subset(plot_temp2, select=c("coll_post_mean_pi",
                                                                 "repunit_post_mean_pi_extra"))))
                         ,xlab = "", ylab = "",horiz=TRUE,col=c("white","grey")
-                        ,axes = FALSE, las=1,xlim=c(0,1),cex.names=0.6)
+                        ,axes = FALSE, las=1,xlim=c(0,1),cex.names=0.6,space=0.02)
           
           # Determine where counts should go. 
           xx <- plot_temp2$repunit_post_mean_pi + 0.015
@@ -259,7 +259,7 @@ plot_summarize_100_sim <- function(axis_label="repunit",repunits_file = TRUE,
       yy <- barplot(as.matrix(t(subset(plot_temp2, select=c("coll_post_mean_pi",
                                                             "repunit_post_mean_pi_extra"))))
                     ,xlab = "", ylab = "",horiz=TRUE,col=c("white","grey")
-                    ,axes = FALSE, las=1,xlim=c(0,1),cex.names=0.6)
+                    ,axes = FALSE, las=1,xlim=c(0,1),cex.names=0.6,space=0.02)
       
       # Determine where counts should go. 
       xx <- plot_temp2$repunit_post_mean_pi + 0.015

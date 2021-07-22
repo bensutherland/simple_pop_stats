@@ -13,7 +13,7 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
                      #, keep_false = FALSE     # Select whether all populations are retained (TRUE) or populations marked as FALSE in the keep column are dropped (FALSE)
                      #, all_collections = TRUE # Run all collections in 100 percent simulation; # Are all populations to be run, or only those that are specified by 'collections_to_use'
                      , ncore_linux = 0 # if Linux, and dev version of rubias, can use multiple cores
-                     
+                     , region = FALSE
                      ){
   
   #### 01. Load in baseline ####
@@ -29,6 +29,14 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
     
     custom_rollup_DF <- read_tsv(custom_rollup.FN, guess_max=100000)
     
+  } else if (region == TRUE){
+    repunit_desc.FN <- choose.files(getwd(),caption = "Path to repunits for analysis")
+    repunits.df <- read_tsv(repunit_desc.FN, guess_max=100000)
+    if(!("region" %in% colnames(repunits.df))){
+      
+      stop("No region specified in the repunits file - run with region = FALSE or add region to the repunits file")
+      
+    }
   }
   
   
@@ -50,7 +58,7 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
     # Save out the filtered rubias baseline
     filtered_base.FN <- gsub(pattern = ".txt", replacement = "", x = rubias_base.FN)
     filtered_base.FN <- paste0(filtered_base.FN, "_coll_10_", format(Sys.time(), "%Y-%m-%d"),".txt")
-    write_tsv(x = rubias_base, path = filtered_base.FN)
+    write_tsv(x = rubias_base, file = filtered_base.FN)
   }
   
   
@@ -224,8 +232,36 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
     inner_join(., repunit.collection_CNT ) %>%
     inner_join(., repunit.CNT )
   
+  } else if (region==TRUE) { 
+    
+    all_collection_results <- merge(all_collection_results,repunits.df,all.x=TRUE)
+    
+    # Filter for same-on-same (targets); take the average of all reps for post_mean_pi, mle_pi, and true_pi
+    coll_to_reg_filt_res <- all_collection_results %>%
+      group_by(collection_scenario, region, repunit, collection) %>%
+      summarise_at(.vars=c("post_mean_pi","mle_pi","true_pi")
+                   , .funs=c(mean="mean")) %>%
+      group_by(collection_scenario,region) %>%
+      summarise_at(.vars=c("post_mean_pi_mean","mle_pi_mean","true_pi_mean")
+                   , .funs=c(sum="sum"))  %>%
+      filter(true_pi_mean_sum > 0)
+    
+    names(coll_to_reg_filt_res) <- c("collection_scenario"
+                                     , "region"
+                                     , "region_post_mean_pi"
+                                     , "region_mle_pi"
+                                     , "region_true_pi")
+    
+    # Merge outputs for report (automatically finds the joining )
+    coll_all <- inner_join(collection.CNT, coll_to_coll_filt_res) %>%
+      inner_join(., coll_to_rep_filt_res) %>%
+      inner_join(., coll_to_reg_filt_res) %>%
+      inner_join(., repunit.collection_CNT ) %>%
+      inner_join(., repunit.CNT )
+    
+    
+    
   } else {
-  
   
   # Merge outputs for report (automatically finds the joining )
   coll_all <- inner_join(collection.CNT, coll_to_coll_filt_res) %>%
@@ -281,11 +317,31 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
                                      ,"group_mle_pi"
                                      ,"group_true_pi")
     
-      write_tsv(x = coll_to_grp_filt_all, path = paste0(result.path, "collection_100_stats_all_grps_",format(Sys.time(), "%Y-%m-%d"),".txt"))
+      write_tsv(x = coll_to_grp_filt_all, file = paste0(result.path, "collection_100_stats_all_grps_",format(Sys.time(), "%Y-%m-%d"),".txt"))
     
       coll_to_grp_filt_all_matrix <- reshape2::dcast(coll_to_grp_filt_all,group~collection_scenario,value.var="group_post_mean_pi")
-      write_tsv(x = coll_to_grp_filt_all_matrix, path = paste0(result.path, "collection_100_stats_all_grps_matrix_",format(Sys.time(), "%Y-%m-%d"),".txt"))
+      write_tsv(x = coll_to_grp_filt_all_matrix, file = paste0(result.path, "collection_100_stats_all_grps_matrix_",format(Sys.time(), "%Y-%m-%d"),".txt"))
     
+  } else if (region == TRUE) {
+    
+    coll_to_reg_filt_all <- all_collection_results %>%
+      group_by(collection_scenario, region, collection) %>%
+      summarise_at(.vars=c("post_mean_pi","mle_pi","true_pi")
+                   , .funs=c(mean="mean")) %>%
+      group_by(collection_scenario, region) %>%
+      summarise_at(.vars=c("post_mean_pi_mean","mle_pi_mean","true_pi_mean")
+                   , .funs=c(sum="sum"))
+    # Provide names
+    names(coll_to_reg_filt_all) <- c("collection_scenario"
+                                     ,"region"
+                                     ,"region_post_mean_pi"
+                                     ,"region_mle_pi"
+                                     ,"region_true_pi")
+    
+    write_tsv(x = coll_to_reg_filt_all, file = paste0(result.path, "collection_100_stats_all_regs_",format(Sys.time(), "%Y-%m-%d"),".txt"))
+    
+    coll_to_reg_filt_all_matrix <- reshape2::dcast(coll_to_reg_filt_all,region~collection_scenario,value.var="region_post_mean_pi")
+    write_tsv(x = coll_to_reg_filt_all_matrix, file = paste0(result.path, "collection_100_stats_all_regs_matrix_",format(Sys.time(), "%Y-%m-%d"),".txt"))
   }
   
   
@@ -294,16 +350,16 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
   print("Exporting results")
   
   # Write out the full raw result of the simulation assignments
-  write_tsv(x = all_collection_results, path = paste0(result.path, "all_collection_results_", format(Sys.time(), "%Y-%m-%d"),".txt.gz"))
+  write_tsv(x = all_collection_results, file = paste0(result.path, "all_collection_results_", format(Sys.time(), "%Y-%m-%d"),".txt.gz"))
   
   # Write out the summary report of the collection and repunit assignment results
-  write_tsv(x = coll_all, path = paste0(result.path, "collection_100_stats_", format(Sys.time(), "%Y-%m-%d"),".txt"))
+  write_tsv(x = coll_all, file = paste0(result.path, "collection_100_stats_", format(Sys.time(), "%Y-%m-%d"),".txt"))
   
   # Write out all info
-  write_tsv(x = coll_to_coll_filt_all, path = paste0(result.path, "collection_100_stats_all_pops_",format(Sys.time(), "%Y-%m-%d"),".txt"))
-  write_tsv(x = coll_to_rep_filt_all, path = paste0(result.path, "collection_100_stats_all_reps_",format(Sys.time(), "%Y-%m-%d"),".txt"))
+  write_tsv(x = coll_to_coll_filt_all, file = paste0(result.path, "collection_100_stats_all_pops_",format(Sys.time(), "%Y-%m-%d"),".txt"))
+  write_tsv(x = coll_to_rep_filt_all, file = paste0(result.path, "collection_100_stats_all_reps_",format(Sys.time(), "%Y-%m-%d"),".txt"))
   
   
   coll_to_coll_filt_all_matrix <- reshape2::dcast(coll_to_coll_filt_all,collection~collection_scenario,value.var="coll_post_mean_pi")
-  write_tsv(x = coll_to_coll_filt_all_matrix, path = paste0(result.path, "collection_100_stats_all_pops_matrix_",format(Sys.time(), "%Y-%m-%d"),".txt"))
+  write_tsv(x = coll_to_coll_filt_all_matrix, file = paste0(result.path, "collection_100_stats_all_pops_matrix_",format(Sys.time(), "%Y-%m-%d"),".txt"))
 }

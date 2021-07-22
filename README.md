@@ -300,6 +300,12 @@ Parallel option to speed up (**for linux only**), add flag: `ncore_linux = <# co
 To install follow instructions in full_sim.R because requires a 'remote' repo install.       
 Assume 20 Gb per thread. Note: if it produces warnings, it is likely there will be populations that did not complete due to lack of RAM (start over with fewer threads).          
 
+Additional rollups: 
+- If `region` is specified as a header in the repunits file, can add flag: `region=TRUE` to output summary files rolled up to region in addition to repunit.
+- If you had other non-repunit groupings of collections to test, can add flag: `custom_rollup=TRUE` and `custom_rollup.FN =<path/to/custom/groupings/file>`. Custom groupings file is expected to have headers `Code	collection	group	Display_Order` with group defining custom reporting units for each collection.       
+Note: Additional rollups are considered one or other - cannot run both at the same time currently.        
+
+
 Note: use thse following function to create a 'Display Order' sorted result file for browsing using the repunit file (do not use for plotting):        
 `format_sims_output()` # and select manually your input 100% sims stats text file. This will output to your results file folder.            
 
@@ -317,6 +323,9 @@ full_sim(rubias_base.FN = <rubias.FN>
          , proportions.FN = paste0(current_path_to_set, "ppn_north_orgn.txt")
          )
 ```
+
+NOTE: not tested with region = TRUE, 
+
 #### end in-development ####
 
 **Alternate option**: can also run 100% simulations using Oncor for the microsatellite data.       
