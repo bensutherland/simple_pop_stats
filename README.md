@@ -364,7 +364,10 @@ plot_summarize_100_sim(axis_label="repunit",repunits_file = TRUE,
                        # also allows for choosing axis label (e.g., CU, CU_Name, repunit) (beta)
 ```
 
-If microsats - `repunits_file = FALSE` is a must.     
+If microsats - `repunits_file = FALSE` is a must, or you need to create a repunits file. Minimum necessary columns are:     
+ "Display_Order", "CU", "CU_NAME", and "repunit"    
+With Display_Order column used to sort the figure from lowest (top) to highest (bottom). Without the repunits file it will still plot, but default to reverse alphebetical.     
+    
 
 Note: could use the - collection_100_stats_YYYY-MM-DD.txt file probably, but would break the regional roll-up.
 
