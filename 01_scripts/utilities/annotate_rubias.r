@@ -8,8 +8,9 @@ annotate_rubias <- function(two_allele_data = two_allele_data, sample_type = sam
   # Interactive read in stock name to repunit conversion (for use later)
   # Select stock code file
   # micro_stock_code.FN <-  choose.files(default=file.path("03_results/"), caption = "Select microsatellite stock code file (tab delim)")
-  sc.df <- read.delim2(file = micro_stock_code.FN, header = T, sep = "\t", stringsAsFactors = F)
-  
+  if(sample_type=="reference"){
+    sc.df <- read.delim2(file = micro_stock_code.FN, header = T, sep = "\t", stringsAsFactors = F)
+  }
   #### Adding non-genetic columns #####
   
   # Create vectors to add to the data
@@ -62,7 +63,16 @@ annotate_rubias <- function(two_allele_data = two_allele_data, sample_type = sam
     # repunit.vec <- temp.sc$repunit
     # 
     
-    sc.df <- merge(x = collection.vec, y = sc.df, by.x = "collection.vec", by.y = "collection", sort = F)
+    if (sample_type=="reference"){
+      sc.df <- merge(x = collection.vec, y = sc.df, by.x = "collection.vec", by.y = "collection", sort = F)
+    } else {
+      sc.df <- as.data.frame(collection.vec)
+      sc.df$repunit <- NA
+    }
+    
+    
+    
+    
     
     # Data checking: 
     if(nrow(collection.vec)==nrow(sc.df)){
