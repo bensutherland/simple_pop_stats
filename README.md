@@ -444,7 +444,7 @@ It will prompt to select a rubias baseline, then match the individual IDs to the
 ONLY TESTED IN SNPS
 
 
-## 18. Convert Rubias to VCF     
+## 19. Convert Rubias to VCF     
 
 To convert a rubias file to a more common VCF format, use:     
 
