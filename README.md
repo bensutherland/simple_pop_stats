@@ -443,3 +443,16 @@ It will prompt to select a rubias baseline, then match the individual IDs to the
 
 ONLY TESTED IN SNPS
 
+
+## 18. Convert Rubias to VCF     
+
+To convert a rubias file to a more common VCF format, use:     
+
+`rubias_to_vcf(output.fn = "03_results/convert_from_rubias.vcf")`     
+
+It will request to interactively select a `*_rubias.txt` file and a `*.hs.bed` in the Proton hotspot format. It will also use the default `<species>_hotspot_detail.txt` file to do some naming conversions. 
+
+This file should deal properly with insertions and deletions markers. It was tested in our coho panel, but not yet in others so beware. Will only work in SNPs - uSat would require significant work to make happen here. 
+
+
+
