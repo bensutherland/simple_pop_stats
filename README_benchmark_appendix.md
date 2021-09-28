@@ -1,6 +1,9 @@
 # Appendix A - Benchmarking document
 
 ## Produce the baseline benchmark document using Rmarkdown.
+     
+### If you encounter errors related to Ghostscript or TinyTex, please see this issue for the fix: https://github.com/bensutherland/simple_pop_stats/issues/29     
+
 
 Walkthrough the minimum requirements for generating a summary document that describes a particular genetic baseline build. The foundation of such an assessment will be kept in a common location and **will not be modified once this document is produced**. If changes need to be made, a new time-stamped folder will be generated, and the summary document needs to be produced again.     
 
