@@ -156,11 +156,11 @@ Fst - _in development_
 ### Open and edit the script
 Open `01_scripts\baseline_benchmark.Rmd`, and edit the following:       
 
-* [folder](https://github.com/bensutherland/simple_pop_stats/blob/b6a45553761486b1eff7669f2d61938817bc77ed/01_scripts/baseline_benchmark.Rmd#L21) needs to be set with the folder name (**not full path**) of the target baseline. The script assumes that this folder is in the standard location: ` W:\9_PBT\01_<species>\reference_databases\`.                    
-* [species](https://github.com/bensutherland/simple_pop_stats/blob/b6a45553761486b1eff7669f2d61938817bc77ed/01_scripts/baseline_benchmark.Rmd#L22) needs to be set with the species name in double quotes. Currently one of: "chinook", "coho", "pink", "eulachon", "sockeye", or "chum".            
+* folder: needs to be set with the folder name (**not full path**) of the target baseline. The script assumes that this folder is in the standard location: ` W:\9_PBT\01_<species>\reference_databases\`.                    
+* species: needs to be set with the species name in double quotes. Currently one of: "chinook", "coho", "pink", "eulachon", "sockeye", or "chum".            
 
-* [datatype](https://github.com/bensutherland/simple_pop_stats/blob/b6a45553761486b1eff7669f2d61938817bc77ed/01_scripts/baseline_benchmark.Rmd#L24) needs to be set with the data type, either "SNP" or "microsat".        
-* [datatype](https://github.com/bensutherland/simple_pop_stats/blob/b6a45553761486b1eff7669f2d61938817bc77ed/01_scripts/baseline_benchmark.Rmd#L25) needs to be set with the minimum number of loci allowed to keep an individual in the baseline. Numeric value (no quotes). eg. `150`     
+* datatype: needs to be set with the data type, either "SNP" or "microsat".        
+* min_loci: needs to be set with the minimum number of loci allowed to keep an individual in the baseline. Numeric value (no quotes). eg. `150`     
 
 ### Run the script
 Press `Knit` at the top of the script in Rstudio! Should automatically output the necessary document. Currently writes to the same folder as the script (01_scripts - default behaviour), so drag it over to the root folder for the baseline
