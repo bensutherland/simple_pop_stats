@@ -113,7 +113,7 @@ MOYEHA_RIVER	Moved from SWVI (official CU) to NoKy as genetically it is very sim
 Ensure the following were run and collect outputs and copy to benchmark folders as follows:       
 **Baseline summary** to `Baseline_summary` folder. This file is generated with `summarise_rubias_baseline()` (see [summarise_rubias_baseline](https://github.com/bensutherland/simple_pop_stats#16-summarize-a-rubias-base-for-collections-years-and-total-n)).       
 note: `by_year = TRUE`, and `out_prefix = "rubias_base_summary"` are recommended. 
-note: suffix default `*baseline_summary.txt` is required.     
+note: suffix default `*.baseline_summary.txt` is required.     
 
 **100% simulations** to `100_sims` folder. These files are generated with `full_sim()` (see [full_sim](https://github.com/bensutherland/simple_pop_stats#14-run-simulated-individual-assignment-test)).       
 note: the string `*100_stats_2.*.txt$` is required, and must be unique in the folder. It is therefore recommended only to change the prefix of the file.       
