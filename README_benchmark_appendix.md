@@ -160,6 +160,7 @@ Open `01_scripts\baseline_benchmark.Rmd`, and edit the following:
 * [species](https://github.com/bensutherland/simple_pop_stats/blob/b6a45553761486b1eff7669f2d61938817bc77ed/01_scripts/baseline_benchmark.Rmd#L22) needs to be set with the species name in double quotes. Currently one of: "chinook", "coho", "pink", "eulachon", "sockeye", or "chum".            
 
 * [datatype](https://github.com/bensutherland/simple_pop_stats/blob/b6a45553761486b1eff7669f2d61938817bc77ed/01_scripts/baseline_benchmark.Rmd#L24) needs to be set with the data type, either "SNP" or "microsat".        
+* [datatype](https://github.com/bensutherland/simple_pop_stats/blob/b6a45553761486b1eff7669f2d61938817bc77ed/01_scripts/baseline_benchmark.Rmd#L25) needs to be set with the minimum number of loci allowed to keep an individual in the baseline. Numeric value (no quotes). eg. `150`     
 
 ### Run the script
 Press `Knit` at the top of the script in Rstudio! Should automatically output the necessary document. Currently writes to the same folder as the script (01_scripts - default behaviour), so drag it over to the root folder for the baseline

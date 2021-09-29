@@ -17,11 +17,13 @@ header-includes:
 <!-- folder is the unique folder (quoted) containing all the necessary files -->
 <!-- species is a simple_pop_stats supported species (quoted) (eg. "chinook"; "coho"; "pink"; "eulachon"; "sockeye"; "chum") -->
 <!-- datatype is either "SNP" or "microsat", same notation as used in simple_pop_stats environment. -->
+<!-- min_loci is a numeric value [don't need to quote] that specifies what minimum number of loci the baseline was filtered on -->
 
 ```{r,echo=FALSE}
-folder <- NULL
-species <- NULL
-datatype <- NULL
+folder <- "2020_V1.0_2020-10-23_baseline"
+species <- "coho"
+datatype <- "SNP"
+min_loci <- 150
 ```
 
 <!-- Create apporpritate report title, and specify options to be carried through.   -->
@@ -88,6 +90,16 @@ print(mark_num$x)
 
 ```
 
+<!-- The minimum number of successfully genotyped loci for an individual to be retained in the baseline  -->
+The minimum number of successfully genotyped loci for an individual to be retained in the baseline:
+```{r,echo=FALSE, message=FALSE, comment=NA}
+
+print(min_loci)
+
+
+
+```
+
 <!-- Specify the highest tray number for samples in the baseline. Option 18 in simple pop stats -->
 The highest tray number found in the baseline:
 ```{r,echo=FALSE, message=FALSE, comment=NA}
@@ -99,8 +111,10 @@ print(tray$Highest_Tray_Number)
 } else {
   print("No Tray number summary found")
 }
-
 ```
+
+
+
 \newpage
 ## Citations
 <!-- This will need to be a citation file that it pulls from based on species, TBD -->
