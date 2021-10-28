@@ -23,7 +23,7 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
     print("Keeping pca.obj in global enviro")
     
     assign(x = "pca.obj", value = pca1, envir = .GlobalEnv)
-    
+    #write_tsv(x=as.data.frame(pca.obj$scores),file=paste0(result.path,"pca.scores.txt"))
   }else{
     
     print("Not retaining pca.obj, only running outputs")
@@ -33,12 +33,21 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
   
   if(is.null(colour_file)){
     
-    # Set colours default
-    library(RColorBrewer)
-    cols1 <- brewer.pal(n = nPop(my.data), name = "Paired")
-    cols2 <- brewer.pal(n = (nPop(my.data)-length(cols1)), name = "Spectral")
-    cols <- c(cols1, cols2)
+    if(nPop(my.data)>1){
     
+    # Set colours default
+    #crp <- colorRampPalette(c("red","blue","yellow"))
+    cols1 <- palette(rainbow(nPop(my.data)))
+    } else {
+      
+      cols1 <- "blue"
+    }
+    #cols1 <- crp(nPop(my.data))
+    #cols2 <- brewer.pal(n = (nPop(my.data)-length(cols1)), name = "Spectral")
+    #cols <- c(cols1, cols2)
+    colours.df<- as.data.frame(cbind(sort(unique(as.character(my.data$pop))),cols1))
+    colnames(colours.df) <- c("collection","colour")
+
   } else if(!is.null(colour_file)){
     
     # Reporting
@@ -51,7 +60,8 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
   
   # Plot w/ ggplot
   pca.scores <- as.data.frame(pca1$scores) # make dataframe for ggplot
-  pca.scores$pop <- pop(data) # add population to df
+  pca.scores$pop <- as.character(pop(data))
+  pca.scores <- pca.scores[order(pca.scores$pop),] # add population to df
   head(pca.scores)
   
   # Create an eigenvalues df for plotting eigenvalues
@@ -65,13 +75,14 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
   
   ## Create a colours vector
   # Select only the pops that are in the data
+  library(dplyr)
   colours <- filter(colours.df, collection %in% unique(pca.scores$pop))
   
   # Put into alphabetic order by collection (the plotting order, and legend order)
   colours <- colours[order(colours$collection), ]
   
   # Take only the colour (note: must NOT be factor to correctly plot)
-  ordered_colours <- colours$colour
+  ordered_colours <- as.character(colours$colour)
   
   # Plot
   set.seed(9)
@@ -90,6 +101,20 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
   print(p)
   dev.off()
   
+  set.seed(9)
+  p <- ggplot(pca.scores, aes(x=PC1, y=PC3, colour=pop))
+  p <- p + geom_point(size=2)
+  p <- p + stat_ellipse(level = 0.95, size = 1)
+  p <- p + scale_color_manual(name = "collection", values = ordered_colours)
+  p <- p + geom_hline(yintercept = 0) 
+  p <- p + geom_vline(xintercept = 0) 
+  p <- p + theme_bw()
+  
+  p
+  
+  pdf(file = paste0(result.path, "pca_all_samples_PC1-PC3.pdf"), width = 11.5, height = 7.5)
+  print(p)
+  dev.off()
   
   ### INSET # (still to be built)
   # require(grid)
@@ -131,6 +156,6 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
        )
      }
     dev.off()
-
+   
   }
 }
