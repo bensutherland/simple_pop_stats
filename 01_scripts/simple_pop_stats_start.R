@@ -26,7 +26,7 @@
 # install.packages("dplyr")
 # install.packages("R.methodsS3")
 # install.packages("dartR")
-# install.packages("rubias)
+# install.packages("rubias")
 # install.packages("RGenetics")
 # install.packages("diveRsity")
  
