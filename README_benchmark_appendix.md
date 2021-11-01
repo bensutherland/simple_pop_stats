@@ -141,7 +141,7 @@ It is possible to have multiple dendrogram PDFs
 Consider when formatting the dendrogram for display:     
 * i) R markdown will incorporate the image as it is formatted in the PDF, so ensure you are happy with the format in the PDF. 
 * ii) If it is on a single page, it will incorporate it as a single page; if split across multiple pages, it will incorporate it as multiple pages.
-* iii) Use [FigTree](http://tree.bio.ed.ac.uk/software/figtree/t) to view and format the trees
+* iii) Use [FigTree](http://tree.bio.ed.ac.uk/software/figtree/) to view and format the trees
 * iv) To split your PDF, use the "print" option in Adobe Acrobat Reader DC, combined with "print to PDF" to create a multi-page PDF from the single page PDF exported from FigTree
 * v) It is recommended that "Expansion" be used to spread the tree, and "Tip Labels" and "Node Labels" font sizes be increased to allow easier reading with minimum zooming.
 * vi) Don't forget in FigTree to ensure bootstrapping is selected for the "Node Labels"
