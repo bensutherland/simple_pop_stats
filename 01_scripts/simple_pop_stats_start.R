@@ -35,23 +35,24 @@
 # require(remotes)
 # remotes::install_github("eriqande/rubias", ref = "mclapply-assess-reference-loo")
 
-# install.packages("rmarkdown)
+# install.packages("rmarkdown")
 # install.packages("tinytex")
 # tinytex::install_tinytex()
 
-#For ask functionality
+## For ask functionality
 # install.packages("gtools")
 
-#For reading data
+## For reading data
 # install.packages("readr")
 
-
+## For relatedness analyses
 # install.packages("Demerelate")
 # install.packages("related", repos="http://R-Forge.R-project.org")
 
+## For <insert> analysis
 # install.packages("geosphere")
 
-#For baseline benchmark functionality
+## For baseline benchmark functionality
 # install.packages("pander")
 # install.packages("koRpus")
 # install.packages("xfun") # (needs >= 0.19)
