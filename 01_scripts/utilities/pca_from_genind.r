@@ -25,7 +25,13 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
     assign(x = "pca.obj", value = pca1, envir = .GlobalEnv)
     
     print("Writing out per sample PC loading values")
-    write_tsv(x = as.data.frame(pca.obj$scores), file = paste0(result.path, "pca_scores_per_sample.txt"))
+    pca_scores_per_sample.df <- as.data.frame(pca.obj$scores)
+    # pca_scores_per_sample.df$sample <- rownames(pca_scores_per_sample.df)
+    pca_scores_per_sample.df <- cbind(rownames(pca_scores_per_sample.df), pca_scores_per_sample.df)
+    colnames(pca_scores_per_sample.df)[1] <- "sample"
+    head(pca_scores_per_sample.df)
+    
+    write_tsv(x = pca_scores_per_sample.df, file = paste0(result.path, "pca_scores_per_sample.txt"))
     
   }else{
     
