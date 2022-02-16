@@ -196,7 +196,16 @@ NOTE: If you need to load your `pairwise_wc_fst` from the output file produced b
 
 ## 08. Run multidimensional scaling techniques
 Conduct PCA using:     
-`pca_from_genind(data = obj_pop_filt, PCs_ret = 3, plot_eigen=TRUE, plot_allele_loadings=TRUE, colour_file = NULL)`       
+```
+pca_from_genind(data = obj_pop_filt
+                       , PCs_ret = 3
+                       , plot_eigen=TRUE
+                       , plot_allele_loadings=TRUE
+                       , colour_file = NULL
+                       , retain_pca_obj = TRUE
+                       )       
+```
+
 This will output results into `03_results`    
 
 Conduct DAPC using:      
