@@ -17,35 +17,39 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
   # Perform PCA
   pca1 <- glPca(my.data, nf = PCs_ret)
   
-  # Save out pca1 obj to retain data
+  
+  # As required, save out pca1 obj to retain data
   if(retain_pca_obj == TRUE){
     
     print("Keeping pca.obj in global enviro")
-    
     assign(x = "pca.obj", value = pca1, envir = .GlobalEnv)
-    #write_tsv(x=as.data.frame(pca.obj$scores),file=paste0(result.path,"pca.scores.txt"))
+    
+    print("Writing out per sample PC loading values")
+    write_tsv(x = as.data.frame(pca.obj$scores), file = paste0(result.path, "pca_scores_per_sample.txt"))
+    
   }else{
     
     print("Not retaining pca.obj, only running outputs")
     
   }
-  
-  
+
+    
+  # Set colour details  
   if(is.null(colour_file)){
     
     if(nPop(my.data)>1){
     
-    # Set colours default
-    #crp <- colorRampPalette(c("red","blue","yellow"))
+    # Define non-custom colours
     cols1 <- palette(rainbow(nPop(my.data)))
+    
     } else {
       
       cols1 <- "blue"
+      
     }
-    #cols1 <- crp(nPop(my.data))
-    #cols2 <- brewer.pal(n = (nPop(my.data)-length(cols1)), name = "Spectral")
-    #cols <- c(cols1, cols2)
-    colours.df<- as.data.frame(cbind(sort(unique(as.character(my.data$pop))),cols1))
+
+    # Create df with the colours
+    colours.df <- as.data.frame(cbind(sort(unique(as.character(my.data$pop))),cols1))
     colnames(colours.df) <- c("collection","colour")
 
   } else if(!is.null(colour_file)){
@@ -57,6 +61,7 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
     colours.df <- read.table(file = colour_file, header = T, sep = ",", stringsAsFactors = F)
     
   }
+  
   
   # Plot w/ ggplot
   pca.scores <- as.data.frame(pca1$scores) # make dataframe for ggplot
@@ -84,7 +89,9 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
   # Take only the colour (note: must NOT be factor to correctly plot)
   ordered_colours <- as.character(colours$colour)
   
-  # Plot
+  
+  ## Plot the PCA
+  # PC1 vs. PC2
   set.seed(9)
   p <- ggplot(pca.scores, aes(x=PC1, y=PC2, colour=pop))
   p <- p + geom_point(size=2)
@@ -96,25 +103,50 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
   
   p
   
-  # Save
-  pdf(file = paste0(result.path, "pca_all_samples.pdf"), width = 11.5, height = 7.5)
+  # Save out
+  pdf(file = paste0(result.path, "pca_samples_PC1_v_PC2.pdf"), width = 11.5, height = 7.5)
   print(p)
   dev.off()
+ 
+  # Determine PCs to include depending on how many PCs retained
+  if(PCs_ret == 3){
+    
+    set.seed(9)
+    p <- ggplot(pca.scores, aes(x=PC1, y=PC3, colour=pop))
+    p <- p + geom_point(size=2)
+    p <- p + stat_ellipse(level = 0.95, size = 1)
+    p <- p + scale_color_manual(name = "collection", values = ordered_colours)
+    p <- p + geom_hline(yintercept = 0) 
+    p <- p + geom_vline(xintercept = 0) 
+    p <- p + theme_bw()
+    
+    p
+    
+    # Save out
+    pdf(file = paste0(result.path, "pca_samples_PC1_v_PC3.pdf"), width = 11.5, height = 7.5)
+    print(p)
+    dev.off()
+
+  }else if(PCs_ret > 3){
+    
+    set.seed(9)
+    p <- ggplot(pca.scores, aes(x=PC3, y=PC4, colour=pop))
+    p <- p + geom_point(size=2)
+    p <- p + stat_ellipse(level = 0.95, size = 1)
+    p <- p + scale_color_manual(name = "collection", values = ordered_colours)
+    p <- p + geom_hline(yintercept = 0) 
+    p <- p + geom_vline(xintercept = 0) 
+    p <- p + theme_bw()
+    
+    p
+    
+    # Save out
+    pdf(file = paste0(result.path, "pca_samples_PC3_v_PC4.pdf"), width = 11.5, height = 7.5)
+    print(p)
+    dev.off()
+    
+  }
   
-  set.seed(9)
-  p <- ggplot(pca.scores, aes(x=PC1, y=PC3, colour=pop))
-  p <- p + geom_point(size=2)
-  p <- p + stat_ellipse(level = 0.95, size = 1)
-  p <- p + scale_color_manual(name = "collection", values = ordered_colours)
-  p <- p + geom_hline(yintercept = 0) 
-  p <- p + geom_vline(xintercept = 0) 
-  p <- p + theme_bw()
-  
-  p
-  
-  pdf(file = paste0(result.path, "pca_all_samples_PC1-PC3.pdf"), width = 11.5, height = 7.5)
-  print(p)
-  dev.off()
   
   ### INSET # (still to be built)
   # require(grid)
@@ -130,6 +162,8 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
   # print(plot2, vp = vp)
   # 
   
+  
+  ## Plotting eigenvalues
   if(plot_eigen==TRUE){
     
     print("Plotting eigenvalues")
