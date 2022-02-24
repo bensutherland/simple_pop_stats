@@ -1,4 +1,4 @@
-keep_pops <- function(df = obj_filt, keep_file = NULL){
+keep_pops <- function(df = obj_filt, keep_file = NULL,partial = FALSE){
   
   # Reporting
   print(paste0("The input genind has ", length(unique(pop(df))), " populations"))
@@ -25,7 +25,16 @@ keep_pops <- function(df = obj_filt, keep_file = NULL){
     
     all_pops <- as.character(unique(pop(df)))
     
-    keep_pops_user_def <- intersect(all_pops, user_defined_keep_pops)
+    if(partial==FALSE){
+    
+        keep_pops_user_def <- intersect(all_pops, user_defined_keep_pops)
+        
+    } else {
+      
+      keep_pops_user_def <- unique (grep(paste(user_defined_keep_pops,collapse="|"), 
+                              all_pops, value=TRUE))
+      
+    }
     
     df <- df[pop=keep_pops_user_def]
     
