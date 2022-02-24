@@ -41,8 +41,25 @@ calculate_FST <- function(format="genind", dat = obj_filt, separated = FALSE, cu
     
     pairwise.wc.fst <- boot.ppfst(dat = dat, nboot = 1000, quant = c(0.025, 0.975))
     print(pairwise.wc.fst)
-    assign(x = "pairwise_wc_fst", value = pairwise.wc.fst, envir = .GlobalEnv)
     booted <- "booted"
+    
+    # Create empty matrix
+    new <- matrix(NA,nrow=nrow(pairwise.wc.fst$ll),ncol=ncol(pairwise.wc.fst$ll))
+    
+    # Assign upper limit to upper triangle
+    new[upper.tri(new)] <-pairwise.wc.fst$ul[upper.tri(pairwise.wc.fst$ul)]
+    
+    # Assign lower limit to lower triangle
+    new[lower.tri(new)] <-pairwise.wc.fst$ll[upper.tri(pairwise.wc.fst$ll)]
+    
+    # Assign the names to the column and rows of the new matrix
+    dimnames(new) <- dimnames(pairwise.wc.fst$ll)
+    
+    # Rename the new matrix
+    pairwise.wc.fst <- new
+    
+    # Assign to the environment
+    assign(x = "pairwise_wc_fst", value = pairwise.wc.fst, envir = .GlobalEnv)
     
   }else if(bootstrap==FALSE){
   
