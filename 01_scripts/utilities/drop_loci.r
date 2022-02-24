@@ -8,13 +8,16 @@ drop_loci <- function(df= obj, drop_monomorphic = TRUE, drop_file = NULL){
   # Drop monomorphic loci
   if(drop_monomorphic==TRUE){
     loci_to_drop <- which(nAll(df)==1) # identify which are monomorphic
-    
+    loci_all_na <- which(nAll(df)==NA)
     # Reporting
     print(paste0("Dropping monomorphic markers, in total: ", length(loci_to_drop), " markers"))
-    
+    print(paste0("Dropping untyped markers, in total: ", length(loci_all_na), " markers"))
     # Avoid an == 0 error
     if(length(loci_to_drop)>0){
         df <- df[loc=-loci_to_drop]
+    }
+    if(length(loci_all_na)>0){
+      df <- df[loc=-loci_all_na]
     }
     
     print(paste0("After dropping monomorphic markers, there are ", length(locNames(df)), " markers"))
