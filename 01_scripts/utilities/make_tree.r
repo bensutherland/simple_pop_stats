@@ -6,7 +6,8 @@ make_tree <- function(matrix = NULL
                               , tree_method = "NJ"
                               , bootstrap = FALSE, nboots = 10000, boot_obj = NULL
                               , dist_metric = "edwards.dist"
-                              , separated = FALSE){
+                              , separated = FALSE
+                              , strata = TRUE){
   
   if(tree_method=="NJ" && bootstrap==FALSE){
     
@@ -75,6 +76,7 @@ make_tree <- function(matrix = NULL
     
   }
     
+  if(strata==TRUE){
   
   
     # Generate tree
@@ -82,7 +84,14 @@ make_tree <- function(matrix = NULL
                                , sample = nboots, strata = pop(boot_obj)
                              , tree = tree_method
                              )
+  } else if (strata==FALSE){
+    bootstrapped_tree <- aboot(x = boot_obj, dist = dist_metric
+                              , sample = nboots
+                              , tree = tree_method
+    )
     
+    
+  }  
     # Save tree
     write.tree(phy = bootstrapped_tree, file = fn.tree)
     assign(x = "bootstrapped_tree", value = bootstrapped_tree, envir = .GlobalEnv)
