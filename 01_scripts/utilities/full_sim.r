@@ -14,6 +14,7 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
                      #, all_collections = TRUE # Run all collections in 100 percent simulation; # Are all populations to be run, or only those that are specified by 'collections_to_use'
                      , ncore_linux = 0 # if Linux, and dev version of rubias, can use multiple cores
                      , region = FALSE
+                     , repunit_file = NULL
                      ){
   
   #### 01. Load in baseline ####
@@ -24,6 +25,12 @@ full_sim <- function(rubias_base.FN = "03_results/rubias_output.txt"
   #  rubias_base <- filter(rubias_base,!(collection %in% c(NULL)))
   ### /end/ Can this be removed? ###
   
+  ##
+  
+  if(!is.null(repunit_file)){
+    repunits <- read_tsv(file = repunit_file)
+    rubias_base <- filter(rubias_base,repunit %in% repunits$repunit)
+  }
   # Read in custom roll-up file
   if(custom_rollup == TRUE){
     
