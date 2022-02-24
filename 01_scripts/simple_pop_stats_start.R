@@ -9,8 +9,8 @@
 
 # if (!requireNamespace("BiocManager", quietly = TRUE))
 #   install.packages("BiocManager")
-# 
-# BiocManager::install("SNPRelate")
+ 
+# BiocManager::install("SNPRelate",force=TRUE)
 
 # BiocManager::install("qvalue") # req for dartR
 
@@ -33,11 +33,9 @@
 ## For parallel processing of sims, require dev version of rubias
 # install.packages("remotes")
 # require(remotes)
-# remotes::install_github("eriqande/rubias", ref = "mclapply-assess-reference-loo")
-
+# remotes::install_github("eriqande/rubias", ref = "mclapply-assess-reference-loo")# install.packages("rmarkdown")
+# install.packages("rubias")
 # install.packages("rmarkdown")
-# install.packages("tinytex")
-# tinytex::install_tinytex()
 
 ## For ask functionality
 # install.packages("gtools")
@@ -56,7 +54,14 @@
 # install.packages("pander")
 # install.packages("koRpus")
 # install.packages("xfun") # (needs >= 0.19)
-
+# install.packages("tinytex")
+# tinytex::install_tinytex()
+# install_tinytex()
+# require(tinytex)
+# tinytex::reinstall_tinytex()
+# tinytex::tlmgr_install("pdfcrop")
+# https://www.ghostscript.com/download/gsdnld.html
+# 
 require("units")
 require("cluster")
 require("adegenet")
@@ -105,6 +110,7 @@ rm(fun, file_sources) # clean up
 # User entry to determine if on local network or offline
 # setup_network()  # function does not seem to work properly
 on_network <- TRUE # change to FALSE if off-network
+
 
 # User entry to set species for filling in variables
 select_species()
