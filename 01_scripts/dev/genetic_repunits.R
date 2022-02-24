@@ -6,12 +6,12 @@ genetic_repunits <- function(threshold_value = 0.85, manual_review_contrib = 7){
     threshold_value = 0.80
     manual_review_contrib = 4
 
-    setwd("E:/S_drive/01_chinook/PBT/2020/2020-07-03_Chinooks_Sims_Full_Base/")
+    setwd("W:/9_PBT/01_chinook/reference_databases/2020_V1.4_2020-10-07_baseline/100_sims/")
     getwd()
     
-    repunits <- read.table(file="E:/H_drive/Stock_Codes/Chinook/repunits_full.txt", sep='\t',quote = "", comment.char = "", header=TRUE, stringsAsFactors = FALSE)
+    repunits <- read.table(file="H:/Stock_Codes/Chinook/repunits_full.txt", sep='\t',quote = "", comment.char = "", header=TRUE, stringsAsFactors = FALSE)
 
-    df <- read.table(file="collection_100_stats_all_pops_2020-07-02.txt", sep='\t',quote = "", comment.char = "", header=TRUE, stringsAsFactors = FALSE)
+    df <- read.table(file="collection_100_stats_all_pops_2020-10-13.txt", sep='\t',quote = "", comment.char = "", header=TRUE, stringsAsFactors = FALSE)
     
     # Create an empty dataframe
     reduced_df <- data.frame()
