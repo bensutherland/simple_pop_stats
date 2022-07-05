@@ -1,0 +1,443 @@
+CBAYES
+
+Title =  XXXXXX
+
+BaselineFile = Chin+4_Mar3_2017.bse
+MixtureFile =  XXXX.mix
+OutputFolder = output
+Species = chinook
+BaseDesc =  Coastwide_2017-03-03_FR_mgmt_units_2021-08-17
+PrintBaseline = F
+PrintMixture = F
+DropFish = F
+ChangeSeeds = F
+InformativePrior = F
+NumberOfStocks = 302
+NumberOfChars = 15
+Levels = 2
+NumberOfChains = 10
+NumberOfReps = 20000
+Seed1 = -718805
+Seed2 = 99733654
+StartStock = 49
+RanGen = MT19937
+MaxMissingLoci = 5
+Timer = 1000
+SaveEvery = 100
+NumberToKeep = 1000
+ThinIse = 1
+ThinSta = 1
+Accuracy = 0.02
+Quantile = 0.975
+Probability = 0.95
+Percentile = 0.975
+
+Chars =
+1   30  T   ogo2
+2   24  T   ogo4
+3   19  T   oke4
+4   54  T   oki100
+5   44  T   omy325
+6   58  T   ots100
+7   50  T   ots101
+8   45  T   ots104
+9   47  T   ots107
+10  32  T   ots2
+11  57  T   ots201b
+12  55  T   ots211
+13  57  T   ots213
+14  15  T   ots9
+15  45  T   ssa197
+
+Stocks  =
+1   8   908 Robertson
+2   7   907 Big_Qualicum
+3   7   907 Quinsam
+4   10  910 Kitimat
+5   8   908 Conuma
+6   3   3   Harrison
+7   7   907 Nanaimo_SU
+8   2   11  Quesnel
+9   8   908 Nitinat
+11  7   907 Cowichan
+12  9   909 Squamish
+15  21  921 Bulkley_Early
+16  22  54  Kitwanga
+18  7   907 Chemainus
+20  19  56  Bear
+21  23  48  Ecstall
+23  10  910 Wannock_R
+24  23  48  Kitsumkalum_R
+25  11  58  Kwinageese
+27  10  910 Atnarko
+29  2   11  Stuart
+30  2   11  Nechako
+31  8   908 Kennedy
+34  8   908 Thornton
+36  9   909 Bute
+37  1   12  Dome
+38  1   12  Salmon@PG
+39  1   12  Tete_Jaune
+40  3   3   Chilliwack_F
+42  6   17  Nicola
+43  5   15  L_Shuswap
+44  2   11  Chilko
+45  2   10  Bridge
+46  6   17  Coldwater
+47  5   15  M_Shuswap
+49  1   12  Bowron
+50  2   10  Cottonwood
+51  19  56  Sustut
+53  11  58  Damdochax
+54  23  48  Exchamsiks
+55  22  54  Kispiox
+57  11  58  Meziadin
+58  11  58  Owegee
+59  11  58  Seaskinnish
+61  11  58  Tseax
+62  11  58  Cranberry
+63  1   12  Horsey
+64  1   12  Goat
+65  1   12  Holmes
+66  1   12  Swift
+67  1   12  Slim_C
+68  1   12  Indianpoint
+69  1   12  Willow_R
+70  4   19  Raft_R
+71  2   10  Elkin_R
+72  8   908 Marble@NVI
+73  2   10  U_Chilcotin
+74  2   9   Portage_C
+75  5   19  Eagle_R
+76  5   14  Salmon@SA
+78  11  58  Snowbank
+79  11  58  Kincolith
+80  11  58  Teigen
+81  6   17  Spius
+82  6   17  Deadman
+83  6   17  Bonaparte
+84  5   13  L_Adams
+85  5   14  South_Thom
+86  23  48  Cedar_Early
+87  4   18  Finn
+90  6   17  Louis
+92  12  6   Big_Silver
+93  12  4   Birkenhead
+94  7   907 Nimpkish
+95  5   13  Little_R
+96  2   10  Horsefly
+97  7   907 L_Qualicum
+98  1   12  Fontoniko
+99  2   10  L_Cariboo
+101 7   907 Nanaimo_F
+102 2   10  L_Chilcoti
+103 2   10  Westroad
+104 2   10  Endako
+105 7   907 Puntledge_Su
+106 7   907 Puntledge_F
+107 8   908 Sarita
+108 8   908 Nahmint
+110 7   907 Quatse
+111 8   908 Tranquil
+112 10  910 U_Atnarko
+116 10  910 Kilbella
+117 10  910 Chuckwalla
+118 10  910 Kildala
+119 9   909 Mamquam
+121 10  910 Nusatsum
+122 10  910 Saloompt
+125 64  802 Sacr_LF
+135 8   908 San_Juan
+137 5   13  L_Thompson
+142 1   12  McGregor
+143 2   11  Taseko
+145 4   19  Clearwater
+147 9   909 Klinaklini
+148 9   909 Devereux
+154 54  708 Chewuch_SP
+156 57  710 Lyon's_Ferry_F
+157 56  711 Tucannon_SP
+158 53  706 Abernathy_F
+159 54  708 Twisp_SP
+160 50  705 Skagit_Su
+161 52  702 Solduc_F
+162 52  702 Quinault_F
+163 52  702 Hoh_River_SP_S
+164 50  705 White_F
+165 50  705 Nooksack_SP@Ke
+166 50  705 Green_F@Soos
+167 51  701 Elwha_F
+168 50  705 Green@Kendal_F
+169 52  702 Queets
+170 53  706 Coweeman
+171 50  705 Skykomish_Su
+172 55  709 Silmilkameen_S
+173 50  705 StillaguamishS
+174 55  709 Wenatchee_Su
+175 54  708 Chiwawa_SP
+176 62  707 Naches_Sp
+177 9   909 Homathko
+179 58  712 Trask_hat_F
+180 63  713 North_Santiam
+183 5   16  Bessette
+184 10  910 Hirsch
+186 14  914 Yakoun
+187 15  501 Unuk
+188 15  501 King_Salmon
+189 17  917 Little_Tatsam
+190 15  501 Chickamin
+191 18  918 Little_Tahltan
+192 17  917 Nahlin
+194 3   3   Chilliwac@Stav
+195 5   82  L_Shus@U_Adams
+196 56  711 McCall_Hat
+197 64  802 Mokelumne
+198 56  711 Valley_Cr
+199 56  711 Imnaha
+200 56  711 Rapid_Sp
+201 56  711 Upper_Valley
+202 56  711 Wenaha
+203 56  711 Marsh_Cr
+204 55  709 Hanford_Reach
+205 56  711 McCall
+206 2   10  Chilako
+208 4   19  Barriere
+210 4   5   Blue
+211 4   19  Lemieux_Cr
+212 13  7   Maria_Slough
+213 61  801 Trinity_SP
+214 10  910 Neechanze
+215 10  910 Ashlulm
+219 61  801 Trinity_F
+220 18  918 Andrew_Cr
+222 10  910 Kwinamass
+223 6   17  U_Coldwat_SP
+224 6   17  U_Spius_SP
+225 1   12  Nevin_Cr
+226 4   19  N_Thom@Main
+228 2   11  Kuzkwa_Cr
+231 1   12  Kenneth_Cr
+232 1   12  Ptarmigan
+233 1   12  Walker
+235 5   16  Duteau_Cr
+236 24  67  Blanchard
+237 24  67  Klukshu
+239 24  67  Takhanne
+240 18  918 Christina
+241 9   909 Phillips
+242 8   908 Burman
+243 18  918 Verrett
+246 1   12  Morkill
+247 1   12  Torpy
+248 18  918 Shakes_Cr
+249 10  910 U_Dean
+252 18  918 Craig
+253 17  917 Nakina
+254 2   10  U_Cariboo
+257 8   908 Toquart
+261 10  910 Docee
+262 9   909 Capilano
+267 7   907 Nanaimo_SP
+270 5   14  Seymour@Thomp
+271 23  48  Gitnadoix
+272 12  5   Upper_Pitt
+273 58  712 Euchre_Cr
+274 59  714 Hunter_Cr
+275 58  712 Umpqua_Smith
+276 59  714 Cole
+277 59  714 Pistol
+278 56  711 Up_Salmon-SP
+279 56  711 Frenchman-SP
+281 55  709 Deschutes-F
+282 58  712 Elk
+283 64  802 Toulumne
+284 64  802 Merced
+285 63  713 Sandy
+286 64  802 Yuba
+287 64  802 Stanislaus
+288 65  803 Butte_Sp
+291 62  707 Granite
+293 56  711 Salmon_E_Fork
+294 62  707 John_Day_Mid
+295 62  707 John_Day_N
+296 62  707 John_Day_main
+297 61  801 Blue_Cr
+298 59  714 Winchuk
+299 54  708 Entiat_Sp
+300 59  714 Lobster_Cr
+302 64  802 American
+303 64  802 Feather_F
+304 65  803 Feather_Sp
+305 64  802 Battle_Cr
+306 65  803 Yuba_Sp
+308 63  713 Clackamas_N
+309 64  802 Butte_F
+311 58  712 Nehalem
+312 58  712 Siuslaw
+314 8   908 Gold_R
+315 8   908 Zeballos
+317 50  705 Serpentine
+326 17  917 Dudidontu
+330 8   908 Colonial_Cay
+331 8   908 Tahsis
+332 8   908 Tlupana
+335 7   907 Woss_Lake
+336 18  918 Johnny_Tashoot
+341 12  6   Sloquet_Cr
+345 10  910 Takia
+346 10  910 Dean
+347 55  709 Okanagan
+348 55  709 Osoyoos_Resid
+349 2   10  Nazko
+350 1   12  James
+351 2   10  Baezaeko
+386 7   907 NanaimoUpper
+394 10  910 Kitlope
+395 10  910 Kateen
+396 19  56  Slamgeesh
+397 11  58  Ishkheenickh
+398 11  58  Kiteen
+399 21  921 Suskwa
+401 22  54  Sweetin
+402 23  48  Thomas_Cr
+405 8   908 Sooke
+414 17  917 Tseta
+415 9   909 Cheakamus
+418 19  56  Kluatantan
+422 17  917 Kowatua
+426 12  5   BlueCr_UpPitt
+428 15  501 Tahini
+429 15  501 Situk
+430 15  501 Big_Boulder_C
+431 66  804 Eel_F
+432 62  707 Spring_Cr_H
+433 53  706 Cowlitz_H_Sp
+434 56  711 Minam_Cr
+435 56  711 Secech
+436 59  714 Umpqua_Sp
+437 17  917 Hackett_r
+438 59  714 Nestucca_F
+439 50  705 Soos_Cr_H
+440 56  711 Johnson_Cr
+459 8   908 Megin_R
+463 8   908 Kaouk_R
+464 8   908 Moyeha_R
+465 17  917 Tatsamenie
+466 19  56  Kluayaz_Cr
+469 24  67  Goat_Cr
+470 9   909 Cheakamus_F
+476 18  918 Tahltan_R
+477 18  918 Tuya_R
+478 24  67  Kudwat_Cr
+479 19  56  Squingula_R
+480 19  56  Kuldo_C
+482 2   10  Baker_Cr
+488 9   909 Cheakamus_Su
+492 19  56  Otsi_Cr
+493 22  54  Shegunia_R
+494 22  54  Kitseguecla_R
+495 19  56  Sicintine_R
+496 23  48  Exstew_R
+497 23  48  Kasiks_R
+498 23  48  Zymogotitz_R
+499 50  705 Snohomish_R
+500 23  48  Fiddler_Cr
+501 22  54  Nangeese_R
+502 23  48  Khyex_R
+505 17  917 Yeth_Cr
+510 21  921 Morice_R
+511 20  920 Babine
+515 52  702 Willapa_Cr
+534 10  910 LowAtnarko
+535 58  712 Cle_Elm_Hatch
+557 8   908 Gordon_R
+558 8   908 Leiner_R
+
+Groups =
+1   1   UPFR
+1   2   MUFR
+1   3   LWFR-F
+1   4   NOTH
+1   5   SOTH
+1   6   LWTH
+1   7   ECVI
+1   8   WCVI
+1   9   SOMN
+1   10  NOMN
+1   11  NASS
+1   12  LWFR-Sp
+1   13  LWFR-Su
+1   14  QCI
+1   15  Alaska
+1   17  Taku
+1   18  Stikine
+1   19  Skeena Upper
+1   20  Skeena Babine
+1   21  Skeena Bulkley
+1   22  Skeena Mid
+1   23  Skeena Lower
+1   24  Alsek
+1   50  Puget Sound
+1   51  Juan de Fuca
+1   52  Coastal Wash
+1   53  Low Col
+1   54  Up Col-Sp
+1   55  Up Col-Su/F
+1   56  Snake-Sp/Su
+1   57  Snake-F
+1   58  North & Central Oregon
+1   59  South Oregon coastal
+1   61  Klamath/Trinity
+1   62  Mid Col-Sp
+1   63  Up Willamette
+1   64  Cent Val-F
+1   65  Cent Val-Sp
+1   66  Coastal California
+2   3   Lower Fraser River_FA_0.3
+2   4   Lower Fraser River_SP_1.3
+2   5   Lower Fraser River-Upper Pitt_SU_1.3
+2   6   Lower Fraser River_SU_1.3
+2   7   Maria Slough_SU_0.3
+2   9   Middle Fraser River-Portage_FA_1.3
+2   10  Middle Fraser River_SP_1.3
+2   11  Middle Fraser River_SU_1.3
+2   12  Upper Fraser River_SP_1.3
+2   13  South Thompson_SU_0.3
+2   14  South Thompson_SU_1.3
+2   15  Shuswap River_SU_0.3
+2   16  South Thompson-Bessette Creek_SU_1.2
+2   17  Lower Thompson_SP_1.2
+2   18  North Thompson_SP_1.3
+2   19  North Thompson_SU_1.3
+2   48  Lower Skeena
+2   54  Middle Skeena-mainstem tributaries
+2   56  Upper Skeena
+2   58  Upper Nass
+2   67  Alsek
+2   82  Upper Adams River_SU_x.x
+2   501 Alaska
+2   701 Juan de Fuca
+2   702 Coastal Washington
+2   705 Puget Sound
+2   706 Lower Columbia River
+2   707 Mid Columbia River_SP
+2   708 Upper Columbia River_SP
+2   709 Upper Columbia River_SU_FA
+2   710 Snake River_FA
+2   711 Snake River_SP_SU
+2   712 North & Central Oregon
+2   713 Upper Willamette River
+2   714 South Oregon coastal
+2   801 California Klamath Trinity
+2   802 California Central Valley_Fall
+2   803 California Central Valley_Spring
+2   804 Coastal California
+2   907 ECVI
+2   908 WCVI
+2   909 SOMN
+2   910 NOMN
+2   914 Haida Gwaii
+2   917 Taku
+2   918 Stikine
+2   920 Skeena Babine
+2   921 Skeena Bulkley

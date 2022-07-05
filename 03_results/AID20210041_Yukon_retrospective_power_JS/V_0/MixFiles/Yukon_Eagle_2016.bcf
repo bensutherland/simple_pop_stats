@@ -1,0 +1,103 @@
+CBAYES
+
+Title = SPAM Conversion
+
+BaselineFile = Yukon2016_Feb4.bse
+MixtureFile = Yukon_Retro1985-2012_Aug_28_2020.POP.mix
+OutputFolder = output
+Species = chinook
+BaseDesc = Yukon2016_Feb
+PrintBaseline = F
+PrintMixture = F
+DropFish = F
+ChangeSeeds = F
+InformativePrior = F
+NumberOfStocks = 29
+NumberOfChars = 15
+Levels = 2
+NumberOfChains = 10
+NumberOfReps = 20000
+Seed1 = -718805
+Seed2 = 99733654
+StartStock = 153
+RanGen = MT19937
+MaxMissingLoci = 5
+Timer = 1000
+SaveEvery = 100
+NumberToKeep = 1000
+ThinIse = 1
+ThinSta = 1
+Accuracy = 0.02
+Quantile = 0.975
+Probability = 0.95
+Percentile = 0.975
+
+
+Chars =
+001 30 T ogo2
+002 24 T ogo4
+003 19 T oke4
+004 54 T oki100
+006 44 T omy325
+007 58 T ots100
+008 50 T ots101
+009 45 T ots104
+010 47 T ots107
+011 32 T ots2
+012 57 T ots201b
+013 55 T ots211
+014 57 T ots213
+015 15 T ots9
+016 45 T ssa197
+
+
+
+
+Stocks =     
+  133   30 92 Takhini   
+   14   30 92 Whitehorse                       
+  153   31 92 Wolf_R                           
+  564   31 92 100_Mile_R                       
+  129   31 92 Morley                           
+  127   31 92 Nisutlin                         
+   22   31 92 Teslin                           
+  446   31 92 Teslin_Lake                      
+  128   32 91 Big_Salmon                       
+  132   32 92 L_Salmon                         
+  393   32 91 N_Big_Salmon                     
+  131   32 92 Tatchun                          
+  356   33 92 Nordenskiold                     
+   10   33 92 Yukon_main                       
+  139   34 92 Blind_Cr                         
+  354   34 92 Earn                             
+  359   34 92 Glenlyon                         
+  360   34 92 Hoole                            
+  390   34 92 Kalzas                           
+  357   34 92 L_andB_Kalzas                    
+  144   34 92 Pelly                            
+  420   34 92 Ross_YT                          
+  140   35 92 Mayo                             
+  531   35 92 McQuesten                        
+  141   35 92 Stewart                          
+  255   36 92 Chandindu                        
+  151   36 92 Klondike                         
+  353   38 92 Kluane                           
+  392   38 92 Nisling                          
+
+
+Groups =
+    1     30         Yukon upper
+    1     31         Yukon Teslin
+    1     32         Yukon Carmacks
+    1     33         Yukon mainstem
+    1     34         Yukon Pelly
+    1     35         Yukon Stewart
+    1     36         Yukon Lower Canadian
+    1     38         Yukon White-Donjek
+    2     91         Salmon_R_Combined
+    2     92         Other_than_SalmonR
+
+
+
+
+  
