@@ -108,6 +108,14 @@ Then clean up your population names using the following:
 
 note: caution, if everything before the space is not unique between populations could cause populations to be merged. There are some checks in place to prevent this, but good to be aware of it.     
 
+### Use custom stock codes ###  
+If you are re-defining stock codes for a specific analysis in SNPs, you can't use the default stock code file. If you have an alternate file, you need to redefine `sc.base`. If you do, use:
+
+`sc.base <- "00_archive/custom_stockcodes.txt` 
+
+As an example.    
+
+
 ## 03. Characterize Data ##
 To find the number of samples, markers, alleles, and sample size per population, use the following:    
 `characterize_genepop(df = obj, pdf_width = 30, pdf_height = 6, cex_names = 0.3, N=30)`     
