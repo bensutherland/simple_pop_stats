@@ -43,20 +43,28 @@ calculate_FST <- function(format="genind", dat = obj_filt, separated = FALSE, cu
     print(pairwise.wc.fst)
     booted <- "booted"
     
-    # Create empty matrix
+    # Create empty matrix 
     new <- matrix(NA,nrow=nrow(pairwise.wc.fst$ll),ncol=ncol(pairwise.wc.fst$ll))
     
-    # Assign upper limit to upper triangle
+    
+    # Data wasn't populating correct - reverse order https://stackoverflow.com/questions/54576385/is-there-an-r-function-that-populates-the-lower-or-upper-diagonal-of-a-matrix)
+     # Assign lower limit to lower triangle
+    new[upper.tri(new)] <-pairwise.wc.fst$ll[upper.tri(pairwise.wc.fst$ll)]
+    
+    #Then transform
+    new <- t(new)
+    
+    # Then Assign upper limit to upper triangle
     new[upper.tri(new)] <-pairwise.wc.fst$ul[upper.tri(pairwise.wc.fst$ul)]
     
-    # Assign lower limit to lower triangle
-    new[lower.tri(new)] <-pairwise.wc.fst$ll[upper.tri(pairwise.wc.fst$ll)]
+ 
+
     
     # Assign the names to the column and rows of the new matrix
     dimnames(new) <- dimnames(pairwise.wc.fst$ll)
     
     # Rename the new matrix
-    pairwise.wc.fst <- new
+    pairwise.wc.fst <- as.data.frame(new,stringsAsFactors = FALSE)
     
     # Assign to the environment
     assign(x = "pairwise_wc_fst", value = pairwise.wc.fst, envir = .GlobalEnv)
@@ -73,7 +81,7 @@ calculate_FST <- function(format="genind", dat = obj_filt, separated = FALSE, cu
   # Save results
   if(separated==TRUE){
     
-    fn <- paste0(result.path, "gen_diff_wcfst_", sep_by, "_by_", name_by, ".csv")
+    fn <- paste0(result.path, "gen_diff_wcfst_", sep_by, "_by_", name_by, "_", booted, ".csv")
     
   }else{
     
