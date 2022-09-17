@@ -27,3 +27,5 @@
 *.genepop
 *~
 *.BCF
+03_results/*
+02_input_data/*
