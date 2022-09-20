@@ -15,6 +15,9 @@ genepop_to_rubias_SNP <- function(data = data, sample_type=sample_type){
   one_allele_data <- data[, grep(pattern = ".01", x = colnames(data), fixed = T)]
   #one_allele_data[1:5,1:5]
   
+  # It is possible to derive the second allele based on the information of the first allele only, e.g., if the first allele is present 0 times, 
+  # the second is present twice; 1 time, second is 1 time; 2 times, second is 0 times; missing data is NA
+  
   # Convert the genepop code back to homo/het info
   print("Converting from genepop codes to proton codes")
   for(i in 1:ncol(one_allele_data)){
@@ -30,7 +33,7 @@ genepop_to_rubias_SNP <- function(data = data, sample_type=sample_type){
   }
   #one_allele_data[1:15,1:10]
   
-  # Drop the .01 in the name for rubias format
+  # Drop the .01 in the column name for rubias format
   colnames(one_allele_data) <- gsub(pattern = "\\.01$", replacement = "", perl = T, x = colnames(one_allele_data))
   #one_allele_data[1:15,1:10]
   
