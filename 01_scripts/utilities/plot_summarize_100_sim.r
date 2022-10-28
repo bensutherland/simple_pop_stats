@@ -282,7 +282,7 @@ plot_summarize_100_sim <- function(axis_label="repunit",repunits_file = TRUE,
     mtext("Percent accuracy",side=1, line=1, las=1)
     
     # Add the y-axis title
-    mtext("CU or reporing group", side=2, line=6,las=0)
+    mtext("CU or reporing group", side=2, line=8,las=0)
 
     
     } else if (plot_colls == TRUE){

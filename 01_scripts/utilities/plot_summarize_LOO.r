@@ -156,7 +156,7 @@ plot_summarize_LOO_sim <- function(axis_label="repunit",repunits_file = TRUE,
     } else {
       
       if (pdf_png == "pdf"){
-          pdf(file = paste0("03_results/",plot_prefix,"_plot.pdf"),width=8,height=14)
+          pdf(file = paste0("03_results/",plot_prefix,"_plot.pdf"),width=8,height=11)
       } else if (pdf_png == "png"){
           png(filename=paste0("03_results/",plot_prefix,"_plot.png"),width = 8, height=11,units = "in",res=400)
       }
@@ -172,7 +172,7 @@ plot_summarize_LOO_sim <- function(axis_label="repunit",repunits_file = TRUE,
         yy <- barplot(as.matrix(t(subset(plot_temp2, select=c("freq",
                                                               "Repu_freq_2"))))
                       ,xlab = "", ylab = "",horiz=TRUE,col=c("white","grey")
-                      ,axes = FALSE, las=1,xlim=c(0,100),cex.names=0.6)
+                      ,axes = FALSE, las=1,xlim=c(0,100),cex.names=0.6,space=0.02)
     
         # Determine where counts should go. 
         xx <- plot_temp2$Repu_freq_2 + plot_temp2$freq + 1.5
@@ -193,7 +193,7 @@ plot_summarize_LOO_sim <- function(axis_label="repunit",repunits_file = TRUE,
         mtext("Percent accuracy",side=1, line=1, las=1)
     
         # Add the y-axis title
-        mtext("CU or reporing group", side=2, line=6,las=0)
+        mtext("CU or reporing group", side=2, line=8,las=0)
 
     } else {
       
