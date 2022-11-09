@@ -16,6 +16,9 @@ percent_missing_by_ind <- function(df= obj){
   dim(obj.df)
   obj.df[1:5,1:5]
   
+  # Replace pop ID with indiv ID
+  obj.df$pop <- rownames(obj.df)
+  
   # Add vector of percent missing per ind
   obj.df$ind.per.missing <- NA
   obj.df$ind.num.typed <- NA
