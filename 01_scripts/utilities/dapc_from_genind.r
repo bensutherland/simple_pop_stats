@@ -32,13 +32,13 @@ dapc_from_genind <- function(data = obj_pop_filt, plot_allele_loadings = TRUE
     
     ## Create a colours vector
     # Select only the pops that are in the data
-    colours <- filter(colours.df, collection %in% rownames(dapc$means))
+    dapc_pops.df <- as.data.frame(rownames(dapc$means))
+    colnames(dapc_pops.df) <- "pop" # note: this is the correct order
     
-    # Put into alphabetic order by collection (the plotting order, and legend order)
-    colours <- colours[order(colours$collection), ]
+    # Merge the DAPC pops file with the colours file, maintaining order from pops file
+    dapc_pops_colours.df <- merge(x = dapc_pops.df, colours.df, by.x = "pop", by.y = "collection", sort = F)
     
-    # Take only the colour (note: must NOT be factor to correctly plot)
-    ordered_colours <- colours$colour
+    # note: the colour must NOT be factor to correctly plot
     
   }
   
@@ -50,7 +50,7 @@ dapc_from_genind <- function(data = obj_pop_filt, plot_allele_loadings = TRUE
   scatter(dapc, scree.da = F, bg = "white", legend = T
           , txt.leg=rownames(dapc$means)
           , posi.leg = "topleft"
-          , col = ordered_colours
+          , col = dapc_pops_colours.df$colour
   )
   dev.off()
   
