@@ -1,5 +1,5 @@
 # Convert genepop data (SNP) to rubias input (where data = a genind file)
-genepop_to_rubias_SNP <- function(data = data, sample_type=sample_type, custom_format = FALSE){
+genepop_to_rubias_SNP <- function(data = data, sample_type=sample_type, custom_format = FALSE, micro_stock_code.FN = NULL){
   
   print("Converting SNP genepop to rubias format")
   
@@ -91,7 +91,7 @@ genepop_to_rubias_SNP <- function(data = data, sample_type=sample_type, custom_f
   
   #### Adding non-genetic columns #####
   print("Adding non-genetic columns")
-  annotate_rubias(two_allele_data = two_allele_data, sample_type = sample_type, custom_format = custom_format)
+  annotate_rubias(two_allele_data = two_allele_data, sample_type = sample_type, custom_format = custom_format, micro_stock_code.FN = micro_stock_code.FN)
   
 }
 

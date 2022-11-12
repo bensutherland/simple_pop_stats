@@ -290,7 +290,7 @@ This will output 'rubias_output_microsat.txt' in your results folder, which can 
 Please note: this currently assumes you have stock name followed by a four digit year identifier in your individual name.    
 
 If using custom format (i.e., not in MGL_GSI_SNP format), use the following (SNP only):            
-`genepop_to_rubias_SNP(data = obj, sample_type = "reference", custom_format = TRUE)`        
+`genepop_to_rubias_SNP(data = obj, sample_type = "reference", custom_format = TRUE, micro_stock_code.FN = micro_stock_code.FN)`         
 This will require that you have a stock code file (assign the variable `micro_stock_code.FN`), as well as a tab-delim file, `02_input_data/my_data_ind-to-pop_annot.txt` in the format of:       
 ```
 indiv   pop
