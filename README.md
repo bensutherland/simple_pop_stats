@@ -289,6 +289,16 @@ For sample_type - must be a choice of "reference" or "mixture" - in almost all c
 This will output 'rubias_output_microsat.txt' in your results folder, which can be used for simulations (below).     
 Please note: this currently assumes you have stock name followed by a four digit year identifier in your individual name.    
 
+If using custom format (i.e., not in MGL_GSI_SNP format), use the following (SNP only):            
+`genepop_to_rubias_SNP(data = obj, sample_type = "reference", custom_format = TRUE)`        
+This will require that you have a stock code file (assign the variable `micro_stock_code.FN`), as well as a tab-delim file, `02_input_data/my_data_ind-to-pop_annot.txt` in the format of:       
+```
+indiv   pop
+101 JPN
+1847    FRA
+```
+
+
 ## 13.b. Rubias utilities
 ### Re-add sample name (TTTT_LL) to an allele file
 Allele files are created using XXX, but in any case you won't have the sample name anymore. To add this back onto the dataframe, use:       

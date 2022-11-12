@@ -3,7 +3,13 @@
 #collection	repunit
 #12Mile_Creek	GoA
 
-annotate_rubias <- function(two_allele_data = two_allele_data, sample_type = sample_type, micro_stock_code.FN = micro_stock_code.FN){
+# NOTE: custom_format also requires a population-repunit interpretation file, AND
+# NOTE: custom_format = FALSE ; requires "02_input_data/my_data_ind-to-pop_annot.txt", a tab-delim file in form of: 
+#indiv  pop
+#101  JPN
+#1847 FRA
+
+annotate_rubias <- function(two_allele_data = two_allele_data, sample_type = sample_type, micro_stock_code.FN = micro_stock_code.FN, custom_format = custom_format){
   
   # Interactive read in stock name to repunit conversion (for use later)
   # Select stock code file
@@ -11,6 +17,7 @@ annotate_rubias <- function(two_allele_data = two_allele_data, sample_type = sam
   if(sample_type=="reference"){
     sc.df <- read.delim2(file = micro_stock_code.FN, header = T, sep = "\t", stringsAsFactors = F)
   }
+  
   #### Adding non-genetic columns #####
   
   # Create vectors to add to the data
@@ -21,14 +28,43 @@ annotate_rubias <- function(two_allele_data = two_allele_data, sample_type = sam
   print("Using stock code file to collect names and repunits")
   if(datatype == "SNP"){
     
-    # Remove everything after the first underscore to get the stock code (if in MGL_GSI_SNP format)
-    pop_code <- gsub(pattern = "\\_.*", replacement = "", x = indiv.vec)
-    pop_code <- as.data.frame(pop_code, stringsAsFactors = FALSE)
-    sc.df <- read.delim2(file = sc.base, header = TRUE, stringsAsFactors = F) # TODO: if mix, do X
-    pop_code <- merge(x = pop_code, y = sc.df, by.x = "pop_code", by.y = "Code", sort = F, all.x = TRUE)
+    # If in MGL_GSI_SNP format
+    if(custom_format == FALSE){
+      
+      # Remove everything after the first underscore to get the stock code
+      pop_code <- gsub(pattern = "\\_.*", replacement = "", x = indiv.vec)
+      pop_code <- as.data.frame(pop_code, stringsAsFactors = FALSE)
+      sc.df <- read.delim2(file = sc.base, header = TRUE, stringsAsFactors = F) # TODO: if mix, do X
+      pop_code <- merge(x = pop_code, y = sc.df, by.x = "pop_code", by.y = "Code", sort = F, all.x = TRUE)
+      
+    # If not in MGL_GSI_SNP format, it is necessary to provide an interpretation file
+    }else if(custom_format == TRUE){
+      
+      # Create dataframe with individual names
+      pop_code <- as.data.frame(indiv.vec, stringsAsFactors = FALSE)
+      
+      # Read in the samplename to pop interpretation file
+      sample_to_pop_interp.df <- read.table(file = "02_input_data/my_data_ind-to-pop_annot.txt"
+                                   , header = T, sep = "\t"
+                                   #, quote = F
+      )
+      
+      # Attach the pops to the individuals
+      pop_code <- merge(x = pop_code, y = sample_to_pop_interp.df, by.x = "indiv.vec", by.y = "indiv", all.x = T, sort = F)
+      
+      # Attach the repunits to the pops
+      pop_code <- merge(x = pop_code, y = sc.df, by.x = "pop", by.y = "collection", all.x = T, sort = F)
+      
+      head(pop_code)
+      colnames(pop_code) <- c("collection", "ind", "repunit")
+      pop_code <- pop_code[, c("ind", "collection", "repunit")]
+      
+    }
+    
     # Create vectors
     collection.vec <- pop_code$collection
     repunit.vec <- pop_code$repunit
+    
     
   }else if(datatype == "microsat"){
     
@@ -69,9 +105,6 @@ annotate_rubias <- function(two_allele_data = two_allele_data, sample_type = sam
       sc.df <- as.data.frame(collection.vec)
       sc.df$repunit <- NA
     }
-    
-    
-    
     
     
     # Data checking: 
