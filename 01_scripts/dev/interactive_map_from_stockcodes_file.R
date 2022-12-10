@@ -29,8 +29,10 @@ stock.codes <- read.delim(file="H:/Stock_Codes/Chum/cmStockCodesCU.txt")
 stock.codes <- stock.codes %>% drop_na(YLAT)
 
 map_points <- stock.codes %>%
-  st_as_sf(coords = c("XLONG","YLAT")) %>% 
+  st_as_sf(coords = c("XLONG","YLAT"), crs=4326) %>% 
   st_cast("POINT")
+
+map_points <- st_shift_longitude(map_points)
 
 map <- tm_shape(map_points) + 
   tm_dots(group="ProvState",
