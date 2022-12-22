@@ -4,7 +4,8 @@
 pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
                             , plot_eigen = TRUE, plot_allele_loadings = TRUE
                             , colour_file = NULL
-                            , retain_pca_obj = FALSE){
+                            , retain_pca_obj = TRUE
+                            , parallel = FALSE){
   
   print("Converting genind to genlight")
     
@@ -15,7 +16,7 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
   print(paste0("Executing PCA, retaining ", PCs_ret, " PCs"))
         
   # Perform PCA
-  pca1 <- glPca(my.data, nf = PCs_ret)
+  pca1 <- glPca(my.data, nf = PCs_ret, parallel = parallel)
   
   
   # As required, save out pca1 obj to retain data

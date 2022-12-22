@@ -210,11 +210,12 @@ pca_from_genind(data = obj_pop_filt
                        , plot_eigen=TRUE
                        , plot_allele_loadings=TRUE
                        , colour_file = NULL
-                       , retain_pca_obj = TRUE
+                       , retain_pca_obj = TRUE 
+                       , parallel = FALSE # set to TRUE to use parallel for pca
                        )       
 ```
 
-This will output results into `03_results`    
+This will output results into `03_results`, including `pca_scores_per_sample.txt` to know each sample's positions on the retained PCA axes (also see pca.obj in global environment).     
 
 Conduct DAPC using:      
 `dapc_from_genind(data = obj_pop_filt, plot_allele_loadings = TRUE, colour_file = NULL)`      
