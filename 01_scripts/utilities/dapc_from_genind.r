@@ -2,12 +2,13 @@
 # Will save out a plot into 03_results
 
 dapc_from_genind <- function(data = obj_pop_filt, plot_allele_loadings = TRUE
-                             , colour_file = NULL){
+                             , colour_file = NULL
+                             , n.pca = 10, n.da = 1){
   
   print("Executing DAPC")
   
   ## DAPC
-  dapc <- dapc(data, n.pca = 10, n.da = 1)
+  dapc <- dapc(data, n.pca = n.pca, n.da = n.da)
   
   # Bring in colour data
   if(is.null(colour_file)){

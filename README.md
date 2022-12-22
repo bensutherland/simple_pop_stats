@@ -218,10 +218,10 @@ pca_from_genind(data = obj_pop_filt
 This will output results into `03_results`, including `pca_scores_per_sample.txt` to know each sample's positions on the retained PCA axes (also see pca.obj in global environment).     
 
 Conduct DAPC using:      
-`dapc_from_genind(data = obj_pop_filt, plot_allele_loadings = TRUE, colour_file = NULL)`      
+`dapc_from_genind(data = obj_pop_filt, plot_allele_loadings = TRUE, colour_file = NULL, n.pca = 10, n.da = 1)`      
 
-To use custom colours, set the path to a csv file with header 'collection' and 'colour' containing the population name and colour name to set your custom colours.     
-
+Set the number PCA and DA axes to consider as needed (see ?dapc() for more details).       
+To use custom colours, set the path to a csv file with header 'collection' and 'colour' containing the population name and colour name to set your custom colours.      
 
 ## 09.1 Calculate relatedness
 First, convert data (SNP or microsat) from genind to relatedness format and calculate relatedness values:      
