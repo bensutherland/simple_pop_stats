@@ -91,6 +91,7 @@ update_pop_names <- function(df = obj, sep_by = "collection", name_by = "stockna
     
     # Safety check - are there duplicate values?
     print("The following stock codes are seen more than once:   ")
+    colnames(stock_codes.df)[which(colnames(stock_codes.df)=="StockCode")] <- "Code" #Temp solution to new header names
     stock_codes.df[duplicated(x = stock_codes.df$Code), "Code"]
     print("If there are duplicated values, this will cause the program to crash")
     
