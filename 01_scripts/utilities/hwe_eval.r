@@ -1,24 +1,47 @@
 hwe_eval <- function(data = obj, alpha = 0.01){
   
-  # Sourced from: https://grunwaldlab.github.io/Population_Genetics_in_R/Locus_Stats.html
+  # Run a HWE test on each population in the genepop using pegas
+  # Sourced / adapted from: https://grunwaldlab.github.io/Population_Genetics_in_R/Locus_Stats.html
   
+  # Test the hypothesis that genotype frequencies follow HWE
+  hwe.dat <- seppop(data) %>% lapply(hw.test, B = 0) # B is for number of reps for Monte Carlo, for regular HW test, set B = 0
+  # chi^2 test based on expected genotype frequencies calculated from the allelic frequencies
+  # Expect warnings if too much missing data
   
-  # Run a HWE test on each population in the genepop (pegas)
-  # Tests the hypothesis that genotype frequencies follow HWE
-  hwe.dat <- seppop(data) %>% lapply(hw.test, B = 0) # B is for permutations
-  # Currently only runs classical chi^2 test based on the expected genotype frequencies calculated from the allelic frequencies
-  # Expect warnings on too much missing data
-  
-  # Produces a list per population, with the following structure
-  # > head(hwe.dat[[1]])
-  # chi^2 df Pr(chi^2 >)
-  # CMRDDFW_10186  0.01373205  1 0.906714386
-  # CMRDDFW_112    0.29203727  1 0.588917945
-  # CMRDDFW_112379 8.23822206  1 0.004101729
-  # 
-  
+  # Output is a list with a slot per population; 
+  #  slot contains three columns, chi2 val, df, p-val of chi2
+  #  marker names are the rownames
+   
   # Reporting
-  print(paste0("There are a total of ", length(hwe.dat), " populations in your HWE test"))
+  print(paste0("There are a total of ", length(hwe.dat), " populations being evaluated"))
+  
+  # Extract and write out each population's per locus values to file and to global envir
+  popn.name <- NULL; output_per_locus.FN <- NULL; obj_per_locus.FN <- NULL ; popn_hwe.df <- NULL; mname <- NULL
+  for(i in 1:length(hwe.dat)){
+    
+    # obtain pop name
+    popn.name <- names(hwe.dat)[i]
+    
+    # Prepare output FN (text or global env)
+    output_per_locus.FN <- paste0("03_results", "/", "per_locus_hwe_", popn.name, ".txt")
+    obj_per_locus.FN    <- paste0("per_locus_hwe_", popn.name, ".df")
+    
+    # Collect df from list
+    popn_hwe.df <- as.data.frame(hwe.dat[[i]])
+    
+    # Add marker names
+    mname       <- rownames(popn_hwe.df)
+    popn_hwe.df <- cbind(mname, popn_hwe.df)
+    
+    # Save out result
+    write_delim(x = popn_hwe.df, file = output_per_locus.FN, delim = "\t", col_names = T)
+    
+    # Assign to global env for further use
+    assign(x = obj_per_locus.FN, value = popn_hwe.df, envir = .GlobalEnv)
+    
+    print(paste0("Per locus hwe p-values have been saved to the GlobalEnv as: ", obj_per_locus.FN))
+    
+  }
   
   # Subset using sapply to take the third column with all rows ("[" is used here to subset data and it is also a function)
   hwe.mat <- sapply(hwe.dat, "[", i = TRUE, j = 3)
