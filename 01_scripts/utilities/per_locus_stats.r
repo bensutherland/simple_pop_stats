@@ -4,14 +4,14 @@ per_locus_stats <- function( data = obj ){
   
   # Calculate per-locus Fst
   print("Calculating per-locus FST")
-  obj_fst <- Fst(as.loci(obj)) # extract the loci from genepop obj and calculate FST per locus
+  obj_fst <- Fst(as.loci(data)) # extract the loci from genepop obj and calculate FST per locus
   obj_fst <- as.data.frame(obj_fst)
   obj_fst$mname <- rownames(obj_fst)
   # produces a df (number loci x 3 (Fit, Fst, Fis))
   
   # Additional calculations
   print("Calculating additional per-locus stats")
-  obj_sum <- summary(obj) # this is a large genind summary, complex obj with names ("n", "n.by.pop", "loc.n.all", "pop.n.all", "NA.perc", "Hobs", "Hexp")
+  obj_sum <- summary(data) # this is a large genind summary, complex obj with names ("n", "n.by.pop", "loc.n.all", "pop.n.all", "NA.perc", "Hobs", "Hexp")
   
   # Obtain hobs
   hobs.df <- as.data.frame(obj_sum$Hobs)
