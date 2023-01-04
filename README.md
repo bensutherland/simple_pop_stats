@@ -217,6 +217,8 @@ pca_from_genind(data = obj_pop_filt
 
 This will output results into `03_results`, including `pca_scores_per_sample.txt` to know each sample's positions on the retained PCA axes (also see pca.obj in global environment).     
 
+Note that you can determine variance explained per axis by accessing pca.obj$eig, and can normalize to a percentage by simply taking the eigenvalue as a percentage of the sum of all eigenvalues. [more info from adegenet](https://adegenet.r-forge.r-project.org/files/PRstats/practical-MVAintro.1.0.pdf)       
+
 Conduct DAPC using:      
 `dapc_from_genind(data = obj_pop_filt, plot_allele_loadings = TRUE, colour_file = NULL, n.pca = 10, n.da = 1)`      
 
