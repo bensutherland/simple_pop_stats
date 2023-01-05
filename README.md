@@ -8,7 +8,7 @@ Also see Appendices for additional specific use-case instructions:
 
 Requirements:     
 <to do>
-Installation of related requires some special instructions on Windows. Follow tutorial:     
+Installation of related requires special instructions; for Windows or linux follow the tutorial, and for mac there are instructions in the readme for install from .tar.gz:             
 https://github.com/timothyfrasier/related
 
 ## 00. Setup ##
