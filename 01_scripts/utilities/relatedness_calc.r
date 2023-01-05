@@ -11,7 +11,7 @@ relatedness_calc <- function(data = obj_pop_filt, datatype = "SNP"){
   
   # Convert genlight to demerelate.df using demerelate
   print("Converting genlight to demerelate.df")
-  obj_demerelate.df <- gl2demerelate(gl = obj.gl)
+  obj_demerelate.df <- gl2demerelate(x = obj.gl)
   obj_demerelate.df[1:5,1:5]
   
   ## Relatedness: info on related input can be obtained here: https://rdrr.io/rforge/related/man/related-package.html
