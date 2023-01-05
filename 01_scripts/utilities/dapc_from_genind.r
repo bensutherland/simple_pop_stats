@@ -3,7 +3,11 @@
 
 dapc_from_genind <- function(data = obj_pop_filt, plot_allele_loadings = TRUE
                              , colour_file = NULL
-                             , n.pca = 10, n.da = 1){
+                             , n.pca = 10, n.da = 1
+                             , scree.da = TRUE
+                             , scree.pca = FALSE, posi.pca = "topright"
+                             , dapc.width = 7, dapc.height = 5
+                             ){
   
   print("Executing DAPC")
   
@@ -47,11 +51,12 @@ dapc_from_genind <- function(data = obj_pop_filt, plot_allele_loadings = TRUE
   
   ## Plot DAPC
   filename <- paste("03_results/", "sample_DAPC.pdf", sep = "")
-  pdf(file = filename, width = 10, height = 10)
-  scatter(dapc, scree.da = F, bg = "white", legend = T
-          , txt.leg=rownames(dapc$means)
-          , posi.leg = "topleft"
+  pdf(file = filename, width = dapc.width, height = dapc.height)
+  scatter(dapc
           , col = dapc_pops_colours.df$colour
+          , scree.da = scree.da
+          , bg = "white", legend = T, txt.leg=rownames(dapc$means), posi.leg = "topleft"
+          , scree.pca = scree.pca, posi.pca = posi.pca
   )
   dev.off()
   
