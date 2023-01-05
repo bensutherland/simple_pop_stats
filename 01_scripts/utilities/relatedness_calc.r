@@ -28,6 +28,7 @@ relatedness_calc <- function(data = obj_pop_filt, datatype = "SNP"){
   obj_demerelate.df <- obj_demerelate.df[, -which(colnames(x = obj_demerelate.df)=="Population")]
   
   # Convert NA to "0" for related format
+  print("Converting NAs to 0 for related format")
   obj_demerelate.df[is.na(obj_demerelate.df)] <- 0 
   str(obj_demerelate.df[1:10,1:10])
   
@@ -106,6 +107,7 @@ relatedness_calc <- function(data = obj_pop_filt, datatype = "SNP"){
                        , quellergt = 2
                        , wang = 2
   ) # all settings default from website
+  # note: if point estimates and 95% CI are desired, use '2' for each estimator
   
   
   # Save out results
