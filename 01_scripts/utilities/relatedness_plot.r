@@ -12,9 +12,9 @@ relatedness_plot <- function(file = "full_path", same_pops = TRUE, plot_by = "na
   
   ## The results are in the following formats
   # relatedness: df w/ all pairwise est. of relatedness
-  # 1. integer for pair #; 2. indiv 1 ID; 3. indiv 2 ID; 4. group assignment; 5-11. relatedness estim.
-  # delta7 & delta8: df w/ delta7 & delta8 est. for relatedness estim. that use it
-  # inbreeding: df w/ inbreeding est. per indiv., as used in relatedness est (one row per indiv)
+  # output$relatedness: pair.no, ind1.id, ind2.id, group, trioml, wang, lynchli, lynchrd, ritland, quellergt, dyadml
+  # output$delta7 (or delta8): df w/ delta7 estimator
+  # output$inbreeding: df w/ inbreeding est. per indiv., as used in relatedness est (one row per indiv)
   
   # See what variables are available for relatedness output
   head(output$relatedness, n = 5)
@@ -34,16 +34,19 @@ relatedness_plot <- function(file = "full_path", same_pops = TRUE, plot_by = "na
             , rel.quellergt
             , group
     )
-    , stringsAsFactors = F)
+    , stringsAsFactors = F
+    )
   
-  # Format sections of df
-  output.df$rel.wang <- as.numeric(output.df$rel.wang)
-  output.df$rel.ritland <- as.numeric(output.df$rel.ritland)
+  # Format sections of df as numeric
+  output.df$rel.wang      <- as.numeric(output.df$rel.wang)
+  output.df$rel.ritland   <- as.numeric(output.df$rel.ritland)
   output.df$rel.quellergt <- as.numeric(output.df$rel.quellergt)
   
   str(output.df)
   
   # Make two vectors showing the pops in the contrast
+  print("These are the types of group comparisons: ")
+  print(unique(output.df$group))
   output.df <- separate(data = output.df, col = group, into = c("pop1", "pop2"), sep = 2, remove = F) # split
   str(output.df)
   
@@ -98,6 +101,7 @@ relatedness_plot <- function(file = "full_path", same_pops = TRUE, plot_by = "na
       } else if(plot_by=="codes" | same_pops=="FALSE"){
       
         print("Keeping stock codes")
+        
       }
     
   } else if(datatype=="microsat"){
