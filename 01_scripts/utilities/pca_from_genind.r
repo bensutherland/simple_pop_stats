@@ -106,6 +106,8 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
   p <- p + scale_color_manual(name = "collection", values = ordered_colours)
   p <- p + geom_hline(yintercept = 0) 
   p <- p + geom_vline(xintercept = 0) 
+  p <- p + xlab(paste('PC1 ', round(pca1$eig[1], digits = 2), '%'))
+  p <- p + ylab(paste('PC2 ', round(pca1$eig[2], digits = 2), '%'))
   p <- p + theme_bw()
   
   p
@@ -124,7 +126,9 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
     p <- p + stat_ellipse(level = 0.95, size = 1)
     p <- p + scale_color_manual(name = "collection", values = ordered_colours)
     p <- p + geom_hline(yintercept = 0) 
-    p <- p + geom_vline(xintercept = 0) 
+    p <- p + geom_vline(xintercept = 0)
+    p <- p + xlab(paste('PC1 ', round(pca1$eig[1], digits = 2), '%'))
+    p <- p + ylab(paste('PC3 ', round(pca1$eig[3], digits = 2), '%'))
     p <- p + theme_bw()
     
     p
