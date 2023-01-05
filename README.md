@@ -220,10 +220,22 @@ This will output results into `03_results`, including `pca_scores_per_sample.txt
 Note that you can determine variance explained per axis by accessing pca.obj$eig, and can normalize to a percentage by simply taking the eigenvalue as a percentage of the sum of all eigenvalues. [more info from adegenet](https://adegenet.r-forge.r-project.org/files/PRstats/practical-MVAintro.1.0.pdf)       
 
 Conduct DAPC using:      
-`dapc_from_genind(data = obj_pop_filt, plot_allele_loadings = TRUE, colour_file = NULL, n.pca = 10, n.da = 1)`      
+```
+
+dapc_from_genind(data = obj_pop_filt
+                , plot_allele_loadings = TRUE  # plot and export the discrim. fn. locus variance contributions? 
+                , colour_file = NULL           # use custom colours 
+                , n.pca = 10, n.da = 1         # number PC axes to use and discriminant functions to retain
+                , scree.da = TRUE              # plot scree plot for DF
+                , scree.pca = TRUE, posi.pca = "topright"     # plot PCA scree plot
+                , dapc.width = 7, dapc.height = 5             # PDF filesize for scatterplot
+                ) 
+```
 
 Set the number PCA and DA axes to consider as needed (see ?dapc() for more details).       
 To use custom colours, set the path to a csv file with header 'collection' and 'colour' containing the population name and colour name to set your custom colours.      
+Note: if you retain more than one discrimant function, the allele loading plot will plot variance contributions of the first two discriminant functions only.       
+
 
 ## 09.1 Calculate relatedness
 First, convert data (SNP or microsat) from genind to relatedness format and calculate relatedness values:      
