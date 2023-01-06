@@ -246,8 +246,12 @@ Note: if you are using microsat data, this will depend that you have run 'Rename
 
 Second, plot your results:      
 `relatedness_plot(file = "03_results/kinship_analysis_<date>.Rdata", same_pops = TRUE, plot_by = "names")`     
+
+note: if you don't want to convert the current pop designations (e.g., if you don't have a stock code file), then set `plot_by = "codes` to avoid any conversion.       
+
 ...where you can use either "names" or "codes" if using only same-on-same.      
 ...and if you set `same_pops` to FALSE, you will get all pops pairwise comparisons. (but can't use names)      
+
 
 ## 09.2 Population marker HWE evaluation summary
 To run a test of whether markers are following Hardy-Weinberg proportions, use the following function to find the number and percentage of markers per population that deviate from H-W proportions:          
