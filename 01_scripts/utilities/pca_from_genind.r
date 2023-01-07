@@ -106,8 +106,8 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
   p <- p + scale_color_manual(name = "collection", values = ordered_colours)
   p <- p + geom_hline(yintercept = 0) 
   p <- p + geom_vline(xintercept = 0) 
-  p <- p + xlab(paste('PC1 ', round(pca1$eig[1], digits = 2), '%'))
-  p <- p + ylab(paste('PC2 ', round(pca1$eig[2], digits = 2), '%'))
+  p <- p + xlab(paste0('PC1 (', round(pca1$eig[1] / sum(pca1$eig) * 100, digits = 1), '%)'))
+  p <- p + ylab(paste0('PC2 (', round(pca1$eig[2] / sum(pca1$eig) * 100, digits = 1), '%)'))
   p <- p + theme_bw()
   
   p
@@ -118,6 +118,7 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
   dev.off()
  
   # Determine PCs to include depending on how many PCs retained
+  # If there were three retained PCs, also plot PC1 vs PC3
   if(PCs_ret == 3){
     
     set.seed(9)
@@ -127,8 +128,8 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
     p <- p + scale_color_manual(name = "collection", values = ordered_colours)
     p <- p + geom_hline(yintercept = 0) 
     p <- p + geom_vline(xintercept = 0)
-    p <- p + xlab(paste('PC1 ', round(pca1$eig[1], digits = 2), '%'))
-    p <- p + ylab(paste('PC3 ', round(pca1$eig[3], digits = 2), '%'))
+    p <- p + xlab(paste0('PC1 (', round(pca1$eig[1] / sum(pca1$eig) * 100, digits = 1), '%)'))
+    p <- p + ylab(paste0('PC3 (', round(pca1$eig[3] / sum(pca1$eig) * 100, digits = 1), '%)'))
     p <- p + theme_bw()
     
     p
@@ -138,6 +139,7 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
     print(p)
     dev.off()
 
+  # If there were > 3 retained PCs, also plot PC3 vs PC4
   }else if(PCs_ret > 3){
     
     set.seed(9)
@@ -147,6 +149,8 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
     p <- p + scale_color_manual(name = "collection", values = ordered_colours)
     p <- p + geom_hline(yintercept = 0) 
     p <- p + geom_vline(xintercept = 0) 
+    p <- p + xlab(paste0('PC3 (', round(pca1$eig[3] / sum(pca1$eig) * 100, digits = 1), '%)'))
+    p <- p + ylab(paste0('PC4 (', round(pca1$eig[4] / sum(pca1$eig) * 100, digits = 1), '%)'))
     p <- p + theme_bw()
     
     p
