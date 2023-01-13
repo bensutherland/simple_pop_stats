@@ -50,7 +50,7 @@ hwe_eval <- function(data = obj, alpha = 0.01){
   print("Summarizing for the following number of markers (rows) and populations (columns): ")
   print(dim(hwe.mat))
   print("p-values retained in a matrix, a subset shown below")
-  hwe.mat[1:5,1:2]
+  print(head(hwe.mat))
   
   print("Confirm the p-values from a slot of the original list")
   head(hwe.dat[[1]])
