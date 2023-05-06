@@ -4,10 +4,11 @@
 #  Currently only operating on **two genepops**
 # B. Sutherland (SBIO), initialized 2022-11-09
 
-comp_tech_reps <- function(path="", format_type="amplitools", max_missing=0.5){
+comp_tech_reps <- function(format_type="amplitools", max_missing=0.5){
   
   # Provide warning
   print("** this is an in-development script and only works on **two genepops** for comparison so far. More development is planned **")
+  print("This will operate on any *.gen files in '02_input_data/")
   
   # Read in all genepops in source folder
   input.FN <- list.files(path = "02_input_data/", pattern = "*.gen")
@@ -49,7 +50,7 @@ comp_tech_reps <- function(path="", format_type="amplitools", max_missing=0.5){
   common_loci <- intersect(x = marker.list[[1]], y = marker.list[[2]])
   
   # Reporting
-  print(paste0("There are ", length(common_loci), " in your marker list"))
+  print(paste0("There are ", length(common_loci), " markers in your marker list"))
   
   # Reporting
   print("Limiting each genepop to the common loci")
@@ -63,7 +64,7 @@ comp_tech_reps <- function(path="", format_type="amplitools", max_missing=0.5){
     
   obj
   
-  print(indNames(obj))
+  #print(indNames(obj))
   
   
   #### 01. Identify which is the best indiv to keep when replicates ####
@@ -119,14 +120,14 @@ comp_tech_reps <- function(path="", format_type="amplitools", max_missing=0.5){
       
     }else{
       
-      print("Only one individual, not keeping as tech rep")
+      #print("Only one individual, not keeping as tech rep")
       
     }
     
   }
   
   print("The following is the list of samples with the most typed markers that will be the individual to keep")
-  print(keep.vec)
+  #print(keep.vec)
   
   # Retain only the best from the obj
   print("Retaining only the best from the obj")
@@ -142,7 +143,7 @@ comp_tech_reps <- function(path="", format_type="amplitools", max_missing=0.5){
   
   #### Keeping Replicates ####
   print("The following is the list of samples with the two best tech reps to keep for comparing technical replicates")
-  print(tech_rep.keep.vec)
+  #print(tech_rep.keep.vec)
   
   # Filter samples if one has more than the allowable missing data
   print(paste0("Checking replicates to ensure both have less than ", max_missing * 100 , "% missing values" ))
@@ -227,11 +228,11 @@ comp_tech_reps <- function(path="", format_type="amplitools", max_missing=0.5){
   
   for(i in 1:length(tech_rep_indivs)){
     
-    print(i)
+    #print(i)
     
     # Identify the sample of interest
     soi <- tech_rep_indivs[i]
-    print(paste0("Comparing genotypes of ", soi))
+    #print(paste0("Comparing genotypes of ", soi))
     
     # Obtain the genotype and sample ID data for the sample of interest
     slice <- obj.df[obj.df$indiv==soi, ]
