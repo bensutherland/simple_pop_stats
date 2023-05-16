@@ -40,24 +40,27 @@ annotate_rubias <- function(two_allele_data = two_allele_data, sample_type = sam
     # If not in MGL_GSI_SNP format, it is necessary to provide an interpretation file
     }else if(custom_format == TRUE){
       
-      # Create dataframe with individual names
-      pop_code <- as.data.frame(indiv.vec, stringsAsFactors = FALSE)
+      # Create dataframe with individual names, in the order of the genotype data, two_allele_data
+      pop_code <- as.data.frame(rownames(x = two_allele_data), stringsAsFactors = FALSE)
+      colnames(pop_code) <- "indiv.vec"
       
-      # Read in the samplename to pop interpretation file
+      # Read in the samplename-to-pop interpretation file
       sample_to_pop_interp.df <- read.table(file = "02_input_data/my_data_ind-to-pop_annot.txt"
                                    , header = T, sep = "\t"
                                    #, quote = F
-      )
+      ) # Note: this df is not assumed to be in the order of the genotypes df
       
-      # Attach the pops to the individuals
+      # Add repunit to the interp (note: important to do it this way to not have a shuffle later)
+      sample_to_pop_interp.df <- merge(x = sample_to_pop_interp.df, y = sc.df, by.x = "pop", by.y = "collection", all.x = T, sort = F)
+      # note: this does not hold the order, and indivs are shuffled. However, it is also not in the order of the samples, so it is OK here. 
+      
+      # Attach the population ID to the *ordered* indivs (note: pop_code is in the correct order, and is same as the genotype df)
       pop_code <- merge(x = pop_code, y = sample_to_pop_interp.df, by.x = "indiv.vec", by.y = "indiv", all.x = T, sort = F)
-      
-      # Attach the repunits to the pops
-      pop_code <- merge(x = pop_code, y = sc.df, by.x = "pop", by.y = "collection", all.x = T, sort = F)
+      #cbind(pop_code$pop, pop_code$indiv.vec, rownames(x = two_allele_data)) # should match above TODO: use as a check
       
       head(pop_code)
-      colnames(pop_code) <- c("collection", "ind", "repunit")
-      pop_code <- pop_code[, c("ind", "collection", "repunit")]
+      colnames(pop_code) <- c("ind", "collection", "repunit")
+      head(pop_code)
       
     }
     
@@ -128,11 +131,19 @@ annotate_rubias <- function(two_allele_data = two_allele_data, sample_type = sam
   
   # Add these together followed by genetic data
   all_data.df <- cbind(sample_type.vec, collection.vec, repunit.vec, indiv.vec, two_allele_data)
+  all_data.df[1:5,1:9]
   colnames(all_data.df)[colnames(all_data.df)=="sample_type.vec"] <- "sample_type"
   colnames(all_data.df)[colnames(all_data.df)=="collection.vec"] <- "collection"
   colnames(all_data.df)[colnames(all_data.df)=="repunit.vec"] <- "repunit"
   colnames(all_data.df)[colnames(all_data.df)=="indiv.vec"] <- "indiv"
 
+  ## Data check
+  print("Confirming that the output individual names are matched and in the same order as the input genotype df, for all samples")
+  print(table(all_data.df$indiv==rownames(two_allele_data)))
+  
+  ### TODO: should add a data check based on the above here with a stop command if the original order (i.e., two_allele_data)
+  ###         doesn't match the output order (i.e., all_data.df)
+  
   assign(x = "rubias_data.df", value = all_data.df, envir = .GlobalEnv)
   
   # Create filename
