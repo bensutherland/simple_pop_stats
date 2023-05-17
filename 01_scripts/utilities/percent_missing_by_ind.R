@@ -41,6 +41,11 @@ percent_missing_by_ind <- function(df= obj){
   head(obj.df)
   tail(obj.df)
   
+  # Write out results to file
+  print("Writing out missing data per individual to file as '03_results/missing_data_per_indiv.csv'")
+  write.csv(x = obj.df, file = "03_results/missing_data_per_indiv.csv", row.names = F)
+  
+  # Save out results to the global environment
   print("The output object will be saved as 'missing_data.df'")
   assign(x = "missing_data.df", value = obj.df, envir = .GlobalEnv)
   
