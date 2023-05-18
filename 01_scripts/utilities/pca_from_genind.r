@@ -5,7 +5,8 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
                             , plot_eigen = TRUE, plot_allele_loadings = TRUE
                             , colour_file = NULL
                             , retain_pca_obj = TRUE
-                            , parallel = FALSE){
+                            , parallel = FALSE
+                            ){
   
   print("Converting genind to genlight")
     
@@ -22,12 +23,13 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
   # As required, save out pca1 obj to retain data
   if(retain_pca_obj == TRUE){
     
+    # Keep PCA object in global enviro
     print("Keeping pca.obj in global enviro")
     assign(x = "pca.obj", value = pca1, envir = .GlobalEnv)
     
+    # Keep per sample PC loading values
     print("Writing out per sample PC loading values")
     pca_scores_per_sample.df <- as.data.frame(pca.obj$scores)
-    # pca_scores_per_sample.df$sample <- rownames(pca_scores_per_sample.df)
     pca_scores_per_sample.df <- cbind(rownames(pca_scores_per_sample.df), pca_scores_per_sample.df)
     colnames(pca_scores_per_sample.df)[1] <- "sample"
     head(pca_scores_per_sample.df)
@@ -72,14 +74,17 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
   
   # Plot w/ ggplot
   pca.scores <- as.data.frame(pca1$scores) # make dataframe for ggplot
-  pca.scores$pop <- as.character(pop(data))
+  pca.scores$pop <- as.character(pop(data)) # note: assumes constant order of scores and originating pop
+  
+  # TODO: /start/ not clear what this does
   pca.scores <- pca.scores[order(pca.scores$pop),] # add population to df
+  # TODO: /end/   not clear what this does
+  
   head(pca.scores)
   
   # Create an eigenvalues df for plotting eigenvalues
   eig <- as.data.frame(pca1$eig)
   colnames(eig) <- "eig"
-  
   
   # Bring in colours (old method, works well for base scatterplot)
   # pca.scores <- merge(x = pca.scores, y = colours, by.x = "pop", by.y = "collection", all.x = T, sort = F)
@@ -116,6 +121,14 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
   pdf(file = paste0(result.path, "pca_samples_PC1_v_PC2.pdf"), width = 11.5, height = 7.5)
   print(p)
   dev.off()
+  
+  # Keep plot for later use
+  if(retain_pca_obj==TRUE){
+    
+    print("Saving a PCA plot as 'pc1_v_pc2.plot' into the enviro")
+    assign(x = "pc1_v_pc2.plot", value = p, envir = .GlobalEnv)
+    
+  }
  
   # Determine PCs to include depending on how many PCs retained
   # If there were three retained PCs, also plot PC1 vs PC3
@@ -138,6 +151,14 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
     pdf(file = paste0(result.path, "pca_samples_PC1_v_PC3.pdf"), width = 11.5, height = 7.5)
     print(p)
     dev.off()
+    
+    # Keep plot for later use
+    if(retain_pca_obj==TRUE){
+      
+      print("Saving a PCA plot as 'pc1_v_pc3.plot' into the enviro")
+      assign(x = "pc1_v_pc3.plot", value = p, envir = .GlobalEnv)
+      
+    }
 
   # If there were > 3 retained PCs, also plot PC3 vs PC4
   }else if(PCs_ret > 3){
@@ -159,6 +180,14 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
     pdf(file = paste0(result.path, "pca_samples_PC3_v_PC4.pdf"), width = 11.5, height = 7.5)
     print(p)
     dev.off()
+    
+    # Keep plot for later use
+    if(retain_pca_obj==TRUE){
+      
+      print("Saving a PCA plot as 'pc3_v_pc4.plot' into the enviro")
+      assign(x = "pc3_v_pc4.plot", value = p, envir = .GlobalEnv)
+      
+    }
     
   }
   
@@ -186,6 +215,7 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
     pdf(file = paste0(result.path, "pca_eigenvalues.pdf"), width = 4, height = 4)
     barplot(pca1$eig, col = heat.colors(50), main = "PCA Eigenvalues")
     dev.off()
+  
     }
   
   if(plot_allele_loadings==TRUE){
