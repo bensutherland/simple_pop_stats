@@ -7,20 +7,27 @@ drop_loci <- function(df= obj, drop_monomorphic = TRUE, drop_file = NULL){
   
   # Drop monomorphic loci
   if(drop_monomorphic==TRUE){
-    loci_to_drop <- which(nAll(df)==1) # identify which are monomorphic
-    loci_all_na <- which(nAll(df)==NA)
-    # Reporting
-    print(paste0("Dropping monomorphic markers, in total: ", length(loci_to_drop), " markers"))
-    print(paste0("Dropping untyped markers, in total: ", length(loci_all_na), " markers"))
-    # Avoid an == 0 error
-    if(length(loci_to_drop)>0){
-        df <- df[loc=-loci_to_drop]
-    }
-    if(length(loci_all_na)>0){
-      df <- df[loc=-loci_all_na]
-    }
     
-    print(paste0("After dropping monomorphic markers, there are ", length(locNames(df)), " markers"))
+    # Which loci are monomorphic? 
+    loci_to_drop <- which(nAll(df)==1)
+    
+    # Which loci are completely untyped? 
+    loci_all_na  <- which(is.na(nAll(df)))
+    
+    # Reporting
+    print(paste0("Dropping ", length(loci_to_drop), " monomorphic markers"))
+    
+    print(paste0("Dropping ", length(loci_all_na) , " completely untyped markers"))
+    
+    # Combine loci to drop
+    remove_loci <- c(names(loci_to_drop), names(loci_all_na))
+    
+    # Which loci to keep? 
+    keep_loci <- setdiff(x = locNames(df), y = remove_loci)
+    
+    df <- df[,loc = keep_loci]
+    
+    print(paste0("After dropping monomorphic and untyped markers, there are ", nLoc(df), " markers remaining"))
     
   }
   
@@ -50,7 +57,9 @@ drop_loci <- function(df= obj, drop_monomorphic = TRUE, drop_file = NULL){
   }
   
   print("The output object will be saved as 'obj_filt'")
+  
   assign(x = "obj_filt", value = df, envir = .GlobalEnv)
+  
   assign(x = "drop_loci_file", value = drop_file, envir = .GlobalEnv)
   
 }
