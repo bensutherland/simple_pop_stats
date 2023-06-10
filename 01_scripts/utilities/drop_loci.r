@@ -9,7 +9,7 @@ drop_loci <- function(df= obj, drop_monomorphic = TRUE, drop_file = NULL){
   if(drop_monomorphic==TRUE){
     
     # Which loci are monomorphic? 
-    loci_to_drop <- which(nAll(df)==1)
+    loci_to_drop <- which(nAll(df, onlyObserved = TRUE)==1)
     
     # Which loci are completely untyped? 
     loci_all_na  <- which(is.na(nAll(df)))
