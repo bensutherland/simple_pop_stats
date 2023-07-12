@@ -109,10 +109,19 @@ relatedness_calc <- function(data = obj_pop_filt, datatype = "SNP"){
   ) # all settings default from website
   # note: if point estimates and 95% CI are desired, use '2' for each estimator
   
-  
   # Save out results
   date <- format(Sys.time(), "%Y-%m-%d")
+  
+  # Write out relatedness dataframe to file
+  write.table(x = output$relatedness
+              , file = paste0(result.path, "pairwise_relatedness_output_all_", date, ".txt")
+              , row.names = F
+              , quote = F
+              , sep = "\t"
+              )
+  
+  # Save out full results
   assign(x = "output", value = output, envir = .GlobalEnv)
   save.image(file = paste0(result.path, "kinship_analysis_", date, ".Rdata"))
-  
+
 }
