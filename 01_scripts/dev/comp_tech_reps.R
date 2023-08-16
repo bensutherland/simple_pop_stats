@@ -7,14 +7,18 @@
 comp_tech_reps <- function(format_type="amplitools", max_missing=0.5){
   
   # Provide warning
-  print("** this is an in-development script and only works on **two genepops** for comparison so far. More development is planned **")
+  print("** This is an in-development script and only works on **two genepops** for comparison so far. More development is planned **")
   print("This will operate on any *.gen files in '02_input_data/")
   
   # Read in all genepops in source folder
   input.FN <- list.files(path = "02_input_data/", pattern = "*.gen")
   
-  genepop.list <- list()
+  # Retain only two, current script limitation
+  print("Only keeping two input files, as more than two not implemented yet")
+  input.FN <- head(input.FN, n = 2)
   
+  # Read in genepops into a list
+  genepop.list <- list()
   for(i in 1:length(input.FN)){
     
     genepop.list[[input.FN[i]]] <- read.genepop(file = paste0("02_input_data/", input.FN[i])
@@ -24,9 +28,13 @@ comp_tech_reps <- function(format_type="amplitools", max_missing=0.5){
   }
   
   # Reporting
-  print(paste0("Loaded ", length(genepop.list), " genepop files to the genepop list"))
+  print(paste0("Loaded ", length(genepop.list), " genepop files into the genepop list: "))
+  print(names(genepop.list))
   
   ### Determine common markers to all obj
+  print("Only considering markers common to all genepop datasets")
+  
+  # Identify which markers are in each genepop
   marker.list <- list()
   for(i in 1:length(genepop.list)){
     
@@ -34,19 +42,7 @@ comp_tech_reps <- function(format_type="amplitools", max_missing=0.5){
     
   }
   
-  
-  #### TODO ###
-  # Stop if more than two genepops (not yet implemented)
-  if(length(marker.list)>2){
-    
-    stop("This function cannot yet handle more than two genepops")
-    
-  }else if(length(marker.list)==2){
-    
-    print("There are two genepops in your marker list")
-    
-  }
-  
+  # Identify which markers are common to both lists
   common_loci <- intersect(x = marker.list[[1]], y = marker.list[[2]])
   
   # Reporting
@@ -67,8 +63,7 @@ comp_tech_reps <- function(format_type="amplitools", max_missing=0.5){
   #print(indNames(obj))
   
   
-  #### 01. Identify which is the best indiv to keep when replicates ####
-  
+  #### 01. Identify which is the best indiv to keep when there are more than two replicates ####
   # Percent missing per individual
   percent_missing_by_ind(df = obj)
   
@@ -89,13 +84,14 @@ comp_tech_reps <- function(format_type="amplitools", max_missing=0.5){
     
   }
   
-  # Per individual, find which tech replicate has the most typed markers
+  ## Per individual, find which tech replicate has the most typed markers
+  # What are the unique individual names? 
   indiv <- unique(missing_data.df$indiv)
   print(paste0("Finding the best replicate for ", length(indiv), " unique individuals from "
                , nrow(missing_data.df), " total individuals")
         )
   
-  # Loop
+  # Loop to identify which tech reps are best for the comparison
   ioi <- NULL; slice <- NULL; keep.vec <- NULL; keep <- NULL; tech_rep.keep <- NULL; tech_rep.keep.vec <- NULL
   for(i in 1:length(indiv)){
     
@@ -126,7 +122,7 @@ comp_tech_reps <- function(format_type="amplitools", max_missing=0.5){
     
   }
   
-  print("The following is the list of samples with the most typed markers that will be the individual to keep")
+  #print("The following is the list of samples with the most typed markers that will be the individual to keep")
   #print(keep.vec)
   
   # Retain only the best from the obj
@@ -142,7 +138,7 @@ comp_tech_reps <- function(format_type="amplitools", max_missing=0.5){
   
   
   #### Keeping Replicates ####
-  print("The following is the list of samples with the two best tech reps to keep for comparing technical replicates")
+  #print("The following is the list of samples with the two best tech reps to keep for comparing technical replicates")
   #print(tech_rep.keep.vec)
   
   # Filter samples if one has more than the allowable missing data
@@ -194,12 +190,12 @@ comp_tech_reps <- function(format_type="amplitools", max_missing=0.5){
   dim(obj.df)
   
   # Observe data again
-  print(obj.df[1:10, 577:587])
-  ## note: this could be improved to be more flexible for different numbers of markers
+  print(obj.df[1:10, (dim(obj.df)[2]-5):dim(obj.df)[2]])
   
   # Provide warning
   print("Warning: this system is currently depending on the amplitools format for sample IDs, ")
   print("...which means indiv are named by <run>__<barcode>__<indiv>")
+  print("Separating indiv ID into components")
   
   if(format_type=="amplitools"){
     
@@ -207,12 +203,10 @@ comp_tech_reps <- function(format_type="amplitools", max_missing=0.5){
     obj.df <- separate(data = obj.df, col = "indiv", into = c("run", "barcode", "indiv"), sep = "__", remove = F)
     
     dim(obj.df)
-    print(obj.df[1:10, 577:589])
-    ## note: this could be improved to be more flexible for different numbers of markers
+    print(obj.df[1:10, (dim(obj.df)[2]-5):dim(obj.df)[2]])
     
     # Identify the indiv IDs that have a technical replicate present
-    #tech_rep_indivs <- dimnames(table(obj.df$indiv)==2)[[1]] 
-    tech_rep_indivs <- names(table(obj.df$indiv)==2) # easier
+    tech_rep_indivs <- names(table(obj.df$indiv)==2)
     
   }else{
     
@@ -225,6 +219,7 @@ comp_tech_reps <- function(format_type="amplitools", max_missing=0.5){
   # Loop to count matching genotypes per marker per individual
   soi <- NULL; slice <- NULL; result.list <- list(); all_result.df <- NULL; 
   num_false <- NULL; num_true <- NULL; percent_true <- NULL; num_typed_in_both <- NULL
+  geno_match_tally <- NULL
   
   for(i in 1:length(tech_rep_indivs)){
     
@@ -246,6 +241,8 @@ comp_tech_reps <- function(format_type="amplitools", max_missing=0.5){
     
     # Drop column if any NA (need both vals to be able to see if it is equal)
     slice <- slice[ , colSums(is.na(slice))==0]
+    #dim(slice)
+    #slice[, 1:5]
     
     # Compare the genotypes in an NA-safe way
     num_true  <- as.numeric(table(mapply(identical, slice[1,], slice[2,]))[2])
@@ -271,6 +268,30 @@ comp_tech_reps <- function(format_type="amplitools", max_missing=0.5){
       all_result.df <- cbind(all_result.df, result.df)
       
     }
+    
+    # Determine the different types of concordance or discordance
+    slice[1:2,1:5]
+    t.slice <- t(slice)
+    t.slice[1:5,1:2]
+    t.slice <- paste0(t.slice[,1], "__", t.slice[,2])
+    t.slice.df <- t(as.data.frame(table(t.slice)))
+    colnames(t.slice.df) <- t.slice.df["t.slice",]
+    t.slice.df <- as.data.frame(t.slice.df)
+    rownames(t.slice.df)[2] <- soi
+    
+    
+    # Build the output df
+    if(i==1){
+      
+      geno_match_tally.df <- t.slice.df
+      
+    }else if(i > 1){
+      
+      geno_match_tally.df <- dplyr::bind_rows(geno_match_tally.df, t.slice.df)
+      
+    }
+    
+    
   }
   
   
@@ -279,6 +300,16 @@ comp_tech_reps <- function(format_type="amplitools", max_missing=0.5){
   head(all_result.df)
   all_result.df <- as.data.frame(all_result.df)
   str(all_result.df)
+  
+  # Format tally table
+  geno_match_tally.df <- geno_match_tally.df[grep(pattern = "t.slice", x = rownames(geno_match_tally.df), invert = T), ]
+  head(geno_match_tally.df)
+  geno_match_tally.df$indiv <- rownames(x = geno_match_tally.df)
+  geno_match_tally.df <- geno_match_tally.df %>% select(indiv, everything())
+  head(geno_match_tally.df)
+  
+  write.csv(x = geno_match_tally.df, file = "03_results/replicate_geno_tally_details.csv", row.names = F)
+  
   
   # Scatter plot percent match by number typed in both
   print("Plotting and exporting '03_results/tech_rep_percent_match_genos_by_number_typed.pdf'")
@@ -295,6 +326,6 @@ comp_tech_reps <- function(format_type="amplitools", max_missing=0.5){
   
   # Export data
   print("Results output to '03_results/tech_rep_results.txt'")
-  write_delim(x = all_result.df, file = "03_results/tech_rep_results.txt", delim = "\t")
+  write_delim(x = all_result.df, file = "03_results/replicate_geno_summary_results.txt", delim = "\t")
   
 }
