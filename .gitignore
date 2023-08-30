@@ -2,6 +2,7 @@
 *.gen
 *.pdf
 *.Rdata
+*.RData
 *.Rhistory
 *.tre
 *.txt*
