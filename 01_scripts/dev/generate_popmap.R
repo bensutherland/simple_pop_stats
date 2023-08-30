@@ -1,17 +1,15 @@
 # Create text file of individual names from genind file and write out for user to manually populate
 #  will also simplify amplitools popnames
+#  Only implemented for amplitools input so far
 # Ben J. G. Sutherland, initialized 2023-08-29
 
 generate_popmap <- function(df = obj, format = "amplitools"){
  
-  # Warning
-  print("Note: this function has only been implemented for amplitools input so far")
-  
   # Confirm that format is supported
   if(format=="amplitools"){
     
-    print("Individual names are indicated as amplitools format")
-    print("Expecting three fields (run, barcode, sample.id), separated by double underscores, i.e., '__'")
+    print("User selected format: amplitools")
+    cat("amplitools format expects three fields, sep by double underscore:\n i.e., <run>__<barcode>__<indiv.ID>\n")
     
   }else{
     
@@ -19,12 +17,12 @@ generate_popmap <- function(df = obj, format = "amplitools"){
     
   }
   
-  ## Create a df with all included indiv names
+  ## Obtain individual names as df
   indiv.df <- as.data.frame(indNames(df))
   colnames(indiv.df) <- "indiv"
   
   # Separate components of indiv ID (i.e., run, barcode, sample)
-  print("Separating data into: ")
+  print("Separating individual label into three fields.")
   indiv.df <- separate(data = indiv.df, col = "indiv", into = c("run", "barcode", "indiv"), sep = "__", remove = T)
   print(head(indiv.df))
   
@@ -60,5 +58,6 @@ generate_popmap <- function(df = obj, format = "amplitools"){
   
   assign(x = "obj.simplified_names", value = df, pos = .GlobalEnv)
   assign(x = "indiv.df", value = indiv.df, pos = .GlobalEnv)
+  print("The renamed indiv name obj is present as obj.simplified_names")
   
 }
