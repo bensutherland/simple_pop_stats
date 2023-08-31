@@ -9,7 +9,7 @@
 #101  JPN
 #1847 FRA
 
-annotate_rubias <- function(two_allele_data = two_allele_data, sample_type = sample_type, micro_stock_code.FN = micro_stock_code.FN, custom_format = custom_format){
+annotate_rubias <- function(two_allele_data = two_allele_data, sample_type = sample_type, micro_stock_code.FN = micro_stock_code.FN, custom_format = custom_format, pop_map.FN = pop_map.FN){
   
   # Interactive read in stock name to repunit conversion (for use later)
   # Select stock code file
@@ -45,7 +45,7 @@ annotate_rubias <- function(two_allele_data = two_allele_data, sample_type = sam
       colnames(pop_code) <- "indiv.vec"
       
       # Read in the samplename-to-pop interpretation file
-      sample_to_pop_interp.df <- read.table(file = "02_input_data/my_data_ind-to-pop_annot.txt"
+      sample_to_pop_interp.df <- read.table(file = pop_map.FN
                                    , header = T, sep = "\t"
                                    #, quote = F
       ) # Note: this df is not assumed to be in the order of the genotypes df
@@ -59,7 +59,9 @@ annotate_rubias <- function(two_allele_data = two_allele_data, sample_type = sam
       #cbind(pop_code$pop, pop_code$indiv.vec, rownames(x = two_allele_data)) # should match above TODO: use as a check
       
       head(pop_code)
-      colnames(pop_code) <- c("ind", "collection", "repunit")
+      
+      # Update the "pop" colname to "collection to match the terminology of other workflows below
+      colnames(pop_code)[which(colnames(pop_code)=="pop")] <- "collection"
       head(pop_code)
       
     }
