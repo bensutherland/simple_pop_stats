@@ -58,6 +58,6 @@ generate_popmap <- function(df = obj, format = "amplitools"){
   
   assign(x = "obj.simplified_names", value = df, pos = .GlobalEnv)
   assign(x = "indiv.df", value = indiv.df, pos = .GlobalEnv)
-  print("The renamed indiv name obj is present as obj.simplified_names")
+  print("An updated genind with renamed indiv names is available as obj.simplified_names")
   
 }
