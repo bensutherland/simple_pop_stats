@@ -8,7 +8,7 @@ id_close_kin <- function(cutoff = 0.18, statistic = "ritland"){
   # Identify path of most recent relatedness file
   input.FN <- list.files(path = "03_results/", pattern = "pairwise_relatedness_output_all", full.names = T)
   input.FN <- input.FN[grep(pattern = ".txt$", x = input.FN)] # only keep .txt files
-  input.FN <- head(sort(input.FN, decreasing = T), n = 1)                     # only keep one input file, the latest
+  input.FN <- head(sort(input.FN, decreasing = T), n = 1)     # only keep one input file, the latest
   
   # Reporting 
   print(paste0("Loading ", input.FN))
@@ -40,29 +40,45 @@ id_close_kin <- function(cutoff = 0.18, statistic = "ritland"){
     slice <- slice[slice[ ,statistic] > cutoff, ]
     
     drop.inds <- NULL
-    # Remove indivs until no more over cutoff pairs remain
-    for(r in 1:nrow(slice)){
+    
+    # If there are no pairs above the threshold, skip this group
+    if(nrow(slice)==0){
       
-      # If the first individual has already been designated to be removed, nothing needs to happen
-      if(slice$ind1.id[r] %in% drop.inds){
-        
-        # This pair has been dealt with, as one of the inds is in drop.inds
+      print(paste0("No individuals to remove for the group ", groups[i]))
       
-      # If the first individual has NOT already been designated to be removed, but the second indiv has already been designated to be removed, 
-        # again, nothing needs to happen
-      }else if(slice$ind2.id[r] %in% drop.inds){
+    # If there are any pairs above the threshold, move into the individual removal stage
+    }else if(nrow(slice) > 0){
+      
+      
+      # Remove indivs until no more over cutoff pairs remain
+      for(r in 1:nrow(slice)){
         
-        # This pair has been dealt with, as one of the inds is in drop.inds
-        
-      # If neither indiv has yet been designated to be dropped, add the first individual to the drop list
-      }else{
-        
-        # Add the first indiv to drop inds
-        drop.inds <- c(drop.inds, slice$ind1.id[r])
+        # If the first individual has already been designated to be removed, nothing needs to happen
+        if(slice$ind1.id[r] %in% drop.inds){
+          
+          # This pair has been dealt with, as one of the inds is in drop.inds
+          
+          # If the first individual has NOT already been designated to be removed, but the second indiv has already been designated to be removed, 
+          # again, nothing needs to happen
+        }else if(slice$ind2.id[r] %in% drop.inds){
+          
+          # This pair has been dealt with, as one of the inds is in drop.inds
+          
+          # If neither indiv has yet been designated to be dropped, add the first individual to the drop list
+        }else{
+          
+          # Add the first indiv to drop inds
+          drop.inds <- c(drop.inds, slice$ind1.id[r])
+          
+        }
         
       }
       
+      
+      
     }
+    
+    
     
     drop.list[[groups[i]]] <- drop.inds
     
