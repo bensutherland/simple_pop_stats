@@ -1,5 +1,5 @@
-# Uses a genepop file to run differentiation analyses
-### Adjust pop names will only work with stock code and year if in the format for PBT, as per: stockcode_year_indivID_sex
+# Uses a genepop file to run various population genetic analyses
+# note: adjust pop names will only work with stock code and year if in the format for PBT, as per: stockcode_year_indivID_sex
 
 #### 00. Front Matter ####
 # Clear space
