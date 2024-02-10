@@ -137,7 +137,7 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
     set.seed(9)
     p <- ggplot(pca.scores, aes(x=PC1, y=PC3, colour=pop))
     p <- p + geom_point(size=2)
-    p <- p + stat_ellipse(level = 0.95, size = 1)
+    p <- p + stat_ellipse(level = 0.95, linewidth = 1)
     p <- p + scale_color_manual(name = "collection", values = ordered_colours)
     p <- p + geom_hline(yintercept = 0) 
     p <- p + geom_vline(xintercept = 0)
