@@ -6,6 +6,9 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
                             , colour_file = NULL
                             , retain_pca_obj = TRUE
                             , parallel = FALSE
+                            , plot_label = FALSE
+                            , width = 11.5
+                            , height = 7.5
                             ){
   
   print("Converting genind to genlight")
@@ -18,7 +21,6 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
         
   # Perform PCA
   pca1 <- glPca(my.data, nf = PCs_ret, parallel = parallel)
-  
   
   # As required, save out pca1 obj to retain data
   if(retain_pca_obj == TRUE){
@@ -82,6 +84,9 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
   
   head(pca.scores)
   
+  # New: retain sample names for labeling
+  pca.scores$indiv <- rownames(pca.scores)
+  
   # Create an eigenvalues df for plotting eigenvalues
   eig <- as.data.frame(pca1$eig)
   colnames(eig) <- "eig"
@@ -106,7 +111,18 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
   # PC1 vs. PC2
   set.seed(9)
   p <- ggplot(pca.scores, aes(x=PC1, y=PC2, colour=pop))
-  p <- p + geom_point(size=2)
+  
+  # Plotting labels or points?
+  if(plot_label==TRUE){
+  
+    p <- p + geom_label(aes(label = pca.scores$indiv))  
+    
+  }else if(plot_label==FALSE){
+    
+    p <- p + geom_point(size=2)
+      
+  }
+  
   p <- p + stat_ellipse(level = 0.95, size = 1)
   p <- p + scale_color_manual(name = "collection", values = ordered_colours)
   p <- p + geom_hline(yintercept = 0) 
@@ -118,7 +134,7 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
   p
   
   # Save out
-  pdf(file = paste0(result.path, "pca_samples_PC1_v_PC2.pdf"), width = 11.5, height = 7.5)
+  pdf(file = paste0(result.path, "pca_samples_PC1_v_PC2.pdf"), width = width, height = height)
   print(p)
   dev.off()
   
@@ -136,7 +152,18 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
     
     set.seed(9)
     p <- ggplot(pca.scores, aes(x=PC1, y=PC3, colour=pop))
-    p <- p + geom_point(size=2)
+    
+    # Plotting labels or points?
+    if(plot_label==TRUE){
+      
+      p <- p + geom_label(aes(label = pca.scores$indiv))  
+      
+    }else if(plot_label==FALSE){
+      
+      p <- p + geom_point(size=2)
+      
+    }
+    
     p <- p + stat_ellipse(level = 0.95, linewidth = 1)
     p <- p + scale_color_manual(name = "collection", values = ordered_colours)
     p <- p + geom_hline(yintercept = 0) 
@@ -148,7 +175,7 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
     p
     
     # Save out
-    pdf(file = paste0(result.path, "pca_samples_PC1_v_PC3.pdf"), width = 11.5, height = 7.5)
+    pdf(file = paste0(result.path, "pca_samples_PC1_v_PC3.pdf"), width = width, height = height)
     print(p)
     dev.off()
     
@@ -165,7 +192,19 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
     
     set.seed(9)
     p <- ggplot(pca.scores, aes(x=PC3, y=PC4, colour=pop))
-    p <- p + geom_point(size=2)
+    
+    # Plotting labels or points?
+    if(plot_label==TRUE){
+      
+      p <- p + geom_label(aes(label = pca.scores$indiv))  
+      
+    }else if(plot_label==FALSE){
+      
+      p <- p + geom_point(size=2)
+      
+    }
+    
+    
     p <- p + stat_ellipse(level = 0.95, size = 1)
     p <- p + scale_color_manual(name = "collection", values = ordered_colours)
     p <- p + geom_hline(yintercept = 0) 
@@ -177,7 +216,7 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
     p
     
     # Save out
-    pdf(file = paste0(result.path, "pca_samples_PC3_v_PC4.pdf"), width = 11.5, height = 7.5)
+    pdf(file = paste0(result.path, "pca_samples_PC3_v_PC4.pdf"), width = width, height = height)
     print(p)
     dev.off()
     
