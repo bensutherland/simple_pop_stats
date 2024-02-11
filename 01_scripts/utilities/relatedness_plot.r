@@ -1,6 +1,7 @@
 # Calculate relatedness for each population
 
 relatedness_plot <- function(file = "full_path", same_pops = TRUE, plot_by = "names"
+                             , plot_by_group = TRUE
                              , pdf_width = 7, pdf_height = 5){
   
   # Read in data
@@ -152,13 +153,31 @@ relatedness_plot <- function(file = "full_path", same_pops = TRUE, plot_by = "na
     pdf(file = paste0(result.path, "relatedness_", metric, "_", date, ".pdf")
         , width = pdf_width, height = pdf_height)
     par(mar=c(7,6,3,3))
-    boxplot(output.df[, paste0("rel.", metric)] ~ output.df$group
+    
+    
+    # Plotting a single boxplot distribution or by group? 
+    if(plot_by_group==FALSE){
+      
+      boxplot(output.df[, paste0("rel.", metric)]
+              #, col = comp_names.df$colour
+              , las = 2
+              , ylab = paste0("relatedness (", metric, ")")
+              , xlab = ""
+      )
+      abline(h = 0, lty = 2)
+      
+    }else if(plot_by_group==TRUE){
+    
+      boxplot(output.df[, paste0("rel.", metric)] ~ output.df$group
             #, col = comp_names.df$colour
             , las = 2
             , ylab = paste0("relatedness (", metric, ")")
             , xlab = ""
-    )
-    abline(h = 0, lty = 2)
+      )
+      abline(h = 0, lty = 2)
+      
+    }
+    
     dev.off()
     
   }
