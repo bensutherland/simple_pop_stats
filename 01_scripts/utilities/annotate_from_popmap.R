@@ -33,9 +33,11 @@ annotate_from_popmap <- function(df = obj, popmap.FN = "00_archive/my_data_ind-t
   print("If order not retained, do not proceed.")
   
   # Update the pop attribute from the ordered sample metadata
-  pop(obj) <- indiv_annot_in_order.df[, "pop"]
+  pop(df) <- indiv_annot_in_order.df[, "pop"]
   
   # Reporting
-  print(table((pop(obj))))
+  print(table((pop(df))))
   
+  print("Saving annotated obj as obj_annot")
+  assign(x = "obj_annot", value = df, envir = .GlobalEnv)
 }
