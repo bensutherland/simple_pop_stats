@@ -16,6 +16,7 @@ generate_popmap <- function(df = obj){
   indiv.df$pop    <- NA # population ID
   indiv.df$alt.ID <- NA # alternate sample name
   indiv.df$sex    <- NA # sex (include for potential parents for parentage applications)
+  indiv.df$ignore <- NA # T/F for whether individual should be discarded
   print("The form to complete is as follows: ")
   print(head(indiv.df))
   print("Note: alt.ID and sex columns are optional")
