@@ -6,7 +6,6 @@
 # rm(list=ls())
 
 # Install packages
-
 # if (!requireNamespace("BiocManager", quietly = TRUE))
 #   install.packages("BiocManager")
  
@@ -42,6 +41,7 @@
 
 ## For reading data
 # install.packages("readr")
+# install.packages("vcfR")
 
 ## For relatedness analyses
 # install.packages("Demerelate")
@@ -61,7 +61,8 @@
 # tinytex::reinstall_tinytex()
 # tinytex::tlmgr_install("pdfcrop")
 # https://www.ghostscript.com/download/gsdnld.html
-# 
+
+# Load packages
 require("units")
 require("cluster")
 require("adegenet")
@@ -82,6 +83,7 @@ library("readr")
 library("rubias")
 library("RGenetics")
 library("diveRsity")
+library("vcfR")
 
 require("Demerelate")
 require("related")
