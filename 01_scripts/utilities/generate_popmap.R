@@ -9,7 +9,7 @@ generate_popmap <- function(df = obj){
   pop_map.FN <- "00_archive/my_data_ind-to-pop.txt"
   
   # Collect individual names from input genepop
-  indiv.df <- as.data.frame(indNames(obj))
+  indiv.df <- as.data.frame(indNames(df))
   colnames(indiv.df) <- "indiv"
   
   # Add fields to manually complete
