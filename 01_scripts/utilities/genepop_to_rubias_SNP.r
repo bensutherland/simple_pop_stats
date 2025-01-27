@@ -1,5 +1,10 @@
 # Convert genepop data (SNP) to rubias input (where data = a genind file)
-genepop_to_rubias_SNP <- function(data = data, sample_type=sample_type, custom_format = FALSE, micro_stock_code.FN = NULL, pop_map.FN = NULL){
+genepop_to_rubias_SNP <- function(data = data
+                                  , sample_type=sample_type
+                                  , custom_format = FALSE
+                                  , micro_stock_code.FN = NULL
+                                  , pop_map.FN = NULL
+                                  , datatype = "SNP"){
   
   print("Converting SNP genepop to rubias format")
   
@@ -12,7 +17,7 @@ genepop_to_rubias_SNP <- function(data = data, sample_type=sample_type, custom_f
   #data[1:5,1:7]
   
   # Only retain the first allele (NOTE: differs from microsat approach)
-  one_allele_data <- data[, grep(pattern = ".01", x = colnames(data), fixed = T)]
+  one_allele_data <- data[, grep(pattern = "\\.01|\\.1", x = colnames(data),perl = T)]
   #one_allele_data[1:5,1:5]
   
   # Note: 
@@ -36,8 +41,9 @@ genepop_to_rubias_SNP <- function(data = data, sample_type=sample_type, custom_f
   
   #one_allele_data[1:5,1:5]
   
-  # Drop the .01 in the column name for rubias format
-  colnames(one_allele_data) <- gsub(pattern = "\\.01$", replacement = "", perl = T, x = colnames(one_allele_data))
+  # Drop the .01 or .1 in the column name for rubias format
+  colnames(one_allele_data) <- gsub(pattern = "\\.01$|\\.1$", replacement = "", perl = T, x = colnames(one_allele_data))
+  #one_allele_data[1:5,1:5]
   
   # Convert from torrent format to rubias format
   print("Converting from proton format to rubias format")
@@ -80,7 +86,7 @@ genepop_to_rubias_SNP <- function(data = data, sample_type=sample_type, custom_f
   
   #one_allele_data[1:5,1:10]
   
-  # Once the loop is done, can rename to the more correct 'two_allele_data'
+  # Once the loop is done, can rename object to the more correct 'two_allele_data'
   two_allele_data <- one_allele_data
   rm(one_allele_data)
   
