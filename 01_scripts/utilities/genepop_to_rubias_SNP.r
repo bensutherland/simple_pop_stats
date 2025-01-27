@@ -97,7 +97,7 @@ genepop_to_rubias_SNP <- function(data = data
   
   #### Adding non-genetic columns #####
   print("Adding non-genetic columns")
-  annotate_rubias(two_allele_data = two_allele_data, sample_type = sample_type, custom_format = custom_format, micro_stock_code.FN = micro_stock_code.FN, pop_map.FN = pop_map.FN)
+  annotate_rubias(two_allele_data = two_allele_data, sample_type = sample_type, custom_format = custom_format, micro_stock_code.FN = micro_stock_code.FN, pop_map.FN = pop_map.FN, datatype = datatype)
   
 }
 
