@@ -27,6 +27,15 @@ dapc_from_genind <- function(data = obj_pop_filt, plot_allele_loadings = TRUE
     
     ordered_colours <- cols
     
+    # Only keep the required number of colours
+    ordered_colours <- ordered_colours[1:nPop(data)]
+    
+    # Create df and vector as called below
+    dapc_pops_colours.df <- matrix(nrow=length(ordered_colours), ncol = 1)
+    dapc_pops_colours.df <- as.data.frame(dapc_pops_colours.df)
+    colnames(dapc_pops_colours.df)[1] <- "colour"
+    dapc_pops_colours.df$colour <- ordered_colours
+    
   } else if(!is.null(colour_file)){
     
     # Reporting
