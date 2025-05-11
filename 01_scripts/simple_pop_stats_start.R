@@ -29,6 +29,9 @@
 # install.packages("rubias")
 # install.packages("RGenetics")
 # install.packages("diveRsity")
+# install.packages("devtools")
+# library(devtools)
+# devtools::install_github("kkeenan02/diveRsity")
  
 ## For parallel processing of sims, require dev version of rubias
 # install.packages("remotes")
