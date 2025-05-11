@@ -88,6 +88,7 @@ summarise_rubias_baseline <- function(baseline = NULL, repunit_desc = NULL
         stock_code <- read_tsv(stock_code_desc.FN)
         
         names(stock_code)[names(stock_code) == "Code"] <- "stockcode"
+        names(stock_code)[names(stock_code) == "StockCode"] <- "stockcode"
         stock_code <- stock_code[ , -which(names(stock_code) %in% c("repunit"))]
         baseline <- merge(baseline,stock_code,by="collection",all.x=TRUE)
         

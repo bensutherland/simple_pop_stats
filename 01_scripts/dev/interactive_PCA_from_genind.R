@@ -2,23 +2,34 @@
 #install.packages("car")
 #install.packages("rgl")
 
-
-
+library("graph4lg")
 
 
 load_genepop()
 
-
-update_pop_names(sep_by = "collection", name_by = "stockname")
+sc.base <- "W:/9_PBT/01_sockeye/reference_databases/bsk_snp_coastwide_v.2.0.0_2025-01-07/Alsek/skStockCodesCU.txt"
+repunits.base <- "W:/9_PBT/01_sockeye/reference_databases/bsk_snp_coastwide_v.2.0.0_2025-01-07/Alsek/repunits_full.txt"
+update_pop_names(sep_by = "collection", name_by = "stockname",add_CU = TRUE)
 
 
 drop_loci(drop_monomorphic = TRUE)
 
 
-keep_pops(keep_file = "W:/9_PBT/01_eulachon/reference_databases/beu_SNP_coastwide_v.2.0.0_2021-02-17/keep_pops.txt")
-#drop_pops(df = obj_filt, drop_by_pop_size = TRUE, min_indiv = 35)
+#keep_pops(df=obj_pop_filt,keep_file = "W:/9_PBT/01_sockeye/reference_databases/bsk_snp_fraser_v.0.0.2_2023-10-04/barkley_hend_keep.txt")
+drop_pops(df = obj_filt, drop_by_pop_size = TRUE, min_indiv = 20)
 
-# 
+#downsample_pops(data=obj_pop_filt,subset_method = "chosen",set_sample_size = 250)
+#obj_pop_filt <- obj_subset
+#make_tree(bootstrap = TRUE, boot_obj = obj_pop_filt, nboots = 10000, dist_metric = "edwards.dist", separated = TRUE)
+#
+
+#calculate_FST(dat=obj_pop_filt)
+#calculate_FST(dat=obj_pop_filt,bootstrap = TRUE)
+
+#make_tree(bootstrap = TRUE, boot_obj = obj_pop_filt, nboots = 10000, dist_metric = "nei.dist", separated = TRUE)
+
+#drop_pops(df = obj_pop_filt, drop_file = "W:/9_PBT/01_chinook/reference_databases/bch_SNP_coastwide_v.5.0.0_2024-09-25/Skeena/drop_pops2.txt")
+
 pca_from_genind(data = obj_pop_filt
                 , PCs_ret = 3
                 , plot_eigen=TRUE
@@ -30,8 +41,8 @@ pca_from_genind(data = obj_pop_filt
 
 
 
-repunits <- read.delim(file="W:/9_PBT/01_eulachon/reference_databases/beu_SNP_coastwide_v.2.0.0_2021-02-17/eu_repunits_full.txt")
-stockcodes<- read.delim(file="W:/9_PBT/01_eulachon/reference_databases/beu_SNP_coastwide_v.2.0.0_2021-02-17/euStockCodesCU.txt")
+repunits <- read.delim(file=repunits.base)
+stockcodes<- read.delim(file=sc.base)
 
 
 joined <- merge(repunits,stockcodes,by="repunit",all.y=TRUE)
@@ -76,4 +87,7 @@ fst_mds_df <- merge(fst_mds_df,joined,by="collection",all.x=TRUE)
 
 fig <- plot_ly(fst_mds_df,x=~PC1,y=~PC2,z=~PC3,text=~collection,color = ~collection)
 fig <- fig %>% add_markers()
+fig <- fig %>% layout(scene=list(xaxis=list(title=paste0('PC1 (', round(pca.obj$eig[1] / sum(pca.obj$eig) * 100, digits = 1), '%)')),
+                      yaxis=list(title=paste0('PC2 (', round(pca.obj$eig[2] / sum(pca.obj$eig) * 100, digits = 1), '%)')),
+                      zaxis=list(title=paste0('PC3 (', round(pca.obj$eig[3] / sum(pca.obj$eig) * 100, digits = 1), '%)'))))       
 fig

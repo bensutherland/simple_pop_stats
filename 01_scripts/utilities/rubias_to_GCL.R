@@ -100,6 +100,7 @@ rubias_to_GCL <- function(choose_sc.fn = TRUE){
   # Reformat column names to match GCL
   names(sc.base.df)[names(sc.base.df)=="collection"] <- "silly"
   names(sc.base.df)[names(sc.base.df)=="Code"] <- "map_no"
+    names(sc.base.df)[names(sc.base.df)=="StockCode"] <- "map_no"
   names(sc.base.df)[names(sc.base.df)=="YLAT"] <- "Latitude"
   names(sc.base.df)[names(sc.base.df)=="XLONG"] <- "Longitude"
   

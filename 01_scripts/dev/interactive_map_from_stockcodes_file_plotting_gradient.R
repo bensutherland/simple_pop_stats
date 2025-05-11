@@ -23,11 +23,11 @@ library(tidyverse)
 
 
 
-# interactive_map(stock.codes_fn = "W:/9_PBT/01_sockeye/reference_databases/bsk_snp_coastwide_v.2.0.0_2025-01-07/skStockCodesCU.txt",
-#                 repunits_fn="W:/9_PBT/01_sockeye/reference_databases/bsk_snp_coastwide_v.2.0.0_2025-01-07/repunits_full.txt",
-#                plot_by = "repunit", filter_by_baseline=TRUE,
-#                my_baseline.path = "W:/9_PBT/01_sockeye/reference_databases/bsk_snp_coastwide_v.2.0.0_2025-01-07/bsk_snp_coastwide_v.2.0.0_2025-01-10_rubias.txt",
-#                filter_by_repunits = TRUE)
+interactive_map(stock.codes_fn = "W:/9_PBT/01_sockeye/reference_databases/bsk_snp_coastwide_v.2.0.0_2025-01-07/skStockCodesCU.txt",
+                 repunits_fn="W:/9_PBT/01_sockeye/reference_databases/bsk_snp_coastwide_v.2.0.0_2025-01-07/repunits_full.txt",
+                plot_by = "repunit", filter_by_baseline=TRUE,
+                my_baseline.path = "W:/9_PBT/01_sockeye/reference_databases/bsk_snp_coastwide_v.2.0.0_2025-01-07/bsk_snp_coastwide_v.2.0.0_2025-01-10_rubias.txt",
+                filter_by_repunits = TRUE)
 
 
 
@@ -90,6 +90,11 @@ joined <- joined %>% select(collection,everything())
 # Drop anything without GPS coordinates
 joined <- joined %>% drop_na(YLAT)
 
+gradient <- read.delim(file="W:/9_PBT/01_sockeye/reference_databases/bsk_snp_coastwide_v.2.0.0_2025-01-07/bsk_snp_coastwide_v.2.0.0_2025-01-10_GREB1L_45474247.txt")
+
+joined <- base::merge(joined,gradient,by="collection",all.x=TRUE)
+
+
 # Generate map points
 map_points <- joined %>%
   st_as_sf(coords = c("XLONG","YLAT"), crs=4326) %>% 
@@ -102,7 +107,7 @@ map_points <- st_shift_longitude(map_points)
 map <- tm_shape(map_points) + 
   tm_dots(group=plot_by,
           col=plot_by,
-  palette = "Dark2",
+  palette = "viridis",
   popup.vars=TRUE,
   size=1) +
   #tmap_options(max.categories = 100) +
