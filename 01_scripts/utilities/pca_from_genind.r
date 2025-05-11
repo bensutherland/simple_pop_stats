@@ -16,6 +16,12 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
   
   print(paste0("Executing PCA, retaining ", PCs_ret, " PCs"))
         
+  #Remove fully untyped loci - can occur after filtering.
+  toRemove <- is.na(glMean(my.data, alleleAsUnit = FALSE)) # TRUE where NA
+  which(toRemove) # position of entirely non-typed loci
+  my.data <- my.data[, !toRemove]
+  
+  
   # Perform PCA
   pca1 <- glPca(my.data, nf = PCs_ret, parallel = parallel)
   
@@ -228,10 +234,10 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
     par(mfrow=c(num.retained.pcs,1))
     # Plot the loading values of the different markers into the PCA
     for(i in 1:num.retained.pcs){
-       loadingplot(x = pca1, axis = i
+       loadingplot(x = abs(pca1$loadings), axis = i
                    , main = paste("PC",i,"_loadings_(alleles)", sep = "")
-                   #, threshold = quantile(x = pca1$loadings[,i], 0.8) # not working
-                   , threshold = 0.001
+                   , threshold = quantile(x = pca1$loadings[,i], 0.99) # not working
+                   #, threshold = 0.001
        )
      }
     dev.off()
