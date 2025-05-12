@@ -9,7 +9,12 @@
 #101  JPN
 #1847 FRA
 
-annotate_rubias <- function(two_allele_data = two_allele_data, sample_type = sample_type, micro_stock_code.FN = micro_stock_code.FN, custom_format = custom_format, pop_map.FN = pop_map.FN){
+annotate_rubias <- function(two_allele_data = two_allele_data
+                            , sample_type = sample_type
+                            , micro_stock_code.FN = micro_stock_code.FN
+                            , custom_format = custom_format
+                            , pop_map.FN = pop_map.FN
+                            , datatype = datatype){
   
   # Interactive read in stock name to repunit conversion (for use later)
   # Select stock code file

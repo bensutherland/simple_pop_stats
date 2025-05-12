@@ -501,4 +501,17 @@ It will request to interactively select a `*_rubias.txt` file and a `*.hs.bed` i
 This file should deal properly with insertions and deletions markers. It was tested in our coho panel, but not yet in others so beware. Will only work in SNPs - uSat would require significant work to make happen here. 
 
 
+## 20. VCF to GEMMA conversion and analysis
+Requires: 
+- GEMMA
+- input VCF file (or compressed vcf.gz)   
+
+Note: currently under development, and so the function needs to be sourced from the `01_scripts/dev` folder.    
+
+Use the following utility in R to convert the VCF file to GEMMA input format:      
+`vcf_to_gemma(vcf_path="02_input_data/my_vcf.gz")`     
+Output will provide a space-separated text file in the result path titled `gwas_geno.txt`.       
+
+GEMMA steps:        
+*in development*     
 

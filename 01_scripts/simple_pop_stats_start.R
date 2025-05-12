@@ -1,12 +1,11 @@
-# Uses a genepop file to run differentiation analyses
-### Adjust pop names will only work with stock code and year if in the format for PBT, as per: stockcode_year_indivID_sex
+# Uses a genepop file to run various population genetic analyses
+# note: adjust pop names will only work with stock code and year if in the format for PBT, as per: stockcode_year_indivID_sex
 
 #### 00. Front Matter ####
 # Clear space
 # rm(list=ls())
 
 # Install packages
-
 # if (!requireNamespace("BiocManager", quietly = TRUE))
 #   install.packages("BiocManager")
  
@@ -45,6 +44,7 @@
 
 ## For reading data
 # install.packages("readr")
+# install.packages("vcfR")
 
 ## For relatedness analyses
 # install.packages("Demerelate")
@@ -64,7 +64,8 @@
 # tinytex::reinstall_tinytex()
 # tinytex::tlmgr_install("pdfcrop")
 # https://www.ghostscript.com/download/gsdnld.html
-# 
+
+# Load packages
 require("units")
 require("cluster")
 require("adegenet")
@@ -85,6 +86,7 @@ library("readr")
 library("rubias")
 library("RGenetics")
 library("diveRsity")
+library("vcfR")
 
 require("Demerelate")
 require("related")

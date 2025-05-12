@@ -2,16 +2,21 @@
 # Will save out a plot into the result path
 
 pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
-                            , plot_eigen = TRUE, plot_allele_loadings = TRUE
+                            , plot_eigen = TRUE
+                            , plot_allele_loadings = TRUE
+                            , plot_ellipse = TRUE
                             , colour_file = NULL
                             , retain_pca_obj = TRUE
                             , parallel = FALSE
+                            , plot_label = FALSE
+                            , width = 11.5
+                            , height = 7.5
                             ){
   
   print("Converting genind to genlight")
     
   # Convert genind to genlight using dartR
-  obj.gl <- gi2gl(data, parallel = TRUE)
+  obj.gl <- gi2gl(data, parallel = parallel)
   my.data <- obj.gl
   
   print(paste0("Executing PCA, retaining ", PCs_ret, " PCs"))
@@ -24,7 +29,6 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
   
   # Perform PCA
   pca1 <- glPca(my.data, nf = PCs_ret, parallel = parallel)
-  
   
   # As required, save out pca1 obj to retain data
   if(retain_pca_obj == TRUE){
@@ -40,6 +44,7 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
     colnames(pca_scores_per_sample.df)[1] <- "sample"
     head(pca_scores_per_sample.df)
     
+    # Write out PCA scores per sample
     write_tsv(x = pca_scores_per_sample.df, file = paste0(result.path, "pca_scores_per_sample.txt"))
     
   }else{
@@ -82,23 +87,20 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
   pca.scores <- as.data.frame(pca1$scores) # make dataframe for ggplot
   pca.scores$pop <- as.character(pop(data)) # note: assumes constant order of scores and originating pop
   
-  # TODO: /start/ not clear what this does
-  pca.scores <- pca.scores[order(pca.scores$pop),] # add population to df
-  # TODO: /end/   not clear what this does
+  # Put PCA scores df into alphabetic order by pop
+  pca.scores <- pca.scores[order(pca.scores$pop),]
   
   head(pca.scores)
+  
+  # Retain sample names for labeling
+  pca.scores$indiv <- rownames(pca.scores)
   
   # Create an eigenvalues df for plotting eigenvalues
   eig <- as.data.frame(pca1$eig)
   colnames(eig) <- "eig"
   
-  # Bring in colours (old method, works well for base scatterplot)
-  # pca.scores <- merge(x = pca.scores, y = colours, by.x = "pop", by.y = "collection", all.x = T, sort = F)
-  # head(pca.scores)
-  
   ## Create a colours vector
   # Select only the pops that are in the data
-  library(dplyr)
   colours <- filter(colours.df, collection %in% unique(pca.scores$pop))
   
   # Put into alphabetic order by collection (the plotting order, and legend order)
@@ -108,12 +110,29 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
   ordered_colours <- as.character(colours$colour)
   
   
-  ## Plot the PCA
+  #### Plot the PCA ####
   # PC1 vs. PC2
   set.seed(9)
   p <- ggplot(pca.scores, aes(x=PC1, y=PC2, colour=pop))
-  p <- p + geom_point(size=2)
-  p <- p + stat_ellipse(level = 0.95, size = 1)
+  
+  # Plotting labels or points?
+  if(plot_label==TRUE){
+  
+    p <- p + geom_label(aes(label = pca.scores$indiv))  
+    
+  }else if(plot_label==FALSE){
+    
+    p <- p + geom_point(size=2)
+      
+  }
+  
+  # If plotting ellipse
+  if(plot_ellipse==TRUE){
+    
+    p <- p + stat_ellipse(level = 0.95, linewidth = 1)
+    
+  }
+  
   p <- p + scale_color_manual(name = "collection", values = ordered_colours)
   p <- p + geom_hline(yintercept = 0) 
   p <- p + geom_vline(xintercept = 0) 
@@ -124,7 +143,7 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
   p
   
   # Save out
-  pdf(file = paste0(result.path, "pca_samples_PC1_v_PC2.pdf"), width = 11.5, height = 7.5)
+  pdf(file = paste0(result.path, "pca_samples_PC1_v_PC2.pdf"), width = width, height = height)
   print(p)
   dev.off()
   
@@ -142,8 +161,25 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
     
     set.seed(9)
     p <- ggplot(pca.scores, aes(x=PC1, y=PC3, colour=pop))
-    p <- p + geom_point(size=2)
-    p <- p + stat_ellipse(level = 0.95, size = 1)
+    
+    # Plotting labels or points?
+    if(plot_label==TRUE){
+      
+      p <- p + geom_label(aes(label = pca.scores$indiv))  
+      
+    }else if(plot_label==FALSE){
+      
+      p <- p + geom_point(size=2)
+      
+    }
+    
+    # If plotting ellipses
+    if(plot_ellipse==TRUE){
+      
+      p <- p + stat_ellipse(level = 0.95, linewidth = 1)
+      
+    }
+    
     p <- p + scale_color_manual(name = "collection", values = ordered_colours)
     p <- p + geom_hline(yintercept = 0) 
     p <- p + geom_vline(xintercept = 0)
@@ -154,7 +190,7 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
     p
     
     # Save out
-    pdf(file = paste0(result.path, "pca_samples_PC1_v_PC3.pdf"), width = 11.5, height = 7.5)
+    pdf(file = paste0(result.path, "pca_samples_PC1_v_PC3.pdf"), width = width, height = height)
     print(p)
     dev.off()
     
@@ -171,8 +207,25 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
     
     set.seed(9)
     p <- ggplot(pca.scores, aes(x=PC3, y=PC4, colour=pop))
-    p <- p + geom_point(size=2)
-    p <- p + stat_ellipse(level = 0.95, size = 1)
+    
+    # Plotting labels or points?
+    if(plot_label==TRUE){
+      
+      p <- p + geom_label(aes(label = pca.scores$indiv))  
+      
+    }else if(plot_label==FALSE){
+      
+      p <- p + geom_point(size=2)
+      
+    }
+    
+    # If plotting ellipses
+    if(plot_ellipse==TRUE){
+      
+      p <- p + stat_ellipse(level = 0.95, linewidth = 1)
+      
+    }
+    
     p <- p + scale_color_manual(name = "collection", values = ordered_colours)
     p <- p + geom_hline(yintercept = 0) 
     p <- p + geom_vline(xintercept = 0) 
@@ -183,7 +236,7 @@ pca_from_genind <- function(data = obj_pop_filt, PCs_ret = 3
     p
     
     # Save out
-    pdf(file = paste0(result.path, "pca_samples_PC3_v_PC4.pdf"), width = 11.5, height = 7.5)
+    pdf(file = paste0(result.path, "pca_samples_PC3_v_PC4.pdf"), width = width, height = height)
     print(p)
     dev.off()
     

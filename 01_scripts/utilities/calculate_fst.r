@@ -5,6 +5,7 @@
 
 calculate_FST <- function(format="genind", dat = obj_filt, separated = FALSE, cust_fn = NULL, bootstrap = FALSE){
   
+  # Determine if input needs converting from genind to hierfstat
   if(format=="genind"){
     
     print("Converting genind to hierfstat")
@@ -35,46 +36,72 @@ calculate_FST <- function(format="genind", dat = obj_filt, separated = FALSE, cu
     return(fail) # crash if not supported
   }
   
-  # Calculate FST
+  
+  ## Calculate FST
   print("Calculating WCfst")
+  
   if(bootstrap==TRUE){
     
-    pairwise.wc.fst <- boot.ppfst(dat = dat, nboot = 1000, quant = c(0.025, 0.975))
-    print(pairwise.wc.fst)
+    print("Using a bootstrapped approach")
+    
+    # Create variable for later use
     booted <- "booted"
     
+    # Calculate bootstrapped FST
+    pairwise.wc.fst <- boot.ppfst(dat = dat, nboot = 1000, quant = c(0.025, 0.975))
+    
+    # Print output
+    print(pairwise.wc.fst)
+    
+    ## Collect output into a single matrix
+    # For more information, see: https://stackoverflow.com/questions/54576385/is-there-an-r-function-that-populates-the-lower-or-upper-diagonal-of-a-matrix)
+    
     # Create empty matrix 
-    new <- matrix(NA,nrow=nrow(pairwise.wc.fst$ll),ncol=ncol(pairwise.wc.fst$ll))
+    new <- matrix(NA, nrow=nrow(pairwise.wc.fst$ll), ncol=ncol(pairwise.wc.fst$ll))
     
+    # Assign lower limit to upper triangle (temporarily)
+    new[upper.tri(new)] <- pairwise.wc.fst$ll[upper.tri(pairwise.wc.fst$ll)]
     
-    # Data wasn't populating correct - reverse order https://stackoverflow.com/questions/54576385/is-there-an-r-function-that-populates-the-lower-or-upper-diagonal-of-a-matrix)
-     # Assign lower limit to lower triangle
-    new[upper.tri(new)] <-pairwise.wc.fst$ll[upper.tri(pairwise.wc.fst$ll)]
-    
-    #Then transform
+    # Put the lower limit into the lower triangle
     new <- t(new)
     
-    # Then Assign upper limit to upper triangle
-    new[upper.tri(new)] <-pairwise.wc.fst$ul[upper.tri(pairwise.wc.fst$ul)]
-    
- 
-
+    # Assign upper limit to upper triangle
+    new[upper.tri(new)] <- pairwise.wc.fst$ul[upper.tri(pairwise.wc.fst$ul)]
     
     # Assign the names to the column and rows of the new matrix
     dimnames(new) <- dimnames(pairwise.wc.fst$ll)
     
     # Rename the new matrix
-    pairwise.wc.fst <- as.data.frame(new,stringsAsFactors = FALSE)
+    pairwise_wc_fst.df <- as.data.frame(new, stringsAsFactors = FALSE)
     
     # Assign to the environment
-    assign(x = "pairwise_wc_fst", value = pairwise.wc.fst, envir = .GlobalEnv)
+    assign(x = "pairwise_wc_fst.df", value = pairwise_wc_fst.df, envir = .GlobalEnv)
+    
+    # In case user wants the raw output from program for checking
+    assign(x = "pairwise_wc_fst_hfstat.list", value = pairwise.wc.fst, envir = .GlobalEnv)
+    
+    # Reporting
+    print("Prepared output in a df for export in 'pairwise_wc_fst.df'")
+    print("Raw list-form output from hierfstat in 'pairwise_wc_fst_hfstat.list'")
+    
     
   }else if(bootstrap==FALSE){
   
+    # Reporting
+    print("Not using bootstrap approach")
+    booted <- "not_booted" # save type of approach
+    
+    # Calculate average FST
     pairwise.wc.fst <- pairwise.WCfst(dat)
-    print(pairwise.wc.fst)
-    assign(x = "pairwise_wc_fst", value = pairwise.wc.fst, envir = .GlobalEnv)  
-    booted <- "not_booted"
+    
+    # Convert to df
+    pairwise_wc_fst.df <- as.data.frame(pairwise.wc.fst)
+    
+    # Print output to screen 
+    print(pairwise_wc_fst.df)
+    
+    # Assign to global enviro
+    assign(x = "pairwise_wc_fst.df", value = pairwise_wc_fst.df, envir = .GlobalEnv)  
     
   }
   
@@ -102,6 +129,6 @@ calculate_FST <- function(format="genind", dat = obj_filt, separated = FALSE, cu
   # Save out
   print(paste0("Saving output as ", fn))
   
-  write.csv(x = pairwise.wc.fst, file = fn)
+  write.csv(x = pairwise_wc_fst.df, file = fn)
   
 }

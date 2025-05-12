@@ -14,8 +14,8 @@ select_species <- function() {
                , "6 - pink"
                , "7 - steelhead"
                , "8 - harbour seal"
-               , "9 - Pacific oyster"
-               , "10 - Yesso scallop"
+               , "9 - pacific oyster"
+               , "10 - other"
                , "q - quit")
              , sep="\n")
   ans <- readline("Select species by number above or q: " )
@@ -24,7 +24,7 @@ select_species <- function() {
   if (!(ans %in% c("1","2","3","4","5", "6","7","8","9", "10"))) {stop("Terminated by request")}
   
   # Select species
-  species <<- c("chinook","coho","chum","eulachon","sockeye","pink","steelhead","harbour_seal", "pacific_oyster", "yesso_scallop")[as.integer(ans)]
+  species <<- c("chinook","coho","chum","eulachon","sockeye","pink","steelhead","harbour_seal", "pacific_oyster", "other")[as.integer(ans)]
   print(paste("You have chosen: ",species))
   
   # Set variables sex_gene, species_gene, two.letter.code
@@ -64,10 +64,10 @@ select_species <- function() {
     sex_gene <<- ""
     species_gene <<-""
     two.letter.code <<- "po"
-  }else if(species=="yesso_scallop"){
+  }else if(species=="other"){
     sex_gene <<- ""
     species_gene <<-""
-    two.letter.code <<- "ys"
+    two.letter.code <<- "na"
   }
   
   
