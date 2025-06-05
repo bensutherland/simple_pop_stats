@@ -1,6 +1,7 @@
 # Convert vcf data (SNP) to GEMMA inputs
 #  dev based on code used here: https://raw.githubusercontent.com/bensutherland/ms_cgig_chr8_oshv1/refs/heads/main/01_scripts/chr8_oshv1_amp_02_vcf_to_gemma.R
 #  Ben J.G. Sutherland (SBIO), 2025-04-09
+#  note: will only include individuals in output that are included in the provided phenotype file
 vcf_to_gemma <- function(vcf_path = "", pheno_path = "", pheno_type = "binary"
                                   ){
   # Reporting
@@ -20,7 +21,7 @@ vcf_to_gemma <- function(vcf_path = "", pheno_path = "", pheno_type = "binary"
   positional_info.df <- as.data.frame(positional_info.df)
   head(positional_info.df)
   
-  # Use positional info as the locus.id
+  # Use positional info (CHROM and POS) from the VCF fix fields as a locus.id
   locus.id <- paste0(positional_info.df$CHROM, "__", positional_info.df$POS)
   rownames(geno) <- locus.id # use the new ID as the row names
   rm(locus.id)
@@ -40,14 +41,20 @@ vcf_to_gemma <- function(vcf_path = "", pheno_path = "", pheno_type = "binary"
   mode(geno) = "numeric"
   #geno[1:5,1:5]
   
-  ## TODO: add option for subsetting a specific set of individuals
-  
   ## Prepare phenotypes
   print(paste0("Loading phenotype file from: ", pheno_path))
+  print("Note: only indiv. included in the phenotype file will be included in output")
   
   # Read in phenotype file
   pheno.df <- read.delim(file = pheno_path, header = F, sep = "\t")
   colnames(pheno.df) <- c("sample.id", "pheno")
+  pheno.df <- as.data.frame(pheno.df)
+  
+  # Remove any individuals from the genotype matrix that are not included in the phenotype file
+  print(paste0("Loaded number of individuals in geno: ", nrow(geno)))
+  print("Only keeping individuals with provided phenotypes")
+  geno <- geno[rownames(geno) %in% pheno.df$sample.id, ]
+  print(paste0("Current number of individuals in geno that had pheno: ", nrow(geno)))
   
   # Obtain sample order
   samples_and_pheno.df <- rownames(geno)
@@ -62,6 +69,7 @@ vcf_to_gemma <- function(vcf_path = "", pheno_path = "", pheno_type = "binary"
   # Convert pheno as needed
   if(pheno_type=="binary"){
     
+    print("Converting binary phenotype to numeric values")
     samples_and_pheno.df$original.pheno <- samples_and_pheno.df$pheno
     samples_and_pheno.df$pheno <- as.numeric(as.factor(samples_and_pheno.df$pheno))
     
