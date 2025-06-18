@@ -73,9 +73,16 @@ vcf_to_gemma <- function(vcf_path = "", pheno_path = "", pheno_type = "binary"
     samples_and_pheno.df$original.pheno <- samples_and_pheno.df$pheno
     samples_and_pheno.df$pheno <- as.numeric(as.factor(samples_and_pheno.df$pheno))
     
+  }else if(pheno_type=="continuous"){
+    
+    print("Phenotype is set as continuous, ensuring numeric")
+    samples_and_pheno.df$original.pheno <- samples_and_pheno.df$pheno
+    samples_and_pheno.df$pheno <- as.numeric(samples_and_pheno.df$pheno)
+    
   }
   
   print(samples_and_pheno.df) 
+  str(samples_and_pheno.df)
   
   # Save as vector
   pheno <- samples_and_pheno.df$pheno
