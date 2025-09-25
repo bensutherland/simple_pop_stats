@@ -242,15 +242,22 @@ First, convert data (SNP or microsat) from genind to relatedness format and calc
 `relatedness_calc(data = obj_pop_filt, datatype = "SNP")`        
 ...this will output to `03_results/kinship_analysis_<date>.Rdata`      
 
-Note: if you are using microsat data, this will depend that you have run 'Rename microsat pops to SNP pop names' above, so that the pop names can be converted to stock codes.        
+Second, plot your results and receive summary statistics:      
+```
+# note: users will need to specify a variable before proceeding:    
+datatype <- "SNP"   # contact if not using SNP data
 
-Second, plot your results:      
-`relatedness_plot(file = "03_results/kinship_analysis_<date>.Rdata", same_pops = TRUE, plot_by = "names")`     
+relatedness_plot(file = "03_results/kinship_analysis_<date>.Rdata" # relative path
+                , plot_by_group = TRUE  # should the data be plotted by group (T) or all together (F)?   
+                , same_pops = TRUE      # if plotting by group, only consider same-on-same populations (T) or all pairwise comparisons, including across populations (F)? 
+                , plot_by = "codes"     # users should use codes not names (unless within MGL)
+                )
 
-note: if you don't want to convert the current pop designations (e.g., if you don't have a stock code file), then set `plot_by = "codes` to avoid any conversion.       
+```     
 
-...where you can use either "names" or "codes" if using only same-on-same.      
-...and if you set `same_pops` to FALSE, you will get all pops pairwise comparisons. (but can't use names)      
+MGL-specific notes:     
+- if you are using microsat data, this will depend that you have run 'Rename microsat pops to SNP pop names' above, so that the pop names can be converted to stock codes.        
+- `plot_by = "names"` is an MGL-specific option to convert stock codes to stock names.    
 
 
 ## 09.2 Population marker HWE evaluation summary
