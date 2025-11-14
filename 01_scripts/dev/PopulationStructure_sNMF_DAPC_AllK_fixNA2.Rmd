@@ -1,0 +1,588 @@
+---
+title: "STRUCTURE-like Ancestry Analysis with sNMF & DAPC (from genind SNPs) - MS365 Copilot GPT5"
+author: "`r Sys.info()[['user']]`"
+date: "`r format(Sys.Date())`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+    df_print: paged
+  pdf_document:
+    toc: true
+    number_sections: true
+params:
+  genind_rds: "genind.rds"
+  missing_ind: 0.20
+  missing_loc: 0.10
+  maf_min: 0.01
+  K_min: 1
+  K_max: 12
+  repetitions: 10
+  alpha: 100
+  seed: 2025
+  save_prefix: "sNMF"
+  run_dapc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = TRUE, warning = FALSE, fig.width = 9, fig.height = 5)
+
+sc.base <- "W:/9_PBT/01_chum/reference_databases/bcm_SNP_coastwide_v.5.0.0_2022-08-18/cmStockCodesCU.txt"
+repunits.base <- "W:/9_PBT/01_chum/reference_databases/bcm_SNP_coastwide_v.5.0.0_2022-08-18/Haida_Gwaii/repunits_full.txt"
+
+
+
+
+need <- c("adegenet", "LEA", "dplyr", "ggplot2", "tidyr", "readr", "stringr", "scales")
+to_install <- need[!sapply(need, requireNamespace, quietly = TRUE)]
+if (length(to_install)) install.packages(to_install)
+lapply(need, library, character.only = TRUE)
+
+set.seed(params$seed)
+dir.create("outputs", showWarnings = FALSE)
+dir.create(file.path("outputs","allK_sNMF"), showWarnings = FALSE, recursive = TRUE)
+dir.create(file.path("outputs","allK_DAPC"), showWarnings = FALSE, recursive = TRUE)
+cat("Outputs will be saved to: outputs/\n")
+
+# Helper: STRUCTURE-like barplot with population labels, full boundary lines, and repunit labels on top
+plot_structure_like <- function(Q_ord, pop_ord, joined, title, ylab, outfile, colpal,
+                                label_cex = 0.7, repunit_line_lwd = 2,
+                                tick_frac = 0.06, top_tick_on_repunit = TRUE,
+                                bottom_ticks = TRUE) {
+  stopifnot(all(c("collection","repunit") %in% names(joined)))
+
+  png(outfile, width = 2400, height = 850, res = 160)
+  op <- par(mar = c(10, 4, 7, 1), xpd = NA)
+
+  bp <- barplot(t(Q_ord), col = colpal, space = 0, border = NA,
+                xlab = "", ylab = ylab, main = title, xaxt = "n")
+
+  # Population boundaries and labels
+  counts     <- as.integer(table(pop_ord))
+  ends_idx   <- cumsum(counts)
+  starts_idx <- c(1, head(ends_idx, -1) + 1)
+  centers_vec <- tapply(bp, pop_ord, mean)
+  pop_labels  <- names(centers_vec)
+
+  # Axis labels (no baseline/ticks)
+  axis(1, at = as.numeric(centers_vec), labels = pop_labels,
+       las = 2, cex.axis = label_cex, tick = FALSE, lwd = 0, lwd.ticks = 0)
+
+  # All population boundaries
+  sep_x <- if (length(ends_idx) > 1)
+             (bp[ends_idx[-length(ends_idx)]] + bp[starts_idx[-1]]) / 2
+           else numeric(0)
+
+  # Repunit membership for each population label, then find change points
+  coll_to_rep <- setNames(joined$repunit, joined$collection)
+  pop_rep <- unname(coll_to_rep[as.character(pop_labels)])
+  pop_rep[is.na(pop_rep)] <- "Unassigned"
+  rep_changes <- which(pop_rep[-length(pop_rep)] != pop_rep[-1])
+  sep_rep_x <- if (length(rep_changes)) sep_x[rep_changes] else numeric(0)
+
+  # Tick geometry
+  usr <- par("usr"); y0 <- usr[3]; y1 <- usr[4]
+  h  <- tick_frac * (y1 - y0)   # height
+  pad <- 0.01 * (y1 - y0)
+
+  # Bottom ticks at ALL population boundaries (optional)
+  if (bottom_ticks && length(sep_x)) {
+    segments(x0 = sep_x, y0 = y0, x1 = sep_x, y1 = y0 + h,
+             col = "grey40", lwd = 1.2)
+  }
+
+  # Repunit bands + labels (top)
+  pop_left  <- bp[starts_idx] - 0.5
+  pop_right <- bp[ends_idx] + 0.5
+  r <- rle(pop_rep)
+  rep_blocks <- data.frame(repunit = r$values, len = r$lengths)
+  rep_blocks$pop_start_index <- c(1, head(cumsum(rep_blocks$len), -1) + 1)
+  rep_blocks$pop_end_index   <- cumsum(rep_blocks$len)
+  rep_blocks$x_left  <- pop_left[rep_blocks$pop_start_index]
+  rep_blocks$x_right <- pop_right[rep_blocks$pop_end_index]
+  rep_blocks$x_mid   <- (rep_blocks$x_left + rep_blocks$x_right)/2
+
+  y_line <- y1 + 0.02 * diff(usr[3:4])   # band line a bit above panel
+  y_text <- y1 + 0.12 * diff(usr[3:4])   # label above the band
+
+  segments(rep_blocks$x_left, y_line, rep_blocks$x_right, y_line,
+           xpd = NA, lwd = repunit_line_lwd, col = "black")
+  text(rep_blocks$x_mid, y_text, labels = rep_blocks$repunit,
+       xpd = NA, cex = 0.9)
+
+  # TOP ticks only at repunit boundaries
+  if (top_tick_on_repunit && length(sep_rep_x)) {
+    # Option A: up above panel
+    segments(x0 = sep_rep_x, y0 = y1, x1 = sep_rep_x, y1 = y1 + h,
+             col = "grey20", lwd = 1.4)
+
+    # Option B (comment above and uncomment below) to stop just below the band:
+    # segments(x0 = sep_rep_x, y0 = y1, x1 = sep_rep_x, y1 = y_line - pad,
+    #          col = "grey20", lwd = 1.4)
+  }
+
+  par(op); dev.off()
+}
+
+library(adegenet)
+library(LEA)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(readr)
+library(stringr)
+library(scales)
+
+
+
+
+
+
+load_genepop <- function(datatype = "SNP"){
+  
+  # Manually choose files (function depends windows or linux)
+  print("Select your genepop from file...")
+  if(.Platform$OS.type == "unix") {
+    
+    my_genepop.path <- tk_choose.files(caption = "Select a genepop file" )
+    
+  } else if(.Platform$OS.type == "windows") {
+    
+    my_genepop.path <- choose.files( default=file.path("02_raw_data/")
+                                     , caption = "Select a genepop file")
+    
+  }
+  
+  
+  # Set allele.code
+  if(datatype=="SNP"){
+    allele.code <- 2
+  }else if(datatype=="microsat"){
+    allele.code <- 3
+  }
+  
+  # Read in data
+  print(paste0("Loading genepop from ", my_genepop.path))
+  
+  obj <- read.genepop(file = my_genepop.path
+                      , ncode = allele.code)
+  
+  print(obj)
+  
+  assign(x = "obj", value = obj, envir = .GlobalEnv)
+  assign(x = "datatype", value = datatype, envir = .GlobalEnv)
+  assign(x = "my_genepop.path", value = my_genepop.path, envir = .GlobalEnv)
+  
+}
+
+
+
+update_pop_names <- function(df = obj, sep_by = "collection", name_by = "stockname", add_CU = FALSE){
+  
+  # Create backup
+  obj.bck <- df
+  
+  # Extract genepop indiv names and put into df
+  indiv_names.df <- as.data.frame(rownames(df$tab))
+  colnames(indiv_names.df) <- "indiv.name"
+  head(indiv_names.df)
+  
+  # Separate the df into individual components
+  indiv_names.df <- separate(data = indiv_names.df
+                             , sep = "_"
+                             , col = "indiv.name"
+                             , into = c("stock.code", "year", "fish.id", "sex")
+                            )
+  head(indiv_names.df)
+  dim(indiv_names.df)
+
+  
+  ## Generate new names for populations
+  # Reporting
+  print(paste0("Renaming pops to ", sep_by))
+  
+  if(sep_by=="collection"){
+    
+    pop_short <- str_pad(string = indiv_names.df$stock.code, width = 2, side = "left", pad = "0")
+    
+  }else if(sep_by=="collection_and_year"){
+    
+    pop_short <- paste0(str_pad(string = indiv_names.df$stock.code, width = 2, side = "left", pad = "0"), "_", indiv_names.df$year)
+    
+  }else {
+    
+    print("Not renaming pops")
+    pop_short <- pop(df)
+    
+  }
+
+  ## Update pop names
+  pop(df) <- pop_short
+  print(unique(pop(df)))
+  
+  ## Collect the new names into a dataframe
+  pop_short.df <- as.data.frame(pop(df))
+  colnames(pop_short.df) <- "pop_short"
+  
+  # Make numeric for matching with stock code below
+  if(sep_by == "collection"){
+    
+    # TO REMOVE
+    #pop_short.df$pop_short <- as.integer(as.character(pop_short.df$pop_short)) # for below, this must be integer
+    # TO REMOVE
+    
+  }else if(sep_by == "collection_and_year"){
+    
+    # separate the column into the collection and the year again
+    pop_short.df <- separate(data = pop_short.df, sep = "_", col = "pop_short", into = c("stock.code", "year"))
+    
+    # rename stock.code into 'pop_short' for compatibility between methods
+    colnames(pop_short.df)[which(colnames(pop_short.df)=="stock.code")] <- "pop_short"
+    
+  }else{
+    
+    print("Pop names still in original format")
+    
+  }
+  
+  # To merge with stock code file below, the pop short variable must be an integer
+  if(sep_by != "none"){
+    pop_short.df$pop_short <- as.integer(as.character(pop_short.df$pop_short)) 
+  }
+
+  
+  ## Change from numeric to names
+  #### 01.2 Pop names as numeric or character?
+  if(sep_by!="none" && name_by=="stockname"){
+    
+    # Generate an order column for re-ordering the samples' stock code vector
+    pop_short.df$id <- 1:nrow(pop_short.df)
+    
+    # Reporting
+    print("Reading in stock codes")
+    
+    stock_codes.df <- read.delim2(file = sc.base, stringsAsFactors = F)
+    
+    # Safety check - are there duplicate values?
+    print("The following stock codes are seen more than once:   ")
+    colnames(stock_codes.df)[which(colnames(stock_codes.df)=="StockCode")] <- "Code" #Temp solution to new header names
+    stock_codes.df[duplicated(x = stock_codes.df$Code), "Code"]
+    print("If there are duplicated values, this will cause the program to crash")
+    
+    # Merge to get the stock code name
+    rosetta <- merge(x = stock_codes.df, y = pop_short.df, by.x = "Code", by.y = "pop_short", sort = F, all.y = T)
+    rosetta$collection <- as.character(rosetta$collection)
+    rosetta$repunit <- as.character(rosetta$repunit)
+    rosetta$ProvState <- as.character(rosetta$ProvState)
+    str(rosetta)
+    
+    print("re-ordering back into original order")
+    rosetta <- rosetta[order(rosetta$id), ]
+    
+    # Add the year if necessary, and create vector for using as pop ID
+    if(sep_by=="collection_and_year"){
+      
+      rosetta$name <- paste0(rosetta$collection, "-", rosetta$year)
+      
+    }else if(sep_by=="collection"){
+      
+      rosetta$name <- rosetta$collection
+      
+    }
+    
+    # Add the CU if requested
+    if(add_CU==TRUE){
+      
+      print("Adding CU to the collection name for the pop variable")
+      
+      rosetta$name <- paste(rosetta$name, rosetta$repunit, sep =  "_")
+      
+    }
+    
+    # Use the newly designated identifier per individual
+    pop(df) <- rosetta$name
+    
+    # Reporting
+    print(unique(pop(df)))
+    print(table(pop(df)))
+    
+  } else {
+    
+    print("Not renaming pop stock code to stock names")
+    
+  }
+  
+  assign(x = "obj", value = df, envir = .GlobalEnv)
+  assign(x = "obj.bck", value = obj.bck, envir = .GlobalEnv)
+  assign(x = "sep_by", value = sep_by, envir = .GlobalEnv)
+  assign(x = "name_by", value = name_by, envir = .GlobalEnv)
+  assign(x = "add_CU", value = add_CU, envir = .GlobalEnv)
+  
+}
+
+
+load_genepop()
+
+update_pop_names(sep_by = "collection", name_by = "stockname",add_CU = FALSE)
+
+
+
+g <- obj
+
+
+
+repunits <- read.delim(file=repunits.base)
+stockcodes<- read.delim(file=sc.base)
+
+
+joined <- merge(repunits,stockcodes,by="repunit",all.y=TRUE)
+
+
+
+```
+
+# 1. Load `genind` and Basic Checks
+
+```{r load-genind}
+if (!exists("g")) {
+  stopifnot(file.exists(params$genind_rds))
+  g <- readRDS(params$genind_rds)
+}
+stopifnot(inherits(g, "genind"))
+cat("Genotype type:", g@type, "\n")
+cat("Ploidy:", ploidy(g), "\n")
+cat("Individuals:", nInd(g), "| Loci:", nLoc(g), "\n")
+if (is.null(pop(g))) { pop(g) <- factor(rep("All", nInd(g))) }
+```
+
+---
+
+# 2. QC (Missingness & MAF) and Build Dosage Matrix
+
+```{r qc}
+# Build a SNP dosage matrix (0/1/2) directly from genind
+M <- tab(g, freq = FALSE, NA.method = "asis")  # nInd x (2 * nLoc)
+cn <- colnames(M)
+split_last_dot <- function(x) { i <- max(gregexpr("\\.", x)[[1]]); c(substr(x,1,i-1), substr(x,i+1,nchar(x))) }
+sp <- do.call(rbind, lapply(cn, split_last_dot))
+loci <- sp[,1]; alle <- sp[,2]
+loc_levels <- unique(loci)
+idx_alt <- unlist(lapply(loc_levels, function(L) which(loci==L & alle==sort(alle[loci==L])[2])[1]))
+dosage <- M[, idx_alt, drop = FALSE]
+# genlight
+gl <- new("genlight", as.matrix(dosage))
+ploidy(gl) <- ploidy(g); indNames(gl) <- indNames(g); locNames(gl) <- loc_levels; pop(gl) <- pop(g)
+
+# Missingness filters on gl
+Xi <- as.matrix(gl)
+ind_miss <- rowMeans(is.na(Xi)); keep_ind <- ind_miss <= params$missing_ind; gl <- gl[keep_ind, ]
+X <- as.matrix(gl)
+loc_miss <- colMeans(is.na(X)); keep_loc <- loc_miss <= params$missing_loc; gl <- gl[, keep_loc]
+X <- as.matrix(gl)
+p <- colMeans(X, na.rm = TRUE)/2; maf <- pmin(p, 1-p); keep_maf <- maf >= params$maf_min; gl <- gl[, keep_maf]
+X <- as.matrix(gl)
+cat(sprintf("After QC: %d individuals, %d SNPs retained.\n", nInd(gl), nLoc(gl)))
+
+# ---- Create DAPC input directly from filtered gl (avoid subsetting g by names) ----
+# Mean-impute per locus, center columns, drop zero-variance columns
+X_imp <- X
+cm <- colMeans(X_imp, na.rm = TRUE)
+for (j in seq_len(ncol(X_imp))) {
+  nas <- is.na(X_imp[, j]); if (any(nas)) X_imp[nas, j] <- cm[j]
+}
+X_center <- sweep(X_imp, 2, colMeans(X_imp), FUN = "-")
+keep_var <- apply(X_center, 2, function(z) sd(z) > 0)
+X_qc <- X_center[, keep_var, drop = FALSE]
+# Set row/col names for traceability
+rownames(X_qc) <- indNames(gl); colnames(X_qc) <- locNames(gl)[keep_var]
+stopifnot(all(is.finite(X_qc)))
+```
+
+---
+
+# 3. sNMF across K, select bestK, and store **all K** results
+
+```{r snmf-run, cache=TRUE}
+library(LEA)
+X_lea <- X; X_lea[is.na(X_lea)] <- 9; storage.mode(X_lea) <- "integer"
+geno_file <- file.path("outputs", paste0(params$save_prefix, "_data.geno"))
+LEA::write.geno(X_lea, geno_file)
+K_range <- params$K_min:params$K_max
+project <- LEA::snmf(geno_file, K = K_range, repetitions = params$repetitions, entropy = TRUE, alpha = params$alpha, project = "new")
+ce_df <- lapply(K_range, function(k){ runs <- seq_len(params$repetitions); ce_runs <- sapply(runs, function(r) LEA::cross.entropy(project, K=k, run=r)); data.frame(K=k, run=runs, cross_entropy=ce_runs) }) %>% dplyr::bind_rows()
+ce_best <- ce_df %>% dplyr::group_by(K) %>% dplyr::summarise(cross_entropy = min(cross_entropy), .groups = "drop")
+bestK <- ce_best$K[which.min(ce_best$cross_entropy)]
+# store best run per K and Q matrices
+best_run_perK <- sapply(K_range, function(k) which.min(sapply(seq_len(params$repetitions), function(r) LEA::cross.entropy(project, K=k, run=r))))
+Q_list <- lapply(K_range, function(k){ Qk <- LEA::Q(project, K=k, run=best_run_perK[match(k, K_range)]); rownames(Qk) <- indNames(gl); colnames(Qk) <- paste0("K", seq_len(k)); Qk })
+names(Q_list) <- as.character(K_range)
+# plot CE
+ce_plot <- ggplot(ce_best, aes(x=K,y=cross_entropy)) + geom_line(color="#2c7fb8") + geom_point(size=2,color="#2c7fb8") + geom_vline(xintercept=bestK, linetype=2, color="firebrick") + labs(title="sNMF Model Selection", y="Cross-entropy (best run per K)") + theme_bw(base_size=12)
+ggsave(file.path("outputs", sprintf("%s_sNMF_cross_entropy.png", params$save_prefix)), ce_plot, width=7.5, height=4, dpi=150)
+readr::write_csv(ce_df, file.path("outputs", sprintf("%s_sNMF_cross_entropy_all_runs.csv", params$save_prefix)))
+```
+
+---
+
+# 4. Export Q for bestK, align ordering by `joined`, and plot (main + **all K** to subfolder)
+
+```{r qmatrix-and-plots}
+stopifnot(exists("joined"))
+stopifnot(all(c("Display_Order","collection","repunit") %in% names(joined)))
+joined <- joined[order(joined$Display_Order, joined$collection), ]
+ordered_pops <- unique(joined$collection)
+popvec <- as.character(pop(gl))
+missing_in_joined <- setdiff(unique(popvec), ordered_pops)
+if (length(missing_in_joined)) { warning(sprintf("These populations are in popvec but not in `joined$collection`: %s", paste(missing_in_joined, collapse=", "))); pop_levels <- c(ordered_pops, setdiff(unique(popvec), ordered_pops)) } else { pop_levels <- ordered_pops }
+popfac <- factor(popvec, levels = pop_levels)
+ord <- order(popfac); pop_ord <- popfac[ord]
+colpal_byK <- lapply(K_range, function(k) if (requireNamespace("scales", quietly=TRUE)) scales::hue_pal()(k) else rainbow(k)); names(colpal_byK) <- as.character(K_range)
+Q <- Q_list[[as.character(bestK)]]
+readr::write_csv(as.data.frame(Q) %>% tibble::rownames_to_column("Individual"), file.path("outputs", sprintf("%s_Qmatrix_K%d.csv", params$save_prefix, bestK)))
+assign_k <- max.col(Q, ties.method="first"); max_q <- apply(Q,1,max)
+assignments <- data.frame(Individual=rownames(Q), Population=as.character(popfac), Cluster=paste0("K",assign_k), MaxQ=max_q)
+readr::write_csv(assignments, file.path("outputs", sprintf("%s_assignments_K%d.csv", params$save_prefix, bestK)))
+# plot bestK
+Q_best_ord <- Q[ord,,drop=FALSE]; colpal <- colpal_byK[[as.character(bestK)]]
+plot_structure_like(Q_best_ord, pop_ord, joined, sprintf("sNMF Q-matrix (K = %d)", bestK), "Ancestry coefficient", file.path("outputs", sprintf("%s_barplot_grouped_K%d.png", params$save_prefix, bestK)), colpal)
+# plot all K
+for (k in K_range) { Qk <- Q_list[[as.character(k)]]; if (is.null(Qk)) next; Qk_ord <- Qk[ord,,drop=FALSE]; plot_structure_like(Qk_ord, pop_ord, joined, sprintf("sNMF Q-matrix (K = %d)", k), "Ancestry coefficient", file.path("outputs","allK_sNMF", sprintf("sNMF_K%d.png", k)), colpal_byK[[as.character(k)]]) }
+```
+
+---
+
+# 5. Population-Level Mean Q (bestK)
+
+```{r pop-mean-q}
+Q_df <- as.data.frame(Q) %>% tibble::rownames_to_column("Individual") %>% dplyr::mutate(Population = as.character(popfac))
+Q_means <- Q_df %>% dplyr::group_by(Population) %>% dplyr::summarise(dplyr::across(starts_with("K"), mean, na.rm = TRUE), .groups = "drop") %>% dplyr::arrange(Population)
+readr::write_csv(Q_means, file.path("outputs", sprintf("%s_population_mean_Q_K%d.csv", params$save_prefix, bestK)))
+Q_means
+```
+
+---
+
+# 6. DAPC — fixed K (bestK) and **all K** versions to subfolder; optional auto-K by BIC
+
+```{r dapc-block, eval=params$run_dapc}
+library(adegenet)
+set.seed(params$seed)
+
+# Use X_qc (imputed & centered from filtered gl) to avoid NA/Inf and naming issues
+ids_X <- rownames(X_qc)
+ids_q <- rownames(Q_list[[as.character(bestK)]])
+common_ids <- intersect(ids_X, ids_q)
+if (length(common_ids) < length(ids_X)) {
+  message(sprintf("Restricting DAPC to %d individuals shared with sNMF/bestK.", length(common_ids)))
+}
+X_common <- X_qc[match(common_ids, ids_X), , drop = FALSE]
+Q_best_common <- Q_list[[as.character(bestK)]][match(common_ids, ids_q), , drop = FALSE]
+# population factor for these individuals
+popvec_common <- as.character(pop(gl))[match(common_ids, indNames(gl))]
+popfac_common <- factor(popvec_common, levels = levels(popfac))
+ord_common <- order(popfac_common)
+X_common_ord <- X_common[ord_common, , drop = FALSE]
+Q_best_ord2 <- Q_best_common[ord_common, , drop = FALSE]
+pop_ord_common <- popfac_common[ord_common]
+
+safe_dapc_plot <- function(Xmat, pop_ord_fac, Qref, k, out_png, title, joined, colpal) {
+  # K-means on Xmat, then DAPC
+  npc <- max(1, min(100, ncol(Xmat) - 1))
+  fc <- find.clusters(Xmat, n.pca = npc, n.clust = k, choose.n.clust = FALSE)
+  if (any(table(fc$grp) < 2)) { message(sprintf("Skipping DAPC K=%d due to singleton clusters.", k)); return(invisible(NULL)) }
+  dap <- dapc(Xmat, grp = fc$grp, n.pca = npc, n.da = k - 1)
+  opt <- optim.a.score(dap)
+  dap <- dapc(Xmat, grp = fc$grp, n.pca = opt$best, n.da = k - 1)
+  P <- dap$posterior
+  if (!is.null(Qref) && ncol(Qref) == ncol(P)) {
+    C <- suppressWarnings(cor(P, Qref, use = "pairwise.complete.obs"))
+    perm <- integer(k); Cwork <- C
+    for (step in seq_len(k)) { idx <- which(Cwork == max(Cwork, na.rm = TRUE), arr.ind = TRUE)[1, ]; i <- idx[1]; j <- idx[2]; perm[j] <- i; Cwork[i,] <- -Inf; Cwork[,j] <- -Inf }
+    P <- P[, perm, drop = FALSE]; colnames(P) <- colnames(Qref)
+  }
+  plot_structure_like(P, pop_ord_fac, joined, title, "DAPC membership (posterior)", out_png, colpal)
+  invisible(P)
+}
+
+# Colors for each K
+colpal_byK <- lapply(K_range, function(k) if (requireNamespace("scales", quietly = TRUE)) scales::hue_pal()(k) else rainbow(k)); names(colpal_byK) <- as.character(K_range)
+
+# bestK DAPC
+safe_dapc_plot(X_common_ord, pop_ord_common, Q_best_ord2, bestK,
+               file.path("outputs", sprintf("DAPC_compoplot_sorted_K%d.png", bestK)),
+               sprintf("DAPC membership (Q-like; K = %d)", bestK), joined,
+               colpal_byK[[as.character(bestK)]])
+
+# ALL-K DAPC to subfolder
+for (k in K_range) {
+  Qk <- Q_list[[as.character(k)]]
+  Qk_ord <- if (!is.null(Qk)) Qk[match(rownames(X_common_ord), rownames(Qk)), , drop = FALSE] else NULL
+  try(safe_dapc_plot(X_common_ord, pop_ord_common, Qk_ord, k,
+                     file.path("outputs","allK_DAPC", sprintf("DAPC_K%d.png", k)),
+                     sprintf("DAPC membership (Q-like; K = %d)", k), joined,
+                     colpal_byK[[as.character(k)]]), silent = TRUE)
+}
+
+# Optional: auto-K by BIC on X_common_ord
+K_explore <- max(params$K_max, bestK + 5)
+fc_auto <- find.clusters(X_common_ord, max.n.clust = K_explore, n.pca = max(1, min(100, ncol(X_common_ord) - 1)), choose.n.clust = FALSE)
+K_auto <- nlevels(fc_auto$grp)
+# BIC curve if available
+bic_vals <- NULL; if (!is.null(fc_auto$Kstat)) bic_vals <- fc_auto$Kstat else if (!is.null(fc_auto$stat)) bic_vals <- fc_auto$stat
+if (!is.null(bic_vals)) {
+  bic_df <- data.frame(K = seq_along(bic_vals), BIC = as.numeric(bic_vals))
+  p_bic <- ggplot(bic_df, aes(K,BIC)) + geom_line(color="#2c7fb8") + geom_point(size=2,color="#2c7fb8") + geom_vline(xintercept=K_auto, linetype=2,color="firebrick") + labs(title="DAPC model selection (BIC)", x="K", y="BIC") + theme_bw(base_size = 12)
+  ggsave(file.path("outputs", "DAPC_BIC_explore.png"), p_bic, width = 7.5, height = 4, dpi = 150)
+}
+if (K_auto != bestK && all(table(fc_auto$grp) >= 2)) {
+  safe_dapc_plot(X_common_ord, pop_ord_common, if (!is.null(Q_list[[as.character(K_auto)]])) Q_list[[as.character(K_auto)]][match(rownames(X_common_ord), rownames(Q_list[[as.character(K_auto)]])), , drop = FALSE] else NULL,
+                 K_auto, file.path("outputs", sprintf("DAPC_compoplot_sorted_AUTO_K%d.png", K_auto)),
+                 sprintf("DAPC membership (auto K by BIC; K = %d)", K_auto), joined,
+                 if (!is.null(colpal_byK[[as.character(K_auto)]])) colpal_byK[[as.character(K_auto)]] else (if (requireNamespace("scales", quietly=TRUE)) scales::hue_pal()(K_auto) else rainbow(K_auto)))
+}
+```
+
+---
+
+# 7. Diagnostics & Tables
+
+```{r diagnostics}
+pop_table <- data.frame(Population = names(sort(table(pop(gl)), decreasing = TRUE)), N = as.integer(sort(table(pop(gl)), decreasing = TRUE)))
+conf_summary <- data.frame(Threshold=c(0.7,0.8,0.9), Proportion=c(mean(assignments$MaxQ>=0.7), mean(assignments$MaxQ>=0.8), mean(assignments$MaxQ>=0.9)))
+list(Individuals_per_Population = pop_table, Assignment_Confidence = conf_summary)
+```
+
+---
+
+# 8. Reproducibility
+
+```{r session-info}
+cat(sprintf("Seed: %s\n", params$seed))
+cat(sprintf("K range: %d..%d; repetitions: %d; alpha: %g\n", params$K_min, params$K_max, params$repetitions, params$alpha))
+cat(sprintf("QC: missing_ind <= %.2f, missing_loc <= %.2f, MAF >= %.3f\n", params$missing_ind, params$missing_loc, params$maf_min))
+sessionInfo()
+```
+
+---
+
+# Appendix: How to Knit / Re-run Programmatically
+
+```{r, eval=FALSE}
+rmarkdown::render("PopulationStructure_sNMF_DAPC_AllK_fixNA2.Rmd",
+  params = list(
+    genind_rds = "genind.rds",
+    missing_ind = 0.20,
+    missing_loc = 0.10,
+    maf_min = 0.01,
+    K_min = 1,
+    K_max = 12,
+    repetitions = 10,
+    alpha = 100,
+    seed = 2025,
+    save_prefix = "sNMF",
+    run_dapc = TRUE
+  ),
+  clean = TRUE
+)
+```
