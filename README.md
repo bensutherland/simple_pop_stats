@@ -72,9 +72,21 @@ Load a genepop with the following, using 'SNP' or 'microsat':
 `load_genepop(datatype = "SNP")`     
 Your data will be put into the 'obj', which is a genind object.    
 
-To see what populations you have:     
-`unique(pop(obj))`      
+#### Alternate option to load data from a VCF file ####    
+```
+# Assign datatype variable, required for repo, normally set by load_genepop()     
+datatype <- "SNP" 
 
+# Read in genotype data, where VCF.FN is the VCF filename
+vcf <- read.vcfR(file = VCF.FN)
+vcf
+
+# Convert to genind file
+obj <- vcfR2genind(x = vcf)
+```
+
+#### Inspect populations ####     
+`unique(pop(obj))`      
 
 
 ## 02. Rename Data ##
