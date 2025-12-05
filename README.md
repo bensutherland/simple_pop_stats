@@ -310,8 +310,39 @@ This will output 'freq.df', but to add the actual genotype alleles to the file, 
 `build_allele_freq_table(freq_file = freq.df)`    
 Note: this assumes that the hotspot file that is currently active is the same as the one that has been used to score all of the samples in your dataset.      
 
-## 13. Convert format (genepop to rubias) 
 
+## 13. Convert format (genepop to rubias) 
+### Custom samplenames and stock codes ###
+If you are using custom samplenames and stock codes, use the following function to convert a genind to a rubias file:     
+```
+# msat data
+genepop_to_rubias_microsat_custom(data = obj
+                                  , sample_type = "reference"
+                                  , stock_code.FN = "00_archive/stock_code.txt"
+                                  , pop_map.FN = "02_input_data/my_pop_map.txt"
+                           )
+
+# SNP data
+# note: function under development   
+
+# Both msat and SNP data require a tab-delim stock code file with header in the format of:    
+collection  repunit
+pop1  repunit1
+pop2  repunit2
+
+# ...where pops and repunits are customized.    
+
+# Also requires a tab-delim pop map file with header in the format of:    
+indiv   pop
+ind.1   pop1
+ind.2   pop1
+ind.3   pop3
+
+# ...where all pops are present in the stock code file.     
+
+```
+
+### MGL stock and samplename formats ###
 NOTE: Script only works if region was *NOT* appended in step 2 (`fix_pop_names()` or `update_pop_names()` depending on datatype).
 
 Convert genepop to rubias (SNP):     
@@ -326,15 +357,6 @@ For sample_type - must be a choice of "reference" or "mixture" - in almost all c
 *For microsatellite data* To convert the microsat data to rubias, the repunits per stock code must be specified. Use the same stock code file as was used to rename data in step 'Rename microsat data' above. It can be named anything, but make sure it has column names 'collection', and 'repunit', and the collection names should match those ones in the data.      
 This will output 'rubias_output_microsat.txt' in your results folder, which can be used for simulations (below).     
 Please note: this currently assumes you have stock name followed by a four digit year identifier in your individual name.    
-
-If using custom format (i.e., not in MGL_GSI_SNP format), use the following (SNP only):            
-`genepop_to_rubias_SNP(data = obj, sample_type = "reference", custom_format = TRUE, micro_stock_code.FN = micro_stock_code.FN)`         
-This will require that you have a stock code file (assign the variable `micro_stock_code.FN`), as well as a tab-delim file, `02_input_data/my_data_ind-to-pop_annot.txt` in the format of:       
-```
-indiv   pop
-101 JPN
-1847    FRA
-```
 
 
 ## 13.b. Rubias utilities

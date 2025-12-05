@@ -3,7 +3,6 @@ genepop_to_rubias_microsat <- function(data = data, sample_type = sample_type, m
   
   print("Converting microsat genepop to rubias format")
   
-  
   ## How to find details regarding the data (genind)
   # nLoc(data)
   # data$loc.fac # the marker names and number of alleles
@@ -40,6 +39,7 @@ genepop_to_rubias_microsat <- function(data = data, sample_type = sample_type, m
     indiv.df <- cbind(indiv.df, NA.vec)
     indiv.df$NA.vec <- as.character(indiv.df$NA.vec)
     # str(indiv.df)
+    head(indiv.df)
     
     # What is the indiv name for this round?
     indiv_name <- gsub(pattern = " ", replacement = "_", x = rownames(data$tab)[i]) # replace spaces with underscores
@@ -147,6 +147,7 @@ genepop_to_rubias_microsat <- function(data = data, sample_type = sample_type, m
     stop("Not all records have a four- or three digit year, as is needed below. Please check input genepop and make sure four- or three-digit year is present.")
     
   }
+  
   
   ##### 2. Take data out of list #####
   # Set nulls
