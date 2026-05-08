@@ -1,18 +1,24 @@
-# Uses a genepop file to run various population genetic analyses
-# note: adjust pop names will only work with stock code and year if in the format for PBT, as per: stockcode_year_indivID_sex
+## Workflow to support population genetic analyses 
+# Updated: 2026-05-08
+# note: default updated to standalone (off-known network method), update variable on_network as needed
 
 #### 00. Front Matter ####
 # Clear space
 # rm(list=ls())
 
-# Install packages
-# if (!requireNamespace("BiocManager", quietly = TRUE))
-#   install.packages("BiocManager")
- 
+## Install and load package managers
+if (!requireNamespace("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+
+# install.packages("devtools")
+library(devtools)
+
+# install.packages("remotes")
+library(remotes)
+
+## Install packages
 # BiocManager::install("SNPRelate",force=TRUE)
-
 # BiocManager::install("qvalue") # req for dartR
-
 # install.packages("units")
 # install.packages("cluster")
 # install.packages("adegenet")
@@ -27,33 +33,17 @@
 # install.packages("dartR")
 # install.packages("rubias")
 # install.packages("RGenetics")
-# install.packages("diveRsity")
-# install.packages("devtools")
-# library(devtools)
 # devtools::install_github("kkeenan02/diveRsity")
- 
-## For parallel processing of sims, require dev version of rubias
-# install.packages("remotes")
-# require(remotes)
-# remotes::install_github("eriqande/rubias", ref = "mclapply-assess-reference-loo")# install.packages("rmarkdown")
+# install.packages("readr")  # reading data
+# install.packages("vcfR")   # reading data
 # install.packages("rubias")
 # install.packages("rmarkdown")
-
-## For ask functionality
-# install.packages("gtools")
-
-## For reading data
-# install.packages("readr")
-# install.packages("vcfR")
-
-## For relatedness analyses
-# install.packages("Demerelate")
+# install.packages("gtools") # required for ask functionality
+# devtools::install_version("Demerelate", version = "0.9-2") # for relatedness analyses
 # install.packages("related", repos="http://R-Forge.R-project.org")
-
-## For <insert> analysis
 # install.packages("geosphere")
 
-## For baseline benchmark functionality
+## Packages for baseline benchmark functionality
 # install.packages("pander")
 # install.packages("koRpus")
 # install.packages("xfun") # (needs >= 0.19)
@@ -65,7 +55,10 @@
 # tinytex::tlmgr_install("pdfcrop")
 # https://www.ghostscript.com/download/gsdnld.html
 
-# Load packages
+## Special note: for parallel processing of sims, require dev version of rubias
+# remotes::install_github("eriqande/rubias", ref = "mclapply-assess-reference-loo")# install.packages("rmarkdown")
+
+## Load packages
 require("units")
 require("cluster")
 require("adegenet")
@@ -81,20 +74,19 @@ require("dartR")
 require("tcltk")
 require("dplyr")
 require("ggplot2")
-library("gtools")
-library("readr")
-library("rubias")
-library("RGenetics")
-library("diveRsity")
-library("vcfR")
-
+require("gtools")
+require("readr")
+require("rubias")
+require("RGenetics")
+require("diveRsity")
+require("vcfR")
 require("Demerelate")
 require("related")
-library("geosphere")
-library("reshape2")
-library("pander")
-library("koRpus")
-library("xfun")
+require("geosphere")
+require("reshape2")
+require("pander")
+require("koRpus")
+require("xfun")
 require("tinytex")
 
 
@@ -113,8 +105,8 @@ for(fun in file_sources){
 rm(fun, file_sources) # clean up
 
 # User entry to determine if on local network or offline
-# setup_network()  # function does not seem to work properly
-on_network <- TRUE # change to FALSE if off-network
+# setup_network()  # function not currently operational
+on_network <- FALSE # change to TRUE if working on-network at MGL
 
 
 # User entry to set species for filling in variables
