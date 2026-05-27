@@ -7,6 +7,7 @@ dapc_from_genind <- function(data = obj_pop_filt, plot_allele_loadings = TRUE
                              , scree.da = TRUE
                              , scree.pca = FALSE, posi.pca = "topright"
                              , dapc.width = 7, dapc.height = 5
+                             , legend_beside = FALSE
                              ){
   
   print("Executing DAPC")
@@ -60,14 +61,42 @@ dapc_from_genind <- function(data = obj_pop_filt, plot_allele_loadings = TRUE
   
   ## Plot DAPC
   filename <- paste("03_results/", "sample_DAPC.pdf", sep = "")
+  
   pdf(file = filename, width = dapc.width, height = dapc.height)
-  scatter(dapc
-          , col = dapc_pops_colours.df$colour
-          , scree.da = scree.da
-          , bg = "white", legend = T, txt.leg=rownames(dapc$means), posi.leg = "topleft"
-          , scree.pca = scree.pca, posi.pca = posi.pca
-  )
+  
+  # Plot with legend beside or overlayed
+  if(isTRUE(legend_beside)){
+    
+    par(mar=c(5,4,4,8), xpd = TRUE)
+    scatter(dapc
+            , col = dapc_pops_colours.df$colour
+            , scree.da = scree.da
+            , bg = "white"
+            , legend = F
+            #, txt.leg=rownames(dapc$means), posi.leg = "topleft"
+            , scree.pca = F, posi.pca = posi.pca
+    )
+    legend("right"
+           , inset = c(-0.3,0)
+           , legend = rownames(dapc$means)
+           , fill = dapc_pops_colours.df$colour
+    )
+    
+  }else if(!isTRUE(legend_beside)){
+    
+    scatter(dapc
+            , col = dapc_pops_colours.df$colour
+            , scree.da = scree.da
+            , bg = "white", legend = T, txt.leg=rownames(dapc$means), posi.leg = "topleft"
+            , scree.pca = scree.pca, posi.pca = posi.pca
+    )
+    
+  }
+  
   dev.off()
+  
+  # Reset par
+  par(mar=c(5.1,4.1,4.1,2.1))
   
   
   # Loading plot # Plot marker variance contribution to DAPC
